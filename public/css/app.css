@@ -1,0 +1,1130 @@
+html{
+	font-size: 62.5%;
+	overflow-y: scroll; 
+}
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+*:focus {outline:none;}
+
+.wrap-full {
+	margin: 0 20px;
+}
+
+.fLeft{
+	float: left;
+}
+
+.usrBlock{
+	width: 50rem !important;
+}
+
+.usrBlock .usrImg{
+	float: left;
+	width: 12rem;
+	height: 12rem;
+	border-radius: 12rem;
+	background: url(http://www.flowsports.at/images/dummy.jpg);
+	background-size: cover;
+	background-position: center;
+}
+
+.usrBlock .usrDetails{
+	float: left;
+	font-size: 2.2rem;
+	font-weight: 200;
+	margin-left: 4rem;
+	padding-top: 2rem;
+}
+
+.inpSearch{
+	position: absolute;
+	font-weight: normal;
+	width: 20rem;
+	margin-top: -0.7rem;
+}
+
+.highlight{
+	background: #fff2a8;
+}
+
+.fRight{
+	float: right;
+	width: 20rem;
+}
+
+span.tt{
+	display: block;
+}
+
+.datepicker-days table{
+	font-size: 1.3rem;
+}
+
+.datepicker{
+	border: 1px solid #d0d0d0;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+	padding: 8px 8px;
+	font-size: 1.3rem;
+}
+
+a{
+	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
+.noSubHeader label{
+	display: inline-block;
+	font-weight: 200;
+	margin-bottom: 1rem;
+}
+
+body{
+	background: #f7f7f7;
+	color: #666;
+	font-size: 1.4rem;
+	font-family: 'Open Sans', sans-serif;
+	padding: 0 !important;
+}
+
+.wrap{
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.wrapLogin{
+	width: 400px;
+}
+
+.wrapLogin label{
+	display: block;
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+	margin-top: 1rem;
+	margin-left: 0.3rem;
+}
+
+.wrapLogin input{
+	display: block;
+	border: 1px solid #d0d0d0;
+	padding: 8px 8px;
+	display: inline-block;
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.wrapLogin input[type=submit] {
+	border: 0;
+}
+
+.wrapLogin .button{
+	margin: 0;
+	margin-top: 1rem;
+}
+
+header{
+	position: fixed;
+	width: 100%;
+	background: rgba(255,255,255,1);
+	box-shadow: 0 1px 1px rgba(0,0,0,.1);
+	color: #666;
+	z-index: 800;
+}
+
+header .headerLeft{
+	float: left;
+}
+
+header .headerRight{
+	float: right;
+	padding-right: 5px;
+}
+
+header .headerRight a:not(.button):hover{
+	color: #222;
+}
+
+header a{
+	color: #666;
+}
+
+header .notificationBlock{
+	float: left;
+	margin-right: 30px;
+	padding-top: 23px;
+	cursor: pointer;
+}
+
+header .notificationBlock .fa{
+	font-size: 20px;
+}
+
+header .notificationBlock .notifications{
+	background: #f44336;
+	position: absolute;
+	top: 12px;
+	margin-left: 10px;
+	padding: 1px 3px;
+	border-radius: 4px;
+	font-size: 11px;
+	color: #fff;
+}
+
+header .userBlock{
+	display: block;
+	padding: 18px 0;
+	float: left;
+	margin-right: 1rem;
+}
+
+header .button {
+	display: block;
+	float: left;
+	margin: 13px 0;
+	padding: 10px 20px;
+	width: auto;
+	margin-left: 15px;
+}
+
+header .button:hover {
+    background-color: #2b957a;
+    color: #fff;
+}
+
+header .userDetails {
+	float: left;
+	margin-left: 10px;
+	padding-top: 5px;
+}
+
+header .userBlock .userImage{
+	float: left;
+	display: block;
+	width: 30px;
+	height: 30px;
+	background: #fff;
+	border-radius: 50px;
+	background: url('https://tedmartens.files.wordpress.com/2013/01/turdy_ted_notext.png');
+	background-position: center;
+	background-size: cover;
+}
+
+header a.logo{
+	font-size: 20px;
+	float: left;
+	text-align: center;
+	display: block;
+	padding: 18px 0 18px 48px;
+	background: url('/img/logo_blue.png');
+	background-size: 30%;
+	background-repeat: no-repeat;
+	background-position: center left;
+	margin-right: 15px;
+	font-weight: 700;
+	color: #414896;
+}
+
+header ul.nav{
+	float: left;
+	color: #fefefe;
+	list-style-type: none;
+}
+
+header ul.nav li{
+	float: left;
+}
+
+header ul.nav li a{
+	text-decoration: none;
+	color: #666;
+	display: block;
+	padding: 23px 1rem;
+}
+
+header ul.nav .fa{
+	margin-right: 0.5rem;
+}
+
+header ul.nav li a:hover{
+	background: #414896;
+	color: #fff;
+}
+
+.button{
+	width: 100%;
+	text-align: center;
+	background: #2b957a;
+	border: 0;
+	border-radius: 5px;
+	padding: 10px 0;
+	color: #fefefe;
+	font-weight: bold;
+	font-family: 'Open Sans', sans-serif;
+	cursor: pointer;
+	box-shadow: none;
+	margin-bottom: 1rem;
+}
+
+.button:hover{
+	background-color: #2b957a;
+}
+
+.subHeader{
+	padding-top: 120px;
+	padding-bottom: 60px;
+	width: 100%;
+	background: #2986BE;
+    background-image: url('/img/background-overlay-final.png'), linear-gradient(-150deg, #00C1B6 0%, #136EB5 97%);
+	
+}
+
+.subHeader h2{
+	color: #fff;
+	margin-left: 10px;
+	font-size: 30px;
+}
+
+.navigation {
+	background: #fff;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+}
+
+.navigation .nav.active {
+    opacity: 1;
+    font-weight: 700;
+    color: #555;
+    border-left: none;
+    border-right: none;
+    border-bottom: .2rem #555 solid;
+}
+
+.navigation .nav {
+    padding: 1rem 1.5rem;
+    opacity: .7;
+    color: #666;
+	float: left;
+}
+
+.container{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 0;
+	padding-right: 0;
+	color: #666 !important;
+}
+
+.noSubHeader{
+	padding-top: 90px;
+}
+
+.ownDropzone{
+	position: relative;
+	z-index: 60;
+	padding: 2rem;
+	border: 2px dashed #bbb;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	cursor: pointer;
+	min-height: 25rem;
+}
+
+.ownDropzone .dz-preview, .dropzone-previews .dz-preview {
+  background: rgba(255,255,255,0.8);
+  position: relative;
+  display: inline-block;
+  margin-right: 1.5rem;
+  margin-bottom: 1.5rem;
+  vertical-align: top;
+  border: 1px solid #acacac;
+  width: 18rem;
+  font-size: 1.3rem;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.07);
+}
+
+.ownDropzone .dz-preview .doc-preview, .dropzone-previews .dz-preview .doc-preview {
+	width: 100%;
+	height: 20rem;
+	background: #f3f3f3;
+}
+
+
+.ownDropzone .dz-preview img, .dropzone-previews .dz-preview img {
+	
+}
+
+.ownDropzone .dz-preview .dz-filename, .dropzone-previews .dz-preview .dz-filename {
+	font-weight: bold;
+}
+
+.ownDropzone .dz-preview strong, .dropzone-previews .dz-preview strong {
+	font-weight: normal;
+}
+
+.ownDropzone .dz-preview .fa-trash, .dropzone-previews .dz-preview .fa-trash {
+	color: #fff;
+	background: #414896;
+	border-radius: 5rem;
+	padding: 0.4rem 0.5rem;
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	cursor: pointer;
+	font-size: 1.3rem;
+}
+
+.ownDropzone .dz-preview, .dropzone-previews .dz-preview  .dz-filename{
+	word-wrap:break-word;
+}
+
+.ownDropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details {
+  position: relative;
+  padding: 1rem;
+  border-top: 1px solid #e3e3e3;
+}
+
+.ownDropzone .dz-preview, .dropzone-previews .dz-preview{
+	border: 1px solid #e3e3e3;
+}
+
+.dz-image-preview .dz-details  img{
+	width: 80px;
+	height: 80px;
+	margin: 10px 30px;
+}
+
+.dropzone .fa-trash{
+	cursor: pointer !important;
+	float: right;
+	font-size: 0.9rem;
+	color: #888;
+}
+
+.ownDropzone.dz-clickable * {
+  cursor: default;
+}
+
+.container h2{
+	margin-bottom: 20px;
+	margin-left: 10px;
+	font-size: 30px;
+}
+
+.mainBlock{
+	float: left;
+	width: calc(100% - 360px);
+}
+
+.sideBlock{
+	float: left;
+	width: 350px;
+	padding-right: 10px;
+}
+
+.box{
+	border: .1rem solid #e1e1e1;
+	background: #fff;
+	margin-bottom: 1rem;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+}
+
+.box .boxHeader{
+	padding: 15px;
+	border-bottom: 1px dotted #e1e1e1;
+	font-weight: 700;
+}
+
+.box .boxContent{
+	padding: 15px;
+}
+
+.box .boxContent canvas {
+	margin: auto;
+    display: block;
+}
+
+.box table{
+	width: 100%;
+	font-size: 1.3rem;
+}
+
+.box table.myDrops tr td:first-child {
+	width: 120px;
+}
+
+.box table.myDrops tr td:last-child {
+	width: 120px;
+}
+
+.box table tr td{
+	padding: 10px;
+}
+
+.box table tr td .button.downloadDrop {
+	display: none;
+	color: #fff;
+	padding: 5px 15px;
+	font-weight: 500;
+	font-size: 1.3rem;
+	border-radius: 3px;
+}
+
+.box table tr td .button.removeDrop {
+	display: none;
+	background: #eb4d5c;
+	color: #fff;
+	padding: 5px 15px;
+	font-weight: 500;
+	font-size: 1.3rem;
+	border-radius: 3px;
+}
+
+.box table tr:not(:last-child) td{
+	border-bottom: 1px solid #e1e1e1;
+}
+
+.box table a{
+	color: #666;
+	font-weight: 600;
+}
+
+.tag, .item{
+	background: #414896 !important;
+	color: #fff !important;
+	display: inline-block !important;
+	padding: 3px 6px 4px 6px !important;
+	border-radius: 2px !important;
+	font-size: 1.1rem !important;
+	margin-right: 3px !important;
+	margin-bottom: 5px !important;
+	font-weight: 200 !important;
+}
+
+.itemSel .labelSel{
+	font-weight: 700;
+	padding-right: 0.5rem;
+	display: block;
+}
+
+.selectize-control .C{
+	width: 100%;
+}
+
+.item .name{
+	display: block;
+}
+
+.item .email{
+	opacity: .6;
+}
+
+.tag .fa-tag{
+	margin-right: 0.5rem;
+}
+
+.removeDrop{
+	cursor: pointer;
+}
+
+.dropBlock .userBlock{
+	margin-top: 10px;
+}
+
+.dropBlock .userDetails{
+	display: block;
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	padding: 10px 0;
+	color: #333;
+}
+
+.dropBlock .userImg{
+	display: block;
+	width: 60px;
+	height: 60px;
+	border-radius: 40px;
+	background: url('http://www.flowsports.at/images/dummy.jpg');
+	background-position: center;
+	background-size: cover;
+	margin: 0 auto;
+}
+
+.right {
+	width: calc(100% - 200px);
+	margin-left: 200px;
+}
+
+.blackBlock{
+	top: 0;
+	display: none;
+	text-align: center;
+	position: fixed;
+	z-index: 10000;
+	background: rgba(0,0,0,0.8);
+	width: 100%;
+	height: 100%;
+}
+
+.blackBlock .progressValue{
+	position: relative;
+	top: 40%; 
+	font-size: 100px;
+	color: #fff;
+}
+
+.blackBlock .progressBar{
+	position: absolute;
+	top: 0;
+	width: 0%;
+	height: 10px;
+	background: #1ab394;
+}
+
+.box ol ol{
+	margin-left: 10px;
+}
+
+.box ol > li{
+	color: #689CC1;
+	padding: 3px 0;
+}
+
+.box ol > li > a{
+	color: #689CC1;
+}
+
+.box ol > li > a:hover{
+	text-decoration: underline;
+}
+
+OL { counter-reset: item }
+ol LI { display: block }
+ol LI:before { content: counters(item, ".") " "; counter-increment: item }
+
+
+.subNav{
+	padding: 15px 0 !important;
+}
+
+.subNav ul{
+	list-style-type: none;
+}
+
+.subNav ul li a{
+	display: block;
+	color: #666;
+	font-weight: 300;
+	padding: 10px 20px;
+}
+
+.subNav ul li a:hover, .subNav .active{
+	background: #414896;
+	color: #fff;
+}
+
+
+.ui-tooltip {
+
+	background: #333 !important;
+	padding: 3px 6px !important;
+	color: #fefefe !important;
+	border: 0 !important;
+	border-radius: 2px !important;
+	font-size: 11px !important;
+	margin-top: -1rem !important;
+	box-shadow: none !important;
+}
+
+span.infinite{
+	width: 1.9rem;
+	height: 1.9rem;
+	display: inline-block;
+	background: url(https://cdn0.iconfinder.com/data/icons/typicons-2/24/infinity-128.png);
+	background-position: center;
+	background-size: cover;
+	opacity: .7;
+}
+
+.dropBlock .sideBlock{
+	padding: 0;
+	padding-left: 10px;
+}
+
+.dropTable tr td:first-child{
+	
+}
+
+.dropTable tr td:nth-child(2){
+	text-align: right;
+	font-weight: 600;
+}
+
+.fa-inbox{
+	margin-right: 10px;
+}
+
+.ownDropzone .dz-message{
+	position: absolute;
+	width: calc(100% - 4rem);
+	text-align: center;
+	padding: 9rem 0;
+	font-size: 1.7rem;
+	font-weight: 300;
+	color: #aaa;
+}
+
+textarea{
+	resize: none;
+	margin-top: 1rem;
+	min-height: 7.2rem;
+}
+
+.dropBlock table td:nth-child(3){
+	text-align: right;
+}
+
+.dropBlock .button{
+	margin: 0;
+	margin-top: 1rem;
+}
+
+.logInOut{
+	display: block;
+	padding: 2.3rem 1.5rem;
+	float: left;
+}
+
+.buttonLight {
+	color: #2c3e4a !important;
+	border: 1px solid #d3d3d3 !important;
+	border-radius: 3px;
+	padding: 0.6rem 1.3rem !important;
+	font-weight: 600;
+	text-transform: uppercase;
+	font-size: 1.3rem;
+	background: #f8f8f8;
+	box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+	cursor: pointer;
+}
+
+.buttonLight:hover {
+  border-color: #c6c6c6;
+  background: #f0f0f0;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.10);
+}
+
+.oneLine{
+	display: inline-block;
+	margin: 0 0 1rem 0;
+}
+
+header .logo .betaMark{
+	color: #f05050;
+	font-size: 1.2rem;
+	padding-left: 0.3rem;
+}
+
+.profile-header h2 {
+	margin-left: 100px;
+}
+
+.profile-header .avatar {
+	background: url('https://tedmartens.files.wordpress.com/2013/01/turdy_ted_notext.png');
+    background-position: center;
+    background-size: cover;
+	position: absolute;
+	margin-top: -25px;
+	display: block;
+	width: 80px;
+	height: 80px;
+	border-radius: 80px;
+	background-color: #fff;
+	border: 2px solid #fff;
+}
+
+.comment-block {
+	margin-top: 1rem;
+}
+
+.comment {
+	margin-bottom: 10px;
+}
+
+.comment .comment-image {
+	display: block;
+	float: left;
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+	background: url('https://tedmartens.files.wordpress.com/2013/01/turdy_ted_notext.png');
+    background-position: center;
+    background-size: cover;
+    margin-right: 10px;
+}
+
+.comment .comment-text {
+	width: calc(100% - 4rem);
+	display: block;
+	float: left;
+}
+
+.comment .comment-text a {
+	color: #2b957a;
+	font-weight: 600;
+}
+
+.comment .comment-text a, .comment .comment-text p {
+	font-size: 1.3rem;
+	display: inline-block;
+	margin: 0;
+	margin-right: 0.3rem;
+}
+
+.comment .comment-text span.date {
+	display: block;
+	font-size: 1.1rem;
+	color: #aaa;
+}
+
+.comment .comment-text textarea {
+	margin: 0;
+	width: 100%;
+	border: none;
+    overflow: auto;
+    outline: none;
+    padding: 5px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+	border-radius: 5px;
+	height: 1rem;
+	font-size: 1.3rem;
+}
+
+.preview {
+	font-weight: 600;
+	cursor: pointer;
+}
+
+/*
+* Modal
+*/
+
+.black.modal {
+	padding: 0 !important;
+}
+
+.black.modal .modal-content {
+	background: none;
+	box-shadow: none;
+	border: 0;
+	border-radius: 0;
+	width: calc(100% - 300px);
+	height: 100%;
+	overflow: hidden;
+	position: absolute;
+	text-align: center;
+}
+
+.black.modal .modal-header .modal-header-left {
+	padding: 10px;
+	position: absolute;
+	left: 0;
+	top: 0
+}
+
+.black.modal .modal-header .modal-header-left .numPages {
+	float: right;
+	margin-left: 1.5rem;
+	color: #fefefe;
+	padding: 0.6rem 0;
+}
+
+.black.modal .modal-header .modal-header-right {
+	padding: 10px;
+	position: absolute;
+	right: 0;
+	top:0;	
+}
+
+.black.modal .modal-header .modal-header-right .btn-preview {
+	background: none;
+	border: 2px solid #fefefe;
+	color: #fefefe;
+}
+
+.black.modal .close {
+	opacity: 1;
+	text-shadow: none;
+}
+
+.black.modal .close span {
+	color: #fefefe;
+	font-size: 3.6rem;
+	font-weight: 400;
+}
+
+.black.modal .modal-sidebar {
+	right: 0;
+	top: 0;
+	position: absolute;
+	width: 300px;
+	background: #171717;
+	border-left: 1px solid #333;
+	color: #ccc;
+	overflow: hidden;
+	height: 100%;
+}
+
+.black.modal .modal-sidebar .sidebar-header {
+	border-bottom: 1px solid #333;
+	font-weight: bold;
+}
+
+.black.modal .modal-sidebar .sidebar-header, .black.modal .modal-sidebar .sidebar-content {
+	padding: 15px;
+}
+
+.black.modal .modal-sidebar .sidebar-content {
+
+}
+
+.black.modal .modal-sidebar .sidebar-content textarea {
+	width: 100%;
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+	color: #333;
+	margin: 5px 0;
+}
+
+.black.modal .modal-sidebar .sidebar-content input[type=text] {
+	width: 100%;
+	border: 0;
+	border-radius: 5px;
+	padding: 8px;
+	color: #333;
+	margin-top: 1rem;
+}
+
+.black.modal .modal-header, .black.modal .modal-footer {
+	border: 0;
+}
+
+.black.modal .modal-dialog {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.black.modal .modal-title {
+	color: #fefefe;
+}
+
+.modal-backdrop.in {
+	opacity: .95;
+}
+
+.userModal .modal-sidebar .userImage {
+	display: block;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 10rem;
+    margin: auto;
+    background: url('https://tedmartens.files.wordpress.com/2013/01/turdy_ted_notext.png');
+    background-position: center;
+    background-size: cover;
+    margin-top: 2rem;
+}
+
+.userModal .modal-sidebar h2 {
+	font-size: 1.6rem;
+}
+
+.userModal .modal-sidebar h3 {
+	font-size: 1.6rem;
+	text-align: center;
+	margin-bottom: 0.4rem;
+}
+
+.userModal .modal-sidebar h4 {
+	color: #555;
+	font-size: 1.3rem;
+	text-align: center;
+	margin-bottom: 2rem;
+	margin-top: 0;
+}
+
+.userModal .modal-sidebar .button {
+	display: block;
+	margin-bottom: 0;
+	width: 100%;
+}
+
+.userModal .modal-sidebar .button:hover { color: #fefefe; }
+
+.userModal .modal-sidebar .sidebar-section {
+	border-bottom: 1px solid #333;
+	padding: 1.5rem;
+}
+
+.modal.fade:not(.in).mRight .modal-dialog {
+	-webkit-transform: translate3d(25%, 0, 0);
+	transform: translate3d(25%, 0, 0);
+}
+
+.dropdown-menu.textcomplete-dropdown {
+	z-index: 50000 !important;
+}
+
+.textoverlay-wrapper {
+	display: block !important;
+}
+
+.textoverlay {
+	border-radius: 5px;
+}
+
+
+@media screen and (max-width: 1200px) {
+
+
+	.wrap{
+		width: calc(100% - 0.4rem);
+		padding-left: 0.2rem;
+		padding-right: 0.2rem;
+	}
+	
+	.wrapLogin{
+		width: 400px;
+	}
+	
+	.right {
+		width: 100%;
+		margin: 0;
+	}
+
+}
+
+@media screen and (max-width: 400px) {
+	.wrapLogin{
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 800px) {
+
+
+
+	body{
+		font-size: 1.5rem;
+	}
+
+	header span{
+		display: none;
+	}
+	
+	header ul.nav li a{
+		padding: 24px 1.8rem 24px 2rem;
+	}
+	
+	header a.logo{
+		width: 48px;
+		background-size: cover;
+		height: 48px;
+		padding: 0;
+		margin-top: 7px;
+	}
+	
+	header .logo span{
+		display: none;
+	}
+	
+	.userBlock .userDetails{
+		display: none;
+	}
+	
+	.mainBlock{
+		float: none;
+		width: 100%;
+	}
+	
+	.sideBlock{
+		float: none;
+		width: 100%;
+		padding: 0;
+	}
+	
+	.blackBlock .progressValue{
+		font-size: 60px;
+	}
+	
+	.subHeader h2{
+		font-size: 18px;
+	}
+	
+	.dropBlock .sideBlock{
+		padding: 0;
+	}
+	
+	.ownDropzone{
+		margin-right: 0;
+	}
+	
+	.home h1{
+		font-size: 6rem;
+	}
+	
+	.home h2{
+		font-size: 1.8rem;
+	}
+	
+	.home img{
+		width: 20rem;
+		height: 20rem;
+	}
+	
+	.black.modal .modal-content {
+		position: relative;
+		height: auto;
+		width: 100%;
+	}
+	
+	.black.modal .modal-sidebar {
+		position: relative;
+		width: auto;
+		height: auto;
+	}
+	
+	#filePreview .modal-body {
+		height: auto;
+		margin-bottom: 1.5rem;
+	}
+	
+	.black.modal .modal-sidebar .sidebar-header {
+		border-top: 1px solid #333;
+	}
+	
+	.black.modal .modal-header .modal-header-right {
+		position: relative;
+	}
+
+	
+}
