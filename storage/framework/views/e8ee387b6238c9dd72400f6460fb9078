@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	<title>Welcome</title>
 
+	<link href="<?php echo e(asset('/css/bootstrap.min.css')); ?>" rel="stylesheet">
 	<link href="<?php echo e(asset('/css/app.css')); ?>" rel="stylesheet">
 	<link href="<?php echo e(asset('/css/vegas.min.css')); ?>" rel="stylesheet">
 	
@@ -347,7 +348,8 @@
 		<div class="transBG"></div>
 		<div class="bodyBlock wrap">
 			<div class="main">
-				<h2>A file exchange app for <strong>teams</strong><br>who like it <strong>simple</strong></h2>
+				<h2 style="margin-bottom: 20px;">A file exchange app for <strong>teams</strong><br>who like it <strong>simple</strong></h2>
+				<!--<a style="margin-bottom: 20px; border: 2px solid #fefefe; border-radius: 5px; background-color: transparent; color: #fefefe;" class="btn btn-default" href="#">Create an empty drop</a>-->
 				<div class="contactBox">
 					<div class="fleft">
 						<p>SKyDrops is a <strong>simple file exchange</strong> app made for you to
@@ -417,7 +419,7 @@
 		  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 		  return regex.test(email);
 		}
-	</script
+	</script>
 
 </body>
 </html>

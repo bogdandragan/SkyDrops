@@ -199,4 +199,8 @@ return [
 
 	],
 
+	'file_storage' => '/var/www/skydrops.dev/storage/app/',
+
+	'sky_group_name' => 'SKYD'
+
 ];

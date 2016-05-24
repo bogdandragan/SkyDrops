@@ -38,7 +38,7 @@ class HomeController extends Controller {
 		if(Auth::check()){
 
 			$drops = Drop::where('user_id', '=', Auth::user()->id)
-						->leftJoin(DB::raw('(SELECT drop_id, group_concat(files.name) as dropFiles, group_concat(files.hash) as dropFilesHash, group_concat(files.content_type) as dropFilesContenttype FROM files GROUP BY drop_id)files'), 'drops.id', '=', 'files.drop_id')
+						->leftJoin(DB::raw('(SELECT drop_id, SUM(files.size) as dropSize, group_concat(files.name) as dropFiles, group_concat(files.hash) as dropFilesHash, group_concat(files.content_type) as dropFilesContenttype FROM files GROUP BY drop_id)files'), 'drops.id', '=', 'files.drop_id')
 						->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
 						->get();
 			

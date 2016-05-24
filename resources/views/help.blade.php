@@ -1,6 +1,8 @@
-<title>Help</title>
-
 @extends('master')
+
+@section('title')
+	Help
+@endsection
 
 @section('content')
 <div class="subHeader">

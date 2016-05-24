@@ -1,5 +1,6 @@
-<title>Not found</title>
-
+<?php $__env->startSection('title'); ?>
+	Not found | SkyDrops Beta
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 

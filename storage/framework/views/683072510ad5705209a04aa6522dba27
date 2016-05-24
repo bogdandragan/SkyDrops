@@ -1,6 +1,8 @@
-<title>Log In</title>
 
 
+<?php $__env->startSection('title'); ?>
+	Log In
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="container wrap noSubHeader wrapLogin">

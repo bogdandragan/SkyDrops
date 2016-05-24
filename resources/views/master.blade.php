@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-	<title>SKyDrops v3</title>
+	<title>@yield('title')</title>
 
 	<link href="{{ asset('/css/selectize.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -16,7 +16,8 @@
 	<!-- Fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 	<!-- Icons -->
 	<link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
 	<link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96">
@@ -27,6 +28,9 @@
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	<style>
+		@yield('style')
+	</style>
 </head>
 <body>
 	<header>
@@ -72,13 +76,14 @@
 		</div>
 	</header>
 <!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+	{!! HTML::script('/js/jquery.min.js') !!}
+	{!! HTML::script('/js/bootstrap.min.js') !!}
+	{!! HTML::script('/js/jquery-ui.min.js') !!}
+	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
 	{!! HTML::script('/js/autosize.js') !!}
 	{!! HTML::script('/js/dropzone.js') !!}
 	{!! HTML::script('/js/selectize.js') !!}
-	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
-	{!! HTML::script('/js/bootstrap.min.js') !!}
 	{!! HTML::script('/js/sweetalert.min.js') !!}
 	{!! HTML::script('/js/chart.min.js') !!}
 	{!! HTML::script('/js/jquery.overlay.min.js') !!}

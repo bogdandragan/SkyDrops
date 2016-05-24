@@ -1,13 +1,53 @@
-<title>Upload</title>
-
 @extends('master')
+
+@section('title')
+	Upload
+@endsection
+
+@section('style')
+	.title-block {
+	margin: 30px 0;
+	}
+
+	input[type=text] {
+	background: none;
+	border: 0;
+	box-shadow: none;
+	height: auto;
+	outline: none;
+	}
+
+	input[name=inpTitle] {
+	font-size: 3rem;
+	}
+
+	.input-group-addon {
+	display: none;
+	}
+
+	.form-control:focus {
+	border: 0;
+	outline: 0;
+	box-shadow: none;
+	}
+
+	.ownDropzone {
+	z-index: 8;
+	}
+
+	.fLeft {
+	width: calc(100% - 220px);
+	}
+
+	.fRight {
+	width: 200px;
+	margin-left: 20px;
+	}
+@endsection
 
 @section('content')
 <div class="container noSubHeader wrap">
-
-				
 				<!-- Content start -->
-				
 				<div class="mainBlock" style="float: none; width: auto;">
 					<div class="title-block">
 						<div class="fLeft">
@@ -17,29 +57,26 @@
 							</div>
 							</div>
 						<div class="fRight">
-							<input type="button" id="uploadButton" class="button" value="Upload" />
+							<input type="button" id="uploadButton" class="button" value="Upload" disabled/>
 						</div>
 						<br clear="both" />
+						<input id="emptyDrop" type="checkbox" name="emptyDrop"> Create empty drop
 					</div>
 					<form action="{{ url('u/upload')}}" class="ownDropzone" id="my-awesome-dropzone" enctype="multipart/form-data" method="post">
 						<div class="dz-message">
     Drop files here or click to upload.</div>
 						{!! Form::token() !!}
 					</form>
-					
-					  
 				</div>
-					  
-				<!-- Content end --> 
-					  
+				<!-- Content end -->
 </div>
 
 <!-- Absolute stuff -->
 <div class="blackBlock">
 	<div class="progressBar"></div>
 	<div class="progressValue">0</div>
-	
-</div> 
+
+</div>
 
 <!-- Hidden stuff -->
 <div id="preview-template" style="display: none;">
@@ -53,7 +90,7 @@
     <div class="dz-size" data-dz-size></div>
   </div>
   <!-- <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
- 
+
  <br clear="right" />
  <div class="dz-error-message"><span data-dz-errormessage></span></div> -->
 </div>
@@ -63,47 +100,7 @@
 	$(document).ready(function(){
 		$('input[name=inpTitle]').focus();
 	});
+
 </script>
-
-<style>
-	.title-block {
-		margin: 30px 0;
-	}
-
-	input[type=text] {
-		background: none;
-		border: 0;
-		box-shadow: none;
-		height: auto;
-		outline: none;
-	}
-	
-	input[name=inpTitle] {
-		font-size: 3rem;
-	}
-	
-	.input-group-addon {
-		display: none;
-	}
-	
-	.form-control:focus {
-		border: 0;
-		outline: 0;
-		box-shadow: none;
-	}
-	
-	.ownDropzone {
-		z-index: 8;
-	}
-	
-	.fLeft {
-		width: calc(100% - 220px);
-	}
-	
-	.fRight {
-		width: 200px;
-		margin-left: 20px;
-	}
-</style>
 
 @endsection

@@ -1,6 +1,8 @@
-<title>Groups</title>
-
 @extends('master')
+
+@section('title')
+	Groups
+@endsection
 
 @section('content')
 <div class="subHeader profile-header">
@@ -40,7 +42,7 @@
 							@foreach($groups as $group)
 								{{ $group->name }} <br>
 							@endforeach
-						<div>
+						</div>
 					</div>
 				</div>
 					  
@@ -48,10 +50,6 @@
 					  
 </div>
 {!! Form::token() !!}
-@endsection
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <script>
 
 	$( document ).tooltip({
@@ -60,16 +58,16 @@
 			at: "left top"
 		},
 		content: function(){
-		  var element = $( this );
-		  return element.attr('title')
+			var element = $( this );
+			return element.attr('title')
 		}
 	});
 
 	$(document).on('click', '.removeDrop', function(){
-			
+
 		var token = $('input[name=_token]').val();
 		console.log(token);
-		
+
 		$.ajax({
 			type:	'DELETE',
 			url:	'/d/' + $(this).attr('data-hash'),
@@ -78,7 +76,9 @@
 				location.reload();
 			}
 		});
-		
+
 	});
 
 </script>
+@endsection
+

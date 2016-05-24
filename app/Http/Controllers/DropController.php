@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Drop as Drop;
 use App\File as File;
+use Illuminate\Support\Facades\Config;
+use League\Flysystem\Filesystem;
 use Response;
 use DB;
 use Mail;
 use Auth;
+use ZipArchive;
+
 
 class DropController extends Controller {
 
@@ -51,20 +55,28 @@ class DropController extends Controller {
 	 */
 	public function show($id)
 	{
-		$drop = Drop::select('*', 'drops.id as dropsid', 'drops.created_at as dropscreated_at')
+		if(Auth::check()){
+			$drop = Drop::select('*', 'drops.id as dropsid', 'drops.created_at as dropscreated_at')
 				->where('hash', '=', $id)
 				->leftJoin('users', 'users.id', '=', 'drops.user_id')
 				->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
 				->first();
 
-		if(!$drop) abort(404);
-		
-		$files = File::where('drop_id', '=', $drop->dropsid)->get();
-		
-		return view('drop', array(
-			'drop'		=> $drop,
-			'files'		=> $files
-		));
+			if(!$drop) abort(404);
+				$files = File::where('drop_id', '=', $drop->dropsid)->get();
+
+				$drop->totalSize = 0;
+				foreach ($files as $file){
+				$drop->totalSize += $file->size;
+			}
+			return view('drop', array(
+				'drop'		=> $drop,
+				'files'		=> $files
+			));
+		}
+		else{
+			return view('home');
+		}
 	}
 
 	/**
@@ -86,7 +98,16 @@ class DropController extends Controller {
 	 */
 	public function update($id)
 	{
-		//
+		//$drop = Drop::where('hash', '=', $hash_id)->first();
+	}
+
+	public function updateValidity($hash_id)
+	{
+		$drop = Drop::where('hash', '=', $hash_id)->first();
+		$drop->expires_at = $_POST['newDate'];
+		$drop->save();
+
+		return $drop->hash;
 	}
 
 	/**
@@ -98,8 +119,16 @@ class DropController extends Controller {
 	public function destroy($hash_id)
 	{
 		$drop = Drop::where('hash', '=', $hash_id)->first();
-		$files = File::where('drop_id', '=', $drop->id)->delete();
+		$files = File::where('drop_id', '=', $drop->id);
 		$drop = $drop->delete();
+
+		foreach ($files->get() as $file){
+			$filepath = Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+			\Illuminate\Support\Facades\File::delete($filepath);
+		}
+
+		$files->delete();
+
 		$response = "false";
 		if($drop && $files){
 			$response = "true";
@@ -107,10 +136,55 @@ class DropController extends Controller {
 		
 		return $response;
 	}
+
+	public function downloadZip($hash_id){
+		if(!Auth::check()){
+			abort('403');
+		}
+
+		$drop = Drop::where('hash', '=', $hash_id)->first();
+
+		if(!$drop){
+			abort('404');
+		}
+
+		$files = File::where('drop_id', '=', $drop->id)->get();
+
+		$zip = new ZipArchive();
+		$zipname = "";
+		if($drop->title){
+			$zipname = $drop->title . ".zip";
+		}else{
+			$zipname = $drop->hash . ".zip";
+		}
+
+		$res = $zip->open(storage_path() . '/app/'.$zipname, ZipArchive::CREATE);
+
+		if($res === TRUE){
+			foreach ($files as $file) {
+				$filename = storage_path() .'/app/'. strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+				if(file_exists($filename))
+				{
+					$zip->addFile($filename,$file->name);
+
+				}
+			}
+
+			$zip->close();
+		}
+
+
+		$headers = array(
+			'Content-Type' => 'application/octet-stream',
+		);
+
+		return Response::download(storage_path() . '/app/'.$zipname, $zipname, $headers)->deleteFileAfterSend(true);
+
+	}
 	
 	public function download($id)
 	{
-		$file= "/var/www/skydrops/storage/app/3/8/logo_black.png";
+		$file= Config::get('app.file_storage')+"3/8/logo_black.png";
         $headers = array(
               'Content-Type: image/png',
             );
@@ -119,7 +193,6 @@ class DropController extends Controller {
 	
 	public function share($hash)
 	{
-
 		//Mail
 		Mail::send('emails.drop', ['drop_hash' => $hash, 'mailMessage' => (string)$_POST['message']], function($message)
 		{
@@ -127,6 +200,26 @@ class DropController extends Controller {
 			$message->subject(Auth::user()->firstname . ' ' . Auth::user()->lastname . ' shared a Drop with you');
 			$message->to(json_decode($_POST['contacts']));
 		});
+	}
+
+	public function sharedForUpload($hash_id){
+		$drop = Drop::select('*', 'drops.id as dropsid', 'drops.created_at as dropscreated_at')
+			->where('hash', '=', $hash_id)
+			->leftJoin('users', 'users.id', '=', 'drops.user_id')
+			->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
+			->first();
+
+		if(!$drop) abort(404);
+		$files = File::where('drop_id', '=', $drop->dropsid)->get();
+
+		$drop->totalSize = 0;
+		foreach ($files as $file){
+			$drop->totalSize += $file->size;
+		}
+		return view('drop', array(
+			'drop'		=> $drop,
+			'files'		=> $files
+		));
 	}
 
 }

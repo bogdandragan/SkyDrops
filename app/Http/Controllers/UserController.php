@@ -29,9 +29,9 @@ class UserController extends Controller {
 	 */
 	public function index()
 	{
-		if(Auth::check()){
+		/*if(Auth::check()){
 			return User::get();
-		}
+		}*/
 	}
 
 	/**
@@ -112,7 +112,10 @@ class UserController extends Controller {
 		//Create Drop
 		$drop = new Drop;
 		$drop->hash = $hash;
-		if($_POST['title']) $drop->title = $_POST['title'];
+		if($_POST['title'])
+			$drop->title = $_POST['title'];
+		else
+			$drop->title = "New drop";
 		$drop->user_id = Auth::user()->id;
 		if(!empty($_POST['expires_at'])) $drop->expires_at = $_POST['expires_at'];
 		$drop->save();
@@ -132,7 +135,7 @@ class UserController extends Controller {
 				$extension = $file->getClientOriginalExtension();
 				$filename = $hash . "." .  $extension;
 				
-				$filepath = '/var/www/skydrops.dev/storage/app/' . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
+				$filepath = Config::get('app.file_storage') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
 				
 				//Create file in DB
 				$dbFile = new File;
@@ -146,7 +149,6 @@ class UserController extends Controller {
 				$file->move($filepath, $filename);
 				
 			}
-			
 		}
 		
 		//Mail
@@ -159,6 +161,52 @@ class UserController extends Controller {
 		
 		return $drop->hash;
 	}
+
+	public function addFile(Request $request)
+	{
+		if($_POST['dropHash']){
+			$dropHash = $_POST['dropHash'];
+			$drop = Drop::where('hash', '=', $dropHash)->first();
+			$drop_id = $drop->id;
+
+			//Create File
+			if($request->hasFile('file')){
+				foreach($request->file('file') as $file){
+					$hash = md5(uniqid(mt_rand(), true));
+
+					//Copy in storage
+					$extension = $file->getClientOriginalExtension();
+					$filename = $hash . "." .  $extension;
+
+					$filepath = Config::get('app.file_storage') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
+
+					//Create file in DB
+					$dbFile = new File;
+					$dbFile->drop_id = $drop_id;
+					$dbFile->hash = $hash;
+					$dbFile->name = $file->getClientOriginalName();
+					$dbFile->size = $file->getSize();
+					$dbFile->content_type = $file->getMimeType();
+					$dbFile->save();
+
+					$file->move($filepath, $filename);
+				}
+			}
+			$files = File::where('drop_id', '=', $drop_id)->get();
+
+		}
+
+		$drop->totalSize = 0;
+		foreach ($files as $file){
+			$drop->totalSize += $file->size;
+		}
+
+		return array(
+			'drop'		=> $drop,
+			'files'		=> $files
+		);
+	}
+	
 	
 	public function ldap(Request $request)
 	{
@@ -174,7 +222,6 @@ class UserController extends Controller {
 			//Check if in Group
 			if ($aGroups) {
 				
-			
 				//Create or get user
 				$user = User::firstOrNew(array('email' => strtolower($bind[0]['mail'][0])));
 				$user->username = $bind[0]['cn'][0];
@@ -201,7 +248,7 @@ class UserController extends Controller {
 				return Redirect::intended('/');
 			
 			} else{
-				return "Your user need to be in a <strong>SKYD-*</strong> group.";
+				return "Your user need to be in a <strong>"+\Config::get('app.sky_group_name')+"-*+</strong> group.";
 			}
 		} else{
 			return "Authentication failed";
@@ -276,7 +323,7 @@ class UserController extends Controller {
 			Log::error($sGroup);
 			preg_match("/cn=([^,]+)/", $sGroup, $treffer);
 			if($treffer){
-				if(substr($treffer[1],0,4) == 'SKYD')
+				if(substr($treffer[1],0,4) == \Config::get('app.sky_group_name'))
 				{
 					array_push($nGroups, $treffer[1]);
 				}
@@ -367,7 +414,7 @@ class UserController extends Controller {
 		}
 		
 	}
-	
+
 
 
 }

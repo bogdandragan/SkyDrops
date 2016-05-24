@@ -1,6 +1,7 @@
 var myDropzone = "";
 var $select = "";
 var $selectCon = "";
+Dropzone.autoDiscover = false;
 
 $(function() {
 
@@ -41,9 +42,32 @@ $(function() {
 		formData.append("message", "");
 		formData.append("expires_at", ($('#delDate').is(':checked')) ? "" : $('.input-group.date').data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
 	});
-	
+
+     myDropzone.on("addedfile", function(file) {
+         $("#uploadButton").removeAttr('disabled');
+     });
+
+     myDropzone.on("removedfile", function(file) {
+         if(!myDropzone.files.length){
+             $("#uploadButton").attr("disabled", true);
+         }
+     });
+
+     myDropzone.on("error", function(error) {
+         $('.blackBlock').hide();
+         swal("Error!", "An error occured while creating new drop", "error");
+     });
+
 	}
-	
+
+    $('#emptyDrop').change(function() {
+        if($(this).is(":checked")) {
+            $("#uploadButton").removeAttr('disabled');
+        }
+        else if(!myDropzone.files.length && $(this).not(":checked")){
+            $("#uploadButton").attr("disabled", true);
+        }
+    });
 	
 	$.ajaxSetup({
         headers: {
@@ -77,23 +101,26 @@ $(function() {
 		}
 	});
 
-	var date = new Date();
-	date.setDate(date.getDate() + 7);
-  date = new Date(date);
-	$('.input-group.date .form-control').val(formatDate(date));
-	
+    var date = new Date();
+    date.setDate(date.getDate() + 7);
+    date = new Date(date);
+    $('.input-group.date .form-control').val(formatDate(date));
+
 	initDatepicker();
 	initContacts();
 	autosize($('textarea'));
 	
 	$('#uploadButton').click(function(){
-		myDropzone.processQueue();
-		$('.blackBlock').show();
-		
-		window.onbeforeunload = function() {
-			return "Your upload is not completed.";
-		};
-		
+        if($("#emptyDrop").is(":checked")) {
+            createEmptyDrop();
+        }
+        else{
+            myDropzone.processQueue();
+            $('.blackBlock').show();
+            window.onbeforeunload = function() {
+                return "Your upload is not completed.";
+            };
+        }
 	});
 	
 	$('#delDate').click(function(){
@@ -126,23 +153,46 @@ $(function() {
     $('#defaultModal').modal('hide');
   });
 
-  $( '.drop, .files tbody tr' )
+  /*$( '.drop, .files tbody tr' )
   .on( "mouseenter", function() {
     $(this).find('.removeDrop, .downloadDrop, .filePreview').show();
   })
   .on( "mouseleave", function() {
     $(this).find('.removeDrop, .downloadDrop, .filePreview').hide();
-  });
-	
+  });*/
 });
 
+
 function initDatepicker(){
-	$('.input-group.date').datepicker({
+    $('.input-group.date').datepicker({
 		format	: "dd.mm.yyyy",
 		startDate: new Date()
 	}).on('changeDate', function(e){
 		$(this).datepicker('hide');
-	});;
+	});
+}
+
+function createEmptyDrop(){
+    var formData = new FormData();
+    formData.append("title", $('input[name=inpTitle]').val());
+    formData.append("tags", JSON.stringify([]));
+    formData.append("contacts", JSON.stringify([]));
+    formData.append("message", "");
+    formData.append("expires_at", ($('#delDate').is(':checked')) ? "" : $('.input-group.date').data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
+
+    $.ajax({
+        url: "u/upload",
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data){
+            window.location = "/d/" + data;
+        },
+        error: function(data){
+            swal("Error!", "An error occured while creating new drop", "error");
+        }
+    });
 }
 
 function initContacts(){

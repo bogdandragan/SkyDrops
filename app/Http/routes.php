@@ -28,11 +28,12 @@ Route::get('login', function(){
 
 Route::get('logout', function(){
 	Auth::logout();
-	return redirect(URL::previous());
+	return redirect("/");
 });
 
 Route::resource('u', 'UserController');
 Route::post('u/upload', 'UserController@upload');
+Route::post('u/addFile', 'UserController@addFile');
 Route::post('u/ldap', 'UserController@ldap');
 Route::get('profile', 'UserController@profile');
 Route::get('profile/groups', 'UserController@groups');
@@ -43,12 +44,16 @@ Route::post('exe/contact', 'HomeController@contact');
 
 Route::resource('d', 'DropController');
 Route::get('d/{id}/download', 'DropController@download');
+Route::get('d/{id}/downloadZip', 'DropController@downloadZip');
+Route::get('d/{id}/sharedForUpload', 'DropController@sharedForUpload');
 Route::post('d/{id}/share', 'DropController@share');
+Route::post('d/{id}/updateValidity', 'DropController@updateValidity');
 
 Route::resource('dt', 'DropTagController');
 
 Route::resource('f', 'FileController');
 Route::get('f/{id}/download', 'FileController@download');
+Route::get('f/{id}/remove', 'FileController@remove');
 Route::get('f/{id}/getComments', 'FileController@getComments');
 
 Route::resource('fc', 'FileCommentController');

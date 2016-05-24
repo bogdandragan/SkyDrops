@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\File as File;
 use App\FileComment as FileComment;
+use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
 
@@ -49,11 +50,10 @@ class FileController extends Controller {
 	 */
 	public function show($id)
 	{
-		
-                $file = File::where('hash', '=', $id)->first();
-                $filePath = storage_path() . "/app/" . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
-                preg_match('/\.[^\.]+$/i',$file->name,$fileName);
-                $fileName = $file->hash . $fileName[0];
+		$file = File::where('hash', '=', $id)->first();
+		$filePath = \Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
+		preg_match('/\.[^\.]+$/i',$file->name,$fileName);
+		$fileName = $file->hash . $fileName[0];
 
 		header('Content-Description: File Transfer');
 		header('Content-Type: ' . $file->content_type);
@@ -93,15 +93,26 @@ class FileController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($hash_id)
 	{
-		//
+		$file = File::where('hash', '=', $hash_id)->first();
+		$filepath = \Config::get('app.file_storage') . strtolower(substr($hash_id, 0, 1)) . '/' . strtolower (substr($hash_id, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+
+		$file = $file->delete();
+		\Illuminate\Support\Facades\File::delete($filepath);
+
+		$response = "false";
+		if($file){
+			$response = "true";
+		}
+
+		return $response;
 	}
 	
 	public function download($id)
 	{
 		$file = File::where('hash', '=', $id)->first();
-		$filePath = storage_path() . "/app/" . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
+		$filePath =  \Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
 		preg_match('/\.[^\.]+$/i',$file->name,$fileName);
 		$fileName = $file->hash . $fileName[0];
 

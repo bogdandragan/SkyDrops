@@ -287,12 +287,23 @@ header ul.nav li a:hover{
 }
 
 .subHeader{
-	padding-top: 120px;
-	padding-bottom: 60px;
+	padding-top: 70px;
+	padding-bottom: 0px;
 	width: 100%;
 	background: #2986BE;
     background-image: url('/img/background-overlay-final.png'), linear-gradient(-150deg, #00C1B6 0%, #136EB5 97%);
 	
+}
+
+.subHeaderRightBlock{
+	width:350px;
+	float: right;
+}
+
+.subHeaderLeftBlock{
+	width: calc(100% - 360px);
+	float: left;
+	margin-top: 70px;
 }
 
 .subHeader h2{
@@ -334,7 +345,7 @@ header ul.nav li a:hover{
 	padding-top: 90px;
 }
 
-.ownDropzone{
+.ownDropzone, .addFileDropzone{
 	position: relative;
 	z-index: 60;
 	padding: 2rem;
@@ -345,7 +356,7 @@ header ul.nav li a:hover{
 	min-height: 25rem;
 }
 
-.ownDropzone .dz-preview, .dropzone-previews .dz-preview {
+.addFileDropzone .dz-preview, .dropzone-previews .dz-preview, .ownDropzone .dz-preview, .dropzone-previews .dz-preview {
   background: rgba(255,255,255,0.8);
   position: relative;
   display: inline-block;
@@ -358,26 +369,26 @@ header ul.nav li a:hover{
   box-shadow: 0 1px 0 rgba(0,0,0,0.07);
 }
 
-.ownDropzone .dz-preview .doc-preview, .dropzone-previews .dz-preview .doc-preview {
+.addFileDropzone .dz-preview .doc-preview, .dropzone-previews .dz-preview .doc-preview, .ownDropzone .dz-preview .doc-preview, .dropzone-previews .dz-preview .doc-preview {
 	width: 100%;
 	height: 20rem;
 	background: #f3f3f3;
 }
 
 
-.ownDropzone .dz-preview img, .dropzone-previews .dz-preview img {
+.addFileDropzone .dz-preview img, .dropzone-previews .dz-preview img, .ownDropzone .dz-preview img, .dropzone-previews .dz-preview img {
 	
 }
 
-.ownDropzone .dz-preview .dz-filename, .dropzone-previews .dz-preview .dz-filename {
+.addFileDropzone .dz-preview .dz-filename, .dropzone-previews .dz-preview .dz-filename, .ownDropzone .dz-preview .dz-filename, .dropzone-previews .dz-preview .dz-filename {
 	font-weight: bold;
 }
 
-.ownDropzone .dz-preview strong, .dropzone-previews .dz-preview strong {
+.addFileDropzone .dz-preview strong, .dropzone-previews .dz-preview strong, .ownDropzone .dz-preview strong, .dropzone-previews .dz-preview strong {
 	font-weight: normal;
 }
 
-.ownDropzone .dz-preview .fa-trash, .dropzone-previews .dz-preview .fa-trash {
+.addFileDropzone .dz-preview .fa-trash, .dropzone-previews .dz-preview .fa-trash, .ownDropzone .dz-preview .fa-trash, .dropzone-previews .dz-preview .fa-trash {
 	color: #fff;
 	background: #414896;
 	border-radius: 5rem;
@@ -389,17 +400,17 @@ header ul.nav li a:hover{
 	font-size: 1.3rem;
 }
 
-.ownDropzone .dz-preview, .dropzone-previews .dz-preview  .dz-filename{
+.addFileDropzone .dz-preview, .dropzone-previews .dz-preview  .dz-filename, .ownDropzone .dz-preview, .dropzone-previews .dz-preview  .dz-filename{
 	word-wrap:break-word;
 }
 
-.ownDropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details {
+.addFileDropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details, .ownDropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details {
   position: relative;
   padding: 1rem;
   border-top: 1px solid #e3e3e3;
 }
 
-.ownDropzone .dz-preview, .dropzone-previews .dz-preview{
+.addFileDropzone .dz-preview, .dropzone-previews .dz-preview, .ownDropzone .dz-preview, .dropzone-previews .dz-preview{
 	border: 1px solid #e3e3e3;
 }
 
@@ -416,7 +427,7 @@ header ul.nav li a:hover{
 	color: #888;
 }
 
-.ownDropzone.dz-clickable * {
+.addFileDropzone.dz-clickable *,  .ownDropzone.dz-clickable * {
   cursor: default;
 }
 
@@ -477,7 +488,6 @@ header ul.nav li a:hover{
 }
 
 .box table tr td .button.downloadDrop {
-	display: none;
 	color: #fff;
 	padding: 5px 15px;
 	font-weight: 500;
@@ -485,8 +495,50 @@ header ul.nav li a:hover{
 	border-radius: 3px;
 }
 
+.downloadArchive {
+	color: #fff;
+	padding: 5px 0px !important;
+	font-weight: 500;
+	font-size: 1.5rem;
+	border-radius: 3px;
+	display: inline-block;
+	width: 170px;
+	margin-top: 65px;
+}
+
+.downloadArchive:hover, .downloadArchive:focus {
+	color: #fff;
+	text-decoration: none;
+}
+
+.validityDatepicker{
+	margin:-10px 0 !important;
+	width: 85px !important;
+	display: inline-block !important;
+	text-align:right !important;
+	padding: 0px !important;
+	color: #e84c3d !important;
+	border: none !important;
+	box-shadow: none !important;
+
+}
+
+.validityDatepicker[disabled]{
+	background-color: #fff;
+	cursor: text;
+}
+
+#updateValidityBtn{
+	cursor: pointer !important;
+	display: inline-block !important;
+	padding-right: 10px !important;
+	padding-left: 0 !important;
+	background-color: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
 .box table tr td .button.removeDrop {
-	display: none;
 	background: #eb4d5c;
 	color: #fff;
 	padding: 5px 15px;
@@ -680,7 +732,7 @@ span.infinite{
 	margin-right: 10px;
 }
 
-.ownDropzone .dz-message{
+.addFileDropzone .dz-message, .ownDropzone .dz-message{
 	position: absolute;
 	width: calc(100% - 4rem);
 	text-align: center;
@@ -1085,6 +1137,10 @@ header .logo .betaMark{
 	}
 	
 	.ownDropzone{
+		margin-right: 0;
+	}
+
+	.addFileDropzone{
 		margin-right: 0;
 	}
 	

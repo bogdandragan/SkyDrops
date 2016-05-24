@@ -1,6 +1,8 @@
-<title>Log In</title>
-
 @extends('master')
+
+@section('title')
+	Log In
+@endsection
 
 @section('content')
 <div class="container wrap noSubHeader wrapLogin">

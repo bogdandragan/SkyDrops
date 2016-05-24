@@ -1,6 +1,9 @@
-<title>{{ $user->firstname }} {{ $user->lastname }}</title>
 
 @extends('master')
+
+@section('title')
+	{{ $user->firstname }} {{ $user->lastname }}
+@endsection
 
 @section('content')
 

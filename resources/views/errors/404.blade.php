@@ -1,5 +1,8 @@
-<title>Not found</title>
 @extends('master')
+
+@section('title')
+	Not found | SkyDrops Beta
+@endsection
 
 @section('content')
 

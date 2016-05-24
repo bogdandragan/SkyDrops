@@ -1,5 +1,8 @@
-<title>Profile</title>
 @extends('master')
+
+@section('title')
+	Profile
+@endsection
 
 @section('content')
 <div class="subHeader profile-header">
@@ -105,66 +108,63 @@
 					  
 </div>
 {!! Form::token() !!}
-@endsection
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 {!! HTML::script('/js/chart.min.js') !!}
 <script>
 
-$(document).ready(function(){
-	
-	var data = [
-    {
-        value: 30,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "Active Drops"
-    },
-    {
-        value: 70,
-        color: "#eee",
-        highlight: "#ddd",
-        label: "Free Drops"
-    }
-];
+	$(document).ready(function(){
 
-var options = {
-    //Boolean - Whether we should show a stroke on each segment
-    segmentShowStroke : true,
+		var data = [
+			{
+				value: 30,
+				color:"#F7464A",
+				highlight: "#FF5A5E",
+				label: "Active Drops"
+			},
+			{
+				value: 70,
+				color: "#eee",
+				highlight: "#ddd",
+				label: "Free Drops"
+			}
+		];
 
-    //String - The colour of each segment stroke
-    segmentStrokeColor : "#fff",
+		var options = {
+			//Boolean - Whether we should show a stroke on each segment
+			segmentShowStroke : true,
 
-    //Number - The width of each segment stroke
-    segmentStrokeWidth : 2,
+			//String - The colour of each segment stroke
+			segmentStrokeColor : "#fff",
 
-    //Number - The percentage of the chart that we cut out of the middle
-    percentageInnerCutout : 0, // This is 0 for Pie charts
+			//Number - The width of each segment stroke
+			segmentStrokeWidth : 2,
 
-    //Number - Amount of animation steps
-    animationSteps : 100,
+			//Number - The percentage of the chart that we cut out of the middle
+			percentageInnerCutout : 0, // This is 0 for Pie charts
 
-    //String - Animation easing effect
-    animationEasing : "easeOutBounce",
+			//Number - Amount of animation steps
+			animationSteps : 100,
 
-    //Boolean - Whether we animate the rotation of the Doughnut
-    animateRotate : true,
+			//String - Animation easing effect
+			animationEasing : "easeOutBounce",
 
-    //Boolean - Whether we animate scaling the Doughnut from the centre
-    animateScale : false,
+			//Boolean - Whether we animate the rotation of the Doughnut
+			animateRotate : true,
 
-    //String - A legend template
-    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+			//Boolean - Whether we animate scaling the Doughnut from the centre
+			animateScale : false,
+
+			//String - A legend template
+			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
 
 };
-	
-	
-	
+
+
+
 	// For a pie chart
 	var ctx = document.getElementById("myChart").getContext("2d");
 	var myPieChart = new Chart(ctx).Pie(data,options);
-	
+
 });
 
 	$( document ).tooltip({
@@ -179,9 +179,9 @@ var options = {
 	});
 
 	$(document).on('click', '.removeDrop', function(){
-		
+
 		var token = $('input[name=_token]').val();
-		
+
 		$.ajax({
 			type:	'DELETE',
 			url:	'/d/' + $(this).attr('data-hash'),
@@ -191,7 +191,9 @@ var options = {
 			}
 		});
 		$(this).parent().parent().remove();
-		
+
 	});
 
 </script>
+
+@endsection
