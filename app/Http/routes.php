@@ -26,6 +26,12 @@ Route::get('login', function(){
 	return view('login');
 });
 
+//Register
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::get('auth/confirm/{code}', 'Auth\AuthController@getConfirm');
+
+
 Route::get('logout', function(){
 	Auth::logout();
 	return redirect("/");

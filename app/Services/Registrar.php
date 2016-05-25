@@ -15,7 +15,9 @@ class Registrar implements RegistrarContract {
 	public function validator(array $data)
 	{
 		return Validator::make($data, [
-			'name' => 'required|max:255',
+			'username' => 'required|max:255',
+			'first_name' => 'required|max:255',
+			'last_name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
 		]);
@@ -29,11 +31,26 @@ class Registrar implements RegistrarContract {
 	 */
 	public function create(array $data)
 	{
-		return User::create([
-			'name' => $data['name'],
+		$verificationCode = str_random(30);
+		$user = User::create([
+			'username' => $data['username'],
+			'firstname' => $data['first_name'],
+			'lastname' => $data['last_name'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
+			'verification_code' => $verificationCode
 		]);
+
+		//Mail
+		\Mail::send('emails.registration', ['code' => $verificationCode], function($message) use($user)
+		{
+			$message->from('skydrops@skypro.ch', 'SKyDrops');
+			$message->subject('Welcome to SKyDrops');
+			$message->to($user->email);
+		});
+
+
+		return $user;
 	}
 
 }

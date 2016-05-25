@@ -1,10 +1,8 @@
-@extends('master')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
     Register
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container wrap noSubHeader wrapLogin">
 
         <!-- Content start -->
@@ -28,7 +26,8 @@
                     <input type="password" name="password_confirmation" />
                     <input type="submit" id="submitButton" class="button" value="Register">
                     <p style="display: block; margin-top: 1rem; font-weight: 200" >Already have an account?<a href="/login"> Log In</a></p>
-                    {!! Form::token() !!}
+                    <?php echo Form::token(); ?>
+
                 </form>
             </div>
         </div>
@@ -61,4 +60,6 @@
 
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
