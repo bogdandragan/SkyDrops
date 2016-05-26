@@ -52,7 +52,7 @@
                         $.each(jqXHR.responseJSON, function (index, value) {
                             errorsHtml += "<li>"+value[0]+"</li>"
                         });
-                        errorsHtml += "</div></ul>";
+                        errorsHtml += "</ul></div>";
                         $("#submitButton").after(errorsHtml);
                     }
                 }

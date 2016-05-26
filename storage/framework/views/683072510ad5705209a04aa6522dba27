@@ -13,12 +13,12 @@
 						Login
 					</div>
 					<div class="boxContent">
-						<form action="/u/ldap" method="POST">
+						<form id="loginForm" action="/u/ldap" method="POST">
 							<label for="username">Username</label>
 							<input type="text" name="username" autofocus />
 							<label for="password">Password</label>
 							<input type="password" name="password" />
-							<input type="submit" id="uploadButton" class="button" value="Log In">
+							<input type="submit" id="submitButton" class="button" value="Log In">
 							<a style="display: block; margin-top: 1rem; font-weight: 200" href="http://reset.skypro.ch/">Forgot password?</a>
 							<?php echo Form::token(); ?>
 
@@ -30,6 +30,29 @@
 				<!-- Content end --> 
 					  
 </div>
+	<script>
+		$("#loginForm").submit(function(e) {
+			e.preventDefault();
+
+			$.ajax({
+				type: "POST",
+				url: "/u/ldap",
+				data: $("#loginForm").serialize(),
+				success: function(data) {
+					window.location = "/";
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					if(jqXHR.status == 401) {
+						$(".alert-danger").remove();
+						var errorHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+								"<li>"+jqXHR.statusText+"</li></ul></div>"
+						$("#submitButton").after(errorHtml);
+					}
+				}
+			});
+
+		});
+	</script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

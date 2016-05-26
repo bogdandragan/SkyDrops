@@ -2,18 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dc16a131-13d6-4a0c-b4b3-565a2640132e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/migrations/2016_05_25_000000_modify_users_table.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/resources/views/emails/registration.blade.php" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/database/migrations/2016_02_24_143844_create_file_comments_table.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/databases/skydrops.sqlite" afterPath="$PROJECT_DIR$/storage/databases/skydrops.sqlite" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Services/Registrar.php" afterPath="$PROJECT_DIR$/app/Services/Registrar.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/User.php" afterPath="$PROJECT_DIR$/app/User.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/home.blade.php" afterPath="$PROJECT_DIR$/resources/views/home.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/login.blade.php" afterPath="$PROJECT_DIR$/resources/views/login.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/register.blade.php" afterPath="$PROJECT_DIR$/resources/views/register.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/framework/views/683072510ad5705209a04aa6522dba27" afterPath="$PROJECT_DIR$/storage/framework/views/683072510ad5705209a04aa6522dba27" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/framework/views/cf29381bd30df216b54f3ece0c1e023d" afterPath="$PROJECT_DIR$/storage/framework/views/cf29381bd30df216b54f3ece0c1e023d" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage/framework/views/e8ee387b6238c9dd72400f6460fb9078" afterPath="$PROJECT_DIR$/storage/framework/views/e8ee387b6238c9dd72400f6460fb9078" />
     </list>
     <ignored path="skydrops.dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,11 +32,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AuthenticatesAndRegistersUsers.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="skydrops.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/js/skydrops.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="174">
+              <caret line="189" column="35" selection-start-line="189" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AuthenticatesAndRegistersUsers.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesAndRegistersUsers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="80" column="40" selection-start-line="80" selection-start-column="40" selection-end-line="80" selection-end-column="40" />
+            <state relative-caret-position="211">
+              <caret line="64" column="46" selection-start-line="64" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
                 <element signature="e#45#58#0#PHP" expanded="true" />
               </folding>
@@ -50,9 +57,60 @@
       <file leaf-file-name="UserController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="415" column="5" selection-start-line="415" selection-start-column="5" selection-end-line="415" selection-end-column="5" />
+            <state relative-caret-position="406">
+              <caret line="266" column="5" selection-start-line="266" selection-start-column="5" selection-end-line="266" selection-end-column="5" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="home.blade.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="338" column="92" selection-start-line="338" selection-start-column="92" selection-end-line="338" selection-end-column="92" />
+              <folding>
+                <element signature="n#style#0;n#a#3;n#div#1;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="register.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/register.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="460">
+              <caret line="53" column="54" selection-start-line="53" selection-start-column="54" selection-end-line="53" selection-end-column="54" />
+              <folding>
+                <marker date="1464246689077" expanded="true" signature="1571:2546" placeholder="..." />
+                <marker date="1464246689077" expanded="true" signature="2168:2185" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/login.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="35" column="20" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
+              <folding>
+                <marker date="1464247006793" expanded="true" signature="1248:1265" placeholder="..." />
+                <marker date="1464247006793" expanded="true" signature="1278:1300" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="drop.blade.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/drop.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="166">
+              <caret line="251" column="66" selection-start-line="251" selection-start-column="58" selection-end-line="251" selection-end-column="66" />
+              <folding>
+                <marker date="1464095002862" expanded="true" signature="17775:17823" placeholder="..." />
+                <marker date="1464095002862" expanded="true" signature="17865:18017" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,18 +128,8 @@
       <file leaf-file-name="Registrar.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Services/Registrar.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="40" column="15" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="registration.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/emails/registration.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="7" selection-start-line="19" selection-start-column="7" selection-end-line="19" selection-end-column="7" />
+            <state relative-caret-position="125">
+              <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -95,46 +143,6 @@
               <folding>
                 <element signature="e#44#80#0#PHP" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="drop.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/emails/drop.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="12" selection-start-line="15" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="contact.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/emails/contact.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="202" column="0" selection-start-line="202" selection-start-column="0" selection-end-line="204" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/User.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="22" column="17" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -154,7 +162,6 @@
       <list>
         <option value="$PROJECT_DIR$/resources/views/group.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/help.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/login.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/profile.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/master.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/user.blade.php" />
@@ -166,23 +173,24 @@
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/resources/views/home-loggedin.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" />
         <option value="$PROJECT_DIR$/resources/views/upload.blade.php" />
         <option value="$PROJECT_DIR$/public/js/skydrops.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/DropController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/FileController.php" />
         <option value="$PROJECT_DIR$/resources/views/drop.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/register.blade.php" />
-        <option value="$PROJECT_DIR$/app/Services/Registrar.php" />
         <option value="$PROJECT_DIR$/app/User.php" />
         <option value="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2016_05_25_000000_modify_users_table.php" />
         <option value="$PROJECT_DIR$/resources/views/emails/registration.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/UserController.php" />
+        <option value="$PROJECT_DIR$/app/Services/Registrar.php" />
         <option value="$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesAndRegistersUsers.php" />
+        <option value="$PROJECT_DIR$/resources/views/register.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/UserController.php" />
+        <option value="$PROJECT_DIR$/resources/views/login.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/home.blade.php" />
       </list>
     </option>
   </component>
@@ -802,12 +810,12 @@
       <workItem from="1463468274983" duration="24544000" />
       <workItem from="1463495391397" duration="107907000" />
       <workItem from="1464073477450" duration="1998000" />
-      <workItem from="1464075502628" duration="45284000" />
+      <workItem from="1464075502628" duration="50546000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="182900000" />
+    <option name="totallyTimeSpent" value="188162000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1045" extended-state="0" />
@@ -876,19 +884,17 @@
           <line>109</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/UserController.php</url>
+          <line>212</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="60" />
+      <option name="time" value="61" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Middleware/Authenticate.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -950,36 +956,6 @@
         <state relative-caret-position="277">
           <caret line="94" column="7" selection-start-line="94" selection-start-column="7" selection-end-line="94" selection-end-column="7" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/skydrops.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="58" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/drop.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="583" column="12" selection-start-line="583" selection-start-column="12" selection-end-line="583" selection-end-column="12" />
-          <folding>
-            <element signature="e#756#777#0#HTML" expanded="true" />
-            <element signature="e#917#938#0#HTML" expanded="true" />
-            <marker date="1464095002862" expanded="true" signature="17775:17823" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="17865:18017" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18058:18478" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18260:18337" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18391:18474" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18657:18828" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18683:18827" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18860:18930" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18880:18929" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18963:19033" placeholder="..." />
-            <marker date="1464095002862" expanded="true" signature="18983:19032" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1151,28 +1127,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/login.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/register.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="590">
-          <caret line="51" column="62" selection-start-line="51" selection-start-column="62" selection-end-line="51" selection-end-column="62" />
-          <folding>
-            <element signature="e#1263#1321#0#HTML" expanded="true" />
-            <marker date="1464167205848" expanded="true" signature="1571:2546" placeholder="..." />
-            <marker date="1464167205848" expanded="true" signature="1584:2532" placeholder="..." />
-            <marker date="1464167205848" expanded="true" signature="1805:1864" placeholder="{...}" />
-            <marker date="1464167205848" expanded="true" signature="2168:2185" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -1261,34 +1215,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/DropController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1550">
-          <caret line="120" column="29" selection-start-line="120" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Services/Registrar.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="40" column="15" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="415" column="5" selection-start-line="415" selection-start-column="5" selection-end-line="415" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -1303,12 +1233,87 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Services/Registrar.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesAndRegistersUsers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="80" column="40" selection-start-line="80" selection-start-column="40" selection-end-line="80" selection-end-column="40" />
+        <state relative-caret-position="211">
+          <caret line="64" column="46" selection-start-line="64" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
           <folding>
             <element signature="e#45#58#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/register.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="53" column="54" selection-start-line="53" selection-start-column="54" selection-end-line="53" selection-end-column="54" />
+          <folding>
+            <marker date="1464246689077" expanded="true" signature="1571:2546" placeholder="..." />
+            <marker date="1464246689077" expanded="true" signature="2168:2185" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/DropController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1550">
+          <caret line="120" column="29" selection-start-line="120" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/drop.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="251" column="66" selection-start-line="251" selection-start-column="58" selection-end-line="251" selection-end-column="66" />
+          <folding>
+            <marker date="1464095002862" expanded="true" signature="17775:17823" placeholder="..." />
+            <marker date="1464095002862" expanded="true" signature="17865:18017" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/skydrops.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="189" column="35" selection-start-line="189" selection-start-column="0" selection-end-line="190" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/login.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="35" column="20" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="20" />
+          <folding>
+            <marker date="1464247006793" expanded="true" signature="1248:1265" placeholder="..." />
+            <marker date="1464247006793" expanded="true" signature="1278:1300" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/UserController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="266" column="5" selection-start-line="266" selection-start-column="5" selection-end-line="266" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/home.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="338" column="92" selection-start-line="338" selection-start-column="92" selection-end-line="338" selection-end-column="92" />
+          <folding>
+            <element signature="n#style#0;n#a#3;n#div#1;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

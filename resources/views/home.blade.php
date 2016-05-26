@@ -336,7 +336,8 @@
 				<a class="logInOut" href="/logout"><i class="fa fa-sign-out"></i><span> Log Out</span></a>
 				<a class="button" href="/upload">Create Drop</a>
 				@else
-				<a class="logInOut" href="/login"><i class="fa fa-sign-in"></i><span> Log In</span></a>
+					<a style="margin-right: 10px;" class="logInOut" href="/auth/register"><i></i><span> Sign Up</span></a>
+					<a class="logInOut" href="/login"><i class="fa fa-sign-in"></i><span> Log In</span></a>
 				@endif
 				<br clear="both" />
 			</div>

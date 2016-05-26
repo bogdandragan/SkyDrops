@@ -245,13 +245,24 @@ class UserController extends Controller {
 				//Log in user
 				Auth::login( $user );
 				
-				return Redirect::intended('/');
+				return $user;
 			
 			} else{
-				return "Your user need to be in a <strong>"+\Config::get('app.sky_group_name')+"-*+</strong> group.";
+				return (new \Illuminate\Http\Response)->setStatusCode(401, "Your user need to be in a <strong>"+\Config::get('app.sky_group_name')+"-*+</strong> group.");
 			}
 		} else{
-			return "Authentication failed";
+			$user = User::where('username', '=', $username)->first();
+			$userGroup = UserGroup::where('user_id', '=', $user->id)->first();
+
+			if(!$user || $userGroup || $user->verification_code != ""){
+				return (new \Illuminate\Http\Response)->setStatusCode(401, 'Username or password do not match');
+			}
+
+			Auth::login($user);
+
+			return $user;
+
+
 		}
 	}
 	
