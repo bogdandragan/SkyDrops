@@ -19,6 +19,21 @@
 	}
 @endsection
 
+@section('scripts')
+	{!! HTML::script('/js/jquery.min.js') !!}
+	{!! HTML::script('/js/bootstrap.min.js') !!}
+	{!! HTML::script('/js/jquery-ui.min.js') !!}
+	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
+	{!! HTML::script('/js/autosize.js') !!}
+	{!! HTML::script('/js/dropzone.js') !!}
+	{!! HTML::script('/js/selectize.js') !!}
+	{!! HTML::script('/js/sweetalert.min.js') !!}
+	{!! HTML::script('/js/chart.min.js') !!}
+	{!! HTML::script('/js/jquery.overlay.min.js') !!}
+	{!! HTML::script('/js/jquery.textcomplete.min.js') !!}
+	{!! HTML::script('/js/skydrops.js') !!}
+@endsection
+
 @section('content')
 <div class="subHeader">
 	<div class="container wrap">
@@ -27,7 +42,7 @@
 			<!-- <input type="button" class="button shareButton" value="Share" /> -->
 			<a class="button downloadArchive" href="/d/{{ $drop->hash }}/downloadZip"><i class="fa fa-download"></i> Download Archive</a>
 			<a style="width: 150px;" id="copyArchiveLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Copy Archive Link</a>
-			<a style="width: 150px;" id="copyDropLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Copy Drop Link</a>
+			<a style="width: 150px;" id="copyDropUploadLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Get link for upload</a>
 
 		</div>
 		<div class="box subHeaderRightBlock">
@@ -257,12 +272,25 @@
 			} );
 		});
 
-		$("#copyDropLink").attr('data-clipboard-text', location.protocol + '//' + location.host + location.pathname + "/sharedForUpload");
-		var copyDropLink = new ZeroClipboard( document.getElementById("copyDropLink") );
+		$("#copyDropUploadLink").attr('data-clipboard-text', location.protocol + '//' + location.host + location.pathname + "/sharedForUpload");
+		var copyDropLink = new ZeroClipboard( document.getElementById("copyDropUploadLink") );
 		copyDropLink.on( "ready", function( readyEvent ) {
 			copyDropLink.on( "aftercopy", function( event ) {
-				swal("Link copied to clipboard.");
-			} );
+				var token = $('input[name=_token]').val();
+				$.ajax({
+					type:	'POST',
+					url:	'/d/'+$("#addFileButton").attr("data-hash")+'/shareForUpload',
+					data:	{_token : token},
+					success: function(data){
+						swal("Link for upload copied to clipboard.");
+					},
+					error: function(data){
+						swal("Error!", "An error occured while sharing the drop.", "error");
+					}
+				});
+
+
+			});
 		});
 
 		//Textmention
@@ -612,7 +640,7 @@
 		$.ajax({
 			type:	'POST',
 			url:	'/d/'+$("#addFileButton").attr("data-hash")+'/updateValidity',
-			data:	{newDate : newDate},
+			data:	{_token : token, newDate : newDate},
 			success: function(data){
 				swal("Updated!", "Drop validity date has been updated.", "success");
 			},

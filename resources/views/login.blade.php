@@ -4,6 +4,21 @@
 	Log In
 @endsection
 
+@section('scripts')
+	{!! HTML::script('/js/jquery.min.js') !!}
+	{!! HTML::script('/js/bootstrap.min.js') !!}
+	{!! HTML::script('/js/jquery-ui.min.js') !!}
+	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
+	{!! HTML::script('/js/autosize.js') !!}
+	{!! HTML::script('/js/dropzone.js') !!}
+	{!! HTML::script('/js/selectize.js') !!}
+	{!! HTML::script('/js/sweetalert.min.js') !!}
+	{!! HTML::script('/js/chart.min.js') !!}
+	{!! HTML::script('/js/jquery.overlay.min.js') !!}
+	{!! HTML::script('/js/jquery.textcomplete.min.js') !!}
+	{!! HTML::script('/js/skydrops.js') !!}
+@endsection
+
 @section('content')
 <div class="container wrap noSubHeader wrapLogin">
 				
@@ -19,8 +34,7 @@
 							<label for="password">Password</label>
 							<input type="password" name="password" />
 							<input type="submit" id="submitButton" class="button" value="Log In">
-							<a style="display: block; margin-top: 1rem; font-weight: 200" href="http://reset.skypro.ch/">Forgot password?</a>
-							{!! Form::token() !!}
+							<a style="display: block; margin-top: 1rem; font-weight: 200" href="auth/restore">Forgot password?</a>
 						</form>
 					</div>
 				</div>

@@ -37,10 +37,18 @@ Route::get('logout', function(){
 	return redirect("/");
 });
 
+Route::get('auth/restore', function(){
+	return view('restore');
+});
+
 Route::resource('u', 'UserController');
 Route::post('u/upload', 'UserController@upload');
 Route::post('u/addFile', 'UserController@addFile');
 Route::post('u/ldap', 'UserController@ldap');
+Route::post('u/restore', 'UserController@restorePassword');
+Route::get('u/restoreConfirm', 'UserController@restorePasswordConfirm');
+
+
 Route::get('profile', 'UserController@profile');
 Route::get('profile/groups', 'UserController@groups');
 
@@ -54,6 +62,8 @@ Route::get('d/{id}/downloadZip', 'DropController@downloadZip');
 Route::get('d/{id}/sharedForUpload', 'DropController@sharedForUpload');
 Route::post('d/{id}/share', 'DropController@share');
 Route::post('d/{id}/updateValidity', 'DropController@updateValidity');
+Route::post('d/{id}/shareForUpload', 'DropController@shareForUpload');
+
 
 Route::resource('dt', 'DropTagController');
 
@@ -69,6 +79,14 @@ Route::resource('fc', 'FileCommentController');
 Route::get('help', function(){
 	return view('help');
 });
+
+Route::get('admin/dashboard', 'AdminController@adminDashboard');
+Route::get('admin/statistic', 'AdminController@adminStatistic');
+Route::get('admin/statistic/getDrops', 'AdminController@getDropsStatistic');
+Route::get('admin/statistic/getUserAgent', 'AdminController@getUserAgentStatistic');
+
+
+
 
 /*
 Route::controllers([

@@ -28,21 +28,12 @@
                 Registration
             </div>
             <div class="boxContent">
-                <form action="/auth/register" method="POST" id="registrationForm">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" autofocus />
-                    <label for="email">Email</label>
-                    <input type="email" name="email" />
-                    <label for="first_name">First name</label>
-                    <input type="text" name="first_name" />
-                    <label for="last_name">Last name</label>
-                    <input type="text" name="last_name" />
+                <form action="/u/newPassword" method="POST" id="newPasswordForm">
                     <label for="password">Password</label>
                     <input type="password" name="password" />
                     <label for="password_confirmation">Confirm password</label>
                     <input type="password" name="password_confirmation" />
-                    <input type="submit" id="submitButton" class="button" value="Register">
-                    <p style="display: block; margin-top: 1rem; font-weight: 200" >Already have an account?<a href="/login"> Log In</a></p>
+                    <input type="submit" id="submitButton" class="button" value="Set new password">
                     {!! Form::token() !!}
                 </form>
             </div>
@@ -55,14 +46,10 @@
 
             $.ajax({
                 type: "POST",
-                url: "/auth/register",
-                data: $("#registrationForm").serialize(),
+                url: "/u/newPassword",
+                data: $("#newPasswordForm").serialize(),
                 success: function(data) {
                     console.log(data);
-                    $(".alert-danger, .alert-success").remove();
-                    var successHtml = "<div class='alert alert-success' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
-                            "<li>Please check your email to confirm registration</li></ul></div>"
-                    $("#submitButton").after(successHtml);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     if(jqXHR.status == 422) {

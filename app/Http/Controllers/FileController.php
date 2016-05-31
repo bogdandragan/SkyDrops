@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\File as File;
 use App\FileComment as FileComment;
+use App\FileStatistic as FileStatistic;
 use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
@@ -119,6 +120,14 @@ class FileController extends Controller {
         $headers = array(
               'Content-Type: ' . $file->content_type,
             );
+
+		//add file statistic
+		$fileStatistic = new FileStatistic;
+		$fileStatistic->file_id = $file->id;
+		$fileStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
+		$fileStatistic->ip = $_SERVER['REMOTE_ADDR'];
+		$fileStatistic->save();
+
 		return Response::download($filePath . "/" . $fileName, $file->name, $headers);
 	}
 

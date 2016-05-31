@@ -268,7 +268,6 @@ class UserController extends Controller {
 	
 	private static function authenticate($username, $password)
 	{
-		
 		if(empty($username) or empty($password))
 		{
 			Log::error('Error binding to LDAP: username or password empty');
@@ -386,9 +385,6 @@ class UserController extends Controller {
 			echo "<pre>";
 			print_r($new_array);
 			echo "</pre>";
-
-
-
 		}
 	}
 	
@@ -424,6 +420,58 @@ class UserController extends Controller {
 			return redirect('login');
 		}
 		
+	}
+
+	public function adminDashboard()
+	{
+		$users = User::select('*')->get();
+
+		return view('dashboard', array('users' => $users));
+
+	}
+
+	public function adminStatistic()
+	{
+		$users = User::select('*')->get();
+		return view('statistic');
+	}
+
+	public function restorePassword(Request $request)
+	{
+		$email = $request->email;
+
+		$user = User::where('email', '=', $email)->first();
+
+		if(!$user){
+			return (new \Illuminate\Http\Response)->setStatusCode(401, 'Email not found');
+		}
+
+		$userGroup = UserGroup::where('user_id', '=', $user->id)->first();
+
+		if($userGroup){
+			return (new \Illuminate\Http\Response)->setStatusCode(422, 'Redirect to http://reset.skypro.ch/');
+		}
+
+		$restoreCode = str_random(30);
+
+		\Mail::send('emails.password', ['code' => $restoreCode], function($message) use($email)
+		{
+			$message->from('skydrops@skypro.ch', 'SKyDrops');
+			$message->subject('SKyDrops restore password');
+			$message->to($email);
+		});
+
+		return $user;
+	}
+
+	public function restorePasswordConfirm($code){
+		$user = User::where('restore_code', '=', $code)->first();
+
+		if(!$user)
+			abort('404');
+
+		return view('newPassword');
+
 	}
 
 }

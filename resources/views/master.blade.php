@@ -17,6 +17,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link href="{{ asset('/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 
 	<!-- Icons -->
 	<link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
@@ -31,6 +32,9 @@
 	<style>
 		@yield('style')
 	</style>
+
+	@yield('scripts')
+
 </head>
 <body>
 	<header>
@@ -76,20 +80,6 @@
 		</div>
 	</header>
 <!-- Scripts -->
-
-	{!! HTML::script('/js/jquery.min.js') !!}
-	{!! HTML::script('/js/bootstrap.min.js') !!}
-	{!! HTML::script('/js/jquery-ui.min.js') !!}
-	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
-	{!! HTML::script('/js/autosize.js') !!}
-	{!! HTML::script('/js/dropzone.js') !!}
-	{!! HTML::script('/js/selectize.js') !!}
-	{!! HTML::script('/js/sweetalert.min.js') !!}
-	{!! HTML::script('/js/chart.min.js') !!}
-	{!! HTML::script('/js/jquery.overlay.min.js') !!}
-	{!! HTML::script('/js/jquery.textcomplete.min.js') !!}
-	{!! HTML::script('/js/skydrops.js') !!}
-
 
 	<script>
 
@@ -170,6 +160,12 @@ var options = {
     		<h3>{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h3>
     		<h4>{{ Auth::user()->email }}</h4>
     		<a href="/logout" type="button" class="button">Logout</a>
+    		@if(Auth::user()->isAdmin)
+    		<div class="text-center" style="margin-top: 10px;">
+    			<a class="btn btn-primary" style="display: inline-block; width:49%;" href="/admin/dashboard">Manage users</a>
+    			<a class="btn btn-primary" style="display: inline-block; width:49%;" href="/admin/statistic">Drop statistics</a>
+    		</div>
+    		@endif
     	</div>
     	<div class="sidebar-section">
     		<h2>Statistics</h2>
@@ -180,6 +176,10 @@ var options = {
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 @endif
-
+<script>
+        $('#defaultModal .modal-content').click(function() {
+            $('#defaultModal').modal('hide');
+        });
+</script>
 </body>
 </html>

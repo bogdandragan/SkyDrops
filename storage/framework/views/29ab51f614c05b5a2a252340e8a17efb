@@ -35,23 +35,13 @@
         <!-- Content start -->
         <div class="box">
             <div class="boxHeader">
-                Registration
+                Restore password
             </div>
             <div class="boxContent">
-                <form action="/auth/register" method="POST" id="registrationForm">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" autofocus />
+                <form action="/user/restore" method="POST" id="restoreForm">
                     <label for="email">Email</label>
-                    <input type="email" name="email" />
-                    <label for="first_name">First name</label>
-                    <input type="text" name="first_name" />
-                    <label for="last_name">Last name</label>
-                    <input type="text" name="last_name" />
-                    <label for="password">Password</label>
-                    <input type="password" name="password" />
-                    <label for="password_confirmation">Confirm password</label>
-                    <input type="password" name="password_confirmation" />
-                    <input type="submit" id="submitButton" class="button" value="Register">
+                    <input type="email" name="email" autofocus />
+                    <input type="submit" id="submitButton" class="button" value="Restore">
                     <p style="display: block; margin-top: 1rem; font-weight: 200" >Already have an account?<a href="/login"> Log In</a></p>
                     <?php echo Form::token(); ?>
 
@@ -61,13 +51,13 @@
         <!-- Content end -->
     </div>
     <script>
-        $("#registrationForm").submit(function(e) {
+        $("#restoreForm").submit(function(e) {
             e.preventDefault();
 
             $.ajax({
                 type: "POST",
-                url: "/auth/register",
-                data: $("#registrationForm").serialize(),
+                url: "/u/restore",
+                data: $("#restoreForm").serialize(),
                 success: function(data) {
                     console.log(data);
                     $(".alert-danger, .alert-success").remove();
@@ -76,15 +66,14 @@
                     $("#submitButton").after(successHtml);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    if(jqXHR.status == 422) {
-                        $(".alert-danger, .alert-success").remove();
-                        var errors = jqXHR.responseJSON;
-                        var errorsHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul>";
-                        $.each(jqXHR.responseJSON, function (index, value) {
-                            errorsHtml += "<li>"+value[0]+"</li>"
-                        });
-                        errorsHtml += "</ul></div>";
-                        $("#submitButton").after(errorsHtml);
+                    if(jqXHR.status == 401) {
+                        $(".alert-danger").remove();
+                        var errorHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+                                "<li>"+jqXHR.statusText+"</li></ul></div>"
+                        $("#submitButton").after(errorHtml);
+                    }
+                    if(jqXHR.status == 422){
+                        window.location = "http://reset.skypro.ch/";
                     }
                 }
             });

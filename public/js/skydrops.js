@@ -63,9 +63,11 @@ $(function() {
     $('#emptyDrop').change(function() {
         if($(this).is(":checked")) {
             $("#uploadButton").removeAttr('disabled');
+            myDropzone.removeEventListeners();
         }
         else if(!myDropzone.files.length && $(this).not(":checked")){
             $("#uploadButton").attr("disabled", true);
+            myDropzone.setupEventListeners();
         }
     });
 	

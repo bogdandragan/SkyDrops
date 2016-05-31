@@ -1,8 +1,10 @@
 <?php namespace App\Http\Controllers;
 
+use App\DropStatistic;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\SharedUploads;
 use Illuminate\Http\Request;
 use App\Drop as Drop;
 use App\File as File;
@@ -110,6 +112,17 @@ class DropController extends Controller {
 		return $drop->hash;
 	}
 
+	public function shareForUpload($hash_id)
+	{
+		$drop = Drop::where('hash', '=', $hash_id)->first();
+
+		$sharedDrop = new SharedUploads;
+		$sharedDrop->drop_id = $drop->id;
+		$sharedDrop->save();
+
+		return $sharedDrop->drop_id;
+	}
+
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -178,6 +191,13 @@ class DropController extends Controller {
 			'Content-Type' => 'application/octet-stream',
 		);
 
+		//add drop statistic
+		$dropStatistic = new DropStatistic;
+		$dropStatistic->drop_id = $drop->id;
+		$dropStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
+		$dropStatistic->ip = $_SERVER['REMOTE_ADDR'];
+		$dropStatistic->save();
+
 		return Response::download(storage_path() . '/app/'.$zipname, $zipname, $headers)->deleteFileAfterSend(true);
 
 	}
@@ -209,7 +229,9 @@ class DropController extends Controller {
 			->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
 			->first();
 
-		if(!$drop) abort(404);
+		$shared = SharedUploads::where('drop_id', '=', $drop->id)->get();
+
+		if(!$drop || !$shared) abort(404);
 		$files = File::where('drop_id', '=', $drop->dropsid)->get();
 
 		$drop->totalSize = 0;

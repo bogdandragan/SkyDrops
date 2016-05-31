@@ -1,42 +1,5 @@
 <?php $__env->startSection('title'); ?>
-Forbidden | SkyDrops Beta
-<?php $__env->stopSection(); ?>
-
-<?php $__env->startSection('style'); ?>
-    .container h2, .container h3, .container p {
-    text-align: center;
-    }
-
-    .container h2 {
-    margin-top: 10rem;
-    margin-bottom: 0;
-    font-size: 22rem;
-    font-weight: 600;
-    }
-
-    .container h3 {
-    font-size: 5rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: 2rem;
-    }
-
-    .container p {
-    width: 40rem;
-    margin: auto;
-    }
-
-    .link {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 550px;
-    height: 660px;
-    background: url('/img/link-404.png');
-    background-position: center;
-    background-size: cover;
-    }
+    Admin Dashboard | SkyDrops Beta
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
@@ -68,18 +31,37 @@ Forbidden | SkyDrops Beta
 
 <?php $__env->startSection('content'); ?>
 
-    <div class="container wrap noSubHeader">
-
+    <div class="container noSubHeader wrap">
         <!-- Content start -->
-
-        <h2>403</h2>
-        <h3>Forbidden</h3>
-        <p>Access denied</p>
-        <div class="link"></div>
-
+        <div class="box" style="padding: 20px;">
+            <h2>Users</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+            <?php $__empty_1 = true; foreach($users as $user): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo e($user->email); ?></td>
+                    <td><?php echo e($user->username); ?></td>
+                    <td><?php echo e($user->firstname); ?></td>
+                    <td><?php echo e($user->lastname); ?></td>
+                </tr>
+            <?php endforeach; if ($__empty_1): ?>
+                No Users
+            <?php endif; ?>
+            </table>
+        </div>
         <!-- Content end -->
-
     </div>
+    <?php echo Form::token(); ?>
+
+
+    <script>
+
+    </script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
