@@ -13,13 +13,19 @@
 
 //Home
 Route::get('/', 'HomeController@index');
-Route::get('/upload', function() {
-	if(Auth::check()){
-		return view('upload');
-	} else{
-		return redirect("login");
-	}
-});
+Route::get('/home', 'HomeController@home');
+
+Route::get('/upload', 'HomeController@upload');
+
+Route::get('/shop', 'ShopController@index');
+Route::post('/shop/pay', 'ShopController@pay');
+Route::post('/shop/startPayment', 'ShopController@startPayment');
+Route::get('/PayPalCancel', 'ShopController@cancelPayment');
+Route::get('/PayPalSuccess', 'ShopController@successPayment');
+
+
+
+Route::post('/PayPal_IPN', 'ShopController@payPalIPN');
 
 //Login
 Route::get('login', function(){
@@ -27,7 +33,9 @@ Route::get('login', function(){
 });
 
 //Register
-Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::get('auth/register', function(){
+	return view('register');
+});
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 Route::get('auth/confirm/{code}', 'Auth\AuthController@getConfirm');
 
@@ -43,11 +51,21 @@ Route::get('auth/restore', function(){
 
 Route::resource('u', 'UserController');
 Route::post('u/upload', 'UserController@upload');
+Route::post('u/upload/save', 'UserController@saveUpload');
+Route::post('u/getFECost', 'UserController@getFECost');
+Route::post('u/upload/empty', 'UserController@uploadEmpty');
+
 Route::post('u/addFile', 'UserController@addFile');
+Route::post('u/addFile/save', 'UserController@saveAddFile');
+Route::post('u/addFile/deleteTmp', 'UserController@deleteTmpAddFile');
+
 Route::post('u/ldap', 'UserController@ldap');
 Route::post('u/restore', 'UserController@restorePassword');
-Route::get('u/restoreConfirm', 'UserController@restorePasswordConfirm');
+Route::get('u/restoreConfirm/{code}', 'UserController@restorePasswordConfirm');
+Route::post('u/newPassword', 'UserController@setNewPassword');
+Route::get('coinStatistics', 'UserController@coinStatistics');
 
+Route::get('getAvailableCoins', 'UserController@getAvailableCoins');
 
 Route::get('profile', 'UserController@profile');
 Route::get('profile/groups', 'UserController@groups');
@@ -62,8 +80,8 @@ Route::get('d/{id}/downloadZip', 'DropController@downloadZip');
 Route::get('d/{id}/sharedForUpload', 'DropController@sharedForUpload');
 Route::post('d/{id}/share', 'DropController@share');
 Route::post('d/{id}/updateValidity', 'DropController@updateValidity');
+Route::post('d/{id}/updateTitle', 'DropController@updateTitle');
 Route::post('d/{id}/shareForUpload', 'DropController@shareForUpload');
-
 
 Route::resource('dt', 'DropTagController');
 
@@ -86,7 +104,9 @@ Route::get('admin/statistic/getDrops', 'AdminController@getDropsStatistic');
 Route::get('admin/statistic/getUserAgent', 'AdminController@getUserAgentStatistic');
 
 
-
+Route::get('landing', function(){
+	return view('landing');
+});
 
 /*
 Route::controllers([

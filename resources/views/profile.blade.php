@@ -4,6 +4,26 @@
 	Profile
 @endsection
 
+@section('createFEButton')
+	<a class="button" href="/upload">Create Drop</a>
+@endsection
+
+@section('scripts')
+	{!! HTML::script('/js/jquery.min.js') !!}
+	{!! HTML::script('/js/bootstrap.min.js') !!}
+	{!! HTML::script('/js/jquery-ui.min.js') !!}
+	{!! HTML::script('/js/bootstrap-datepicker.js') !!}
+	{!! HTML::script('/js/autosize.js') !!}
+	{!! HTML::script('/js/dropzone.js') !!}
+	{!! HTML::script('/js/selectize.js') !!}
+	{!! HTML::script('/js/sweetalert.min.js') !!}
+	{!! HTML::script('/js/chart.min.js') !!}
+	{!! HTML::script('/js/jquery.overlay.min.js') !!}
+	{!! HTML::script('/js/jquery.textcomplete.min.js') !!}
+	{!! HTML::script('/js/skydrops.js') !!}
+	{!! HTML::script('/js/chart.min.js') !!}
+@endsection
+
 @section('content')
 <div class="subHeader profile-header">
 	<div class="wrap">
@@ -21,7 +41,6 @@
 </div>
 
 <div class="container wrap">
-				
 				<!-- Content start -->
 				<div class="sideBlock">
 					<div class="box">
@@ -108,76 +127,7 @@
 					  
 </div>
 {!! Form::token() !!}
-{!! HTML::script('/js/jquery.min.js') !!}
-{!! HTML::script('/js/bootstrap.min.js') !!}
-{!! HTML::script('/js/jquery-ui.min.js') !!}
-{!! HTML::script('/js/bootstrap-datepicker.js') !!}
-{!! HTML::script('/js/autosize.js') !!}
-{!! HTML::script('/js/dropzone.js') !!}
-{!! HTML::script('/js/selectize.js') !!}
-{!! HTML::script('/js/sweetalert.min.js') !!}
-{!! HTML::script('/js/chart.min.js') !!}
-{!! HTML::script('/js/jquery.overlay.min.js') !!}
-{!! HTML::script('/js/jquery.textcomplete.min.js') !!}
-{!! HTML::script('/js/skydrops.js') !!}
-{!! HTML::script('/js/chart.min.js') !!}
 <script>
-
-	$(document).ready(function(){
-
-		var data = [
-			{
-				value: 30,
-				color:"#F7464A",
-				highlight: "#FF5A5E",
-				label: "Active Drops"
-			},
-			{
-				value: 70,
-				color: "#eee",
-				highlight: "#ddd",
-				label: "Free Drops"
-			}
-		];
-
-		var options = {
-			//Boolean - Whether we should show a stroke on each segment
-			segmentShowStroke : true,
-
-			//String - The colour of each segment stroke
-			segmentStrokeColor : "#fff",
-
-			//Number - The width of each segment stroke
-			segmentStrokeWidth : 2,
-
-			//Number - The percentage of the chart that we cut out of the middle
-			percentageInnerCutout : 0, // This is 0 for Pie charts
-
-			//Number - Amount of animation steps
-			animationSteps : 100,
-
-			//String - Animation easing effect
-			animationEasing : "easeOutBounce",
-
-			//Boolean - Whether we animate the rotation of the Doughnut
-			animateRotate : true,
-
-			//Boolean - Whether we animate scaling the Doughnut from the centre
-			animateScale : false,
-
-			//String - A legend template
-			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-
-};
-
-
-
-	// For a pie chart
-	var ctx = document.getElementById("myChart").getContext("2d");
-	var myPieChart = new Chart(ctx).Pie(data,options);
-
-});
-
 	$( document ).tooltip({
 		position: {
 			my: "left bottom-0",
@@ -204,7 +154,21 @@
 		$(this).parent().parent().remove();
 
 	});
-
 </script>
-
+@if(Auth::check())
+	<script>
+		var token = $('input[name=_token]').val();
+		$.ajax({
+			url: "/getAvailableCoins",
+			type: 'POST',
+			data:	{ _token : token },
+			success: function(data){
+				$("#coinsAmount").html(data[0]);
+			},
+			error: function(data){
+				console.log(data);
+			}
+		});
+	</script>
+@endif
 @endsection

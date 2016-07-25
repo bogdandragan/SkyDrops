@@ -38,7 +38,8 @@ class Registrar implements RegistrarContract {
 			'lastname' => $data['last_name'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),
-			'verification_code' => $verificationCode
+			'verification_code' => $verificationCode,
+			'coins' => \Config::get('app.startCoins')
 		]);
 
 		//Mail

@@ -16,6 +16,7 @@ html{
 
 .fLeft{
 	float: left;
+	width: calc(100% - 220px);
 }
 
 .usrBlock{
@@ -53,7 +54,8 @@ html{
 
 .fRight{
 	float: right;
-	width: 20rem;
+	width: 200px;
+	margin-left: 20px;
 }
 
 span.tt{
@@ -204,7 +206,8 @@ header .button {
 }
 
 header .button:hover {
-    background-color: #2b957a;
+	background-color: #414896;
+	border-color: #414896;
     color: #fff;
 }
 
@@ -270,11 +273,12 @@ header ul.nav li a:hover{
 .button{
 	width: 100%;
 	text-align: center;
-	background: #2b957a;
+	background-color: #414896;
+	border-color: #414896;
 	border: 0;
 	border-radius: 5px;
 	padding: 10px 0;
-	color: #fefefe;
+	color: #fff;
 	font-weight: bold;
 	font-family: 'Open Sans', sans-serif;
 	cursor: pointer;
@@ -282,8 +286,11 @@ header ul.nav li a:hover{
 	margin-bottom: 1rem;
 }
 
-.button:hover{
-	background-color: #2b957a;
+.button:hover, .button:focus{
+	background-color: #414896;
+	border-color: #414896;
+	text-decoration: none;
+	color: #fff;
 }
 
 .subHeader{
@@ -291,7 +298,8 @@ header ul.nav li a:hover{
 	padding-bottom: 0px;
 	width: 100%;
 	background: #2986BE;
-    background-image: url('/img/background-overlay-final.png'), linear-gradient(-150deg, #00C1B6 0%, #136EB5 97%);
+    background-image: url('../img/laptop-837208_1920.jpg'), linear-gradient(-150deg, #00C1B6 0%, #136EB5 97%);
+	background-position: 0% 10%;
 	
 }
 
@@ -503,7 +511,7 @@ header ul.nav li a:hover{
 	border-radius: 3px;
 	display: inline-block;
 	width: 170px;
-	margin-top: 65px;
+	margin-top: 85px;
 }
 
 .downloadArchive:hover, .downloadArchive:focus {
@@ -649,6 +657,11 @@ header ul.nav li a:hover{
 	background: #1ab394;
 }
 
+.progressBar{
+	height: 10px;
+	background: #1ab394;
+}
+
 .box ol ol{
 	margin-left: 10px;
 }
@@ -737,7 +750,7 @@ span.infinite{
 	width: calc(100% - 4rem);
 	text-align: center;
 	padding: 9rem 0;
-	font-size: 1.7rem;
+	font-size: 2.5rem;
 	font-weight: 300;
 	color: #aaa;
 }
@@ -1079,11 +1092,52 @@ header .logo .betaMark{
 	.wrapLogin{
 		width: 100%;
 	}
+
+	.fRight{
+		float: right;
+		width: 100%;
+	}
+
+	.fLeft{
+		float: left;
+		width: 100%;
+	}
+
+	.drop{
+		width: 100% !important;
+	}
+
+	.subHeaderLeftBlock{
+		width: 100%;
+		margin-top: 0px;
+	}
+
+	.subHeaderRightBlock{
+		width: 100%;
+	}
+
+	.downloadArchive{
+		margin-top : 0px;
+		width: 49%;
+	}
+
+	#dropTitle {
+		margin-top: 0px !important;
+		margin-bottom: 10px;
+	}
+
+	.titleIcon{
+		margin-top: 5px !important;
+	}
+
+	#removeFile{
+		display: block;
+		width: 92px;
+		float: right;
+	}
 }
 
 @media screen and (max-width: 800px) {
-
-
 
 	body{
 		font-size: 1.5rem;
@@ -1182,5 +1236,103 @@ header .logo .betaMark{
 		position: relative;
 	}
 
-	
+	#contactButton{
+		margin-top: 5px;
+		margin-left: 0px;
+	}
+
+	.fRight{
+		float: right;
+		width: 100%;
+	}
+
+	.fLeft{
+		float: left;
+		width: 100%;
+	}
+
+	.drop{
+		width: 100% !important;
+	}
+
+	.subHeaderLeftBlock{
+		width: 100%;
+		margin-top: 0px;
+	}
+
+	.subHeaderRightBlock{
+		width: 100%;
+	}
+
+	.downloadArchive{
+		margin-top : 0px;
+		width: 49%;
+	}
+
+	#dropTitle {
+		margin-top: 0px !important;
+		margin-bottom: 10px;
+	}
+
+	.titleIcon{
+		margin-top: 5px !important;
+	}
+
+}
+
+.alert .ul{
+	padding-left: 10px;
+}
+
+.titleIcon{
+	float: left;
+	color: #fff;
+	margin-top: 26px;
+}
+
+.saveBtnDisabled{
+	background-color: #9e9e9e;
+}
+
+.saveBtnDisabled:hover{
+	background-color: #9e9e9e;
+}
+
+.uploadBlock{
+	background-color: #f7f7f7;
+	padding: 1px 20px 20px 20px;
+}
+
+
+
+
+.credit-card-box .panel-title {
+	display: inline;
+	font-weight: bold;
+}
+.credit-card-box .form-control.error {
+	border-color: red;
+	outline: 0;
+	box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(255,0,0,0.6);
+}
+.credit-card-box label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+.credit-card-box .payment-errors {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+.credit-card-box label {
+	display: block;
+}
+
+
+.product{
+	padding: 20px 50px 20px 0px;
+	font-size: 16px;
 }

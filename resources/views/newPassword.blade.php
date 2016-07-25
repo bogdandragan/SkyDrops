@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-    Register
+    New password | SKyDrops Beta
 @endsection
 
 @section('scripts')
@@ -25,15 +25,16 @@
         <!-- Content start -->
         <div class="box">
             <div class="boxHeader">
-                Registration
+                New password
             </div>
             <div class="boxContent">
                 <form action="/u/newPassword" method="POST" id="newPasswordForm">
                     <label for="password">Password</label>
                     <input type="password" name="password" />
                     <label for="password_confirmation">Confirm password</label>
-                    <input type="password" name="password_confirmation" />
-                    <input type="submit" id="submitButton" class="button" value="Set new password">
+                    <input type="password" name="password_confirmation"/>
+                    <input type="hidden" name="code" value="{{$code}}"/>
+                    <input type="submit" id="submitButton" class="button" value="Send">
                     {!! Form::token() !!}
                 </form>
             </div>
@@ -41,7 +42,7 @@
         <!-- Content end -->
     </div>
     <script>
-        $("#registrationForm").submit(function(e) {
+        $("#newPasswordForm").submit(function(e) {
             e.preventDefault();
 
             $.ajax({
@@ -49,7 +50,7 @@
                 url: "/u/newPassword",
                 data: $("#newPasswordForm").serialize(),
                 success: function(data) {
-                    console.log(data);
+                    window.location = "/home";
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     if(jqXHR.status == 422) {

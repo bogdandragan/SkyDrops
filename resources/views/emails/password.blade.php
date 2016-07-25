@@ -14,6 +14,6 @@
 <h2>Restore password request</h2>
 <div>
     <p>Please follow the link below to reset your password:</p>
-    <a href="http://skydrops.skypro.ch/u/restoreConfirm/{{$code}}">http://skydrops.skypro.ch/u/restoreConfirm/{{$code}}</a>
+    <a href="{{\Illuminate\Support\Facades\Config::get('app.domain')}}/u/restoreConfirm/{{$code}}">{{\Illuminate\Support\Facades\Config::get('app.domain')}}/u/restoreConfirm/{{$code}}</a>
 </div>
 </body>

@@ -4,7 +4,6 @@ use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 
 class VerifyCsrfToken extends BaseVerifier {
-
 	/**
 	 * Handle an incoming request.
 	 *
@@ -14,7 +13,7 @@ class VerifyCsrfToken extends BaseVerifier {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (!$request->is('u/ldap')) {
+		if ($request->is('u/ldap') && !$request->is('getAvailableDrops') && !$request->is('PayPal_IPN')) {
 			return parent::handle($request, $next);
 		}
 		return $next($request);

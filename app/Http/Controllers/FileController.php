@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Drop;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -10,6 +11,7 @@ use App\FileStatistic as FileStatistic;
 use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
+use Crypt;
 
 class FileController extends Controller {
 
@@ -52,7 +54,7 @@ class FileController extends Controller {
 	public function show($id)
 	{
 		$file = File::where('hash', '=', $id)->first();
-		$filePath = \Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
+		$filePath = \Config::get('filesystems.disks.local.root') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
 		preg_match('/\.[^\.]+$/i',$file->name,$fileName);
 		$fileName = $file->hash . $fileName[0];
 
@@ -63,7 +65,22 @@ class FileController extends Controller {
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
 		header('Content-Length: ' . $file->size);
-		if(true || substr($file->content_type, 0, 5) == "image") return readfile($filePath . "/" . $fileName);
+
+		if(true || substr($file->content_type, 0, 5) == "image"){
+
+			$decryptedContent = Crypt::decrypt(\Illuminate\Support\Facades\File::get($filePath . "/" . $fileName));
+			\Illuminate\Support\Facades\File::put($filePath . "/" . 'd'.$fileName, $decryptedContent);
+
+			$downloadRes = DropController::sendFile($filePath . "/" . 'd'.$fileName, $file->content_type);
+
+			if ($downloadRes['status']) {
+				\Illuminate\Support\Facades\File::delete($filePath . "/" . 'd'.$fileName);
+			} else {
+				\Illuminate\Support\Facades\File::delete($filePath . "/" . 'd'.$fileName);
+			}
+
+			//return readfile($filePath . "/" . $fileName);
+		}
 	}
 
 	/**
@@ -97,10 +114,15 @@ class FileController extends Controller {
 	public function destroy($hash_id)
 	{
 		$file = File::where('hash', '=', $hash_id)->first();
-		$filepath = \Config::get('app.file_storage') . strtolower(substr($hash_id, 0, 1)) . '/' . strtolower (substr($hash_id, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
 
-		$file = $file->delete();
-		\Illuminate\Support\Facades\File::delete($filepath);
+		if($hash_id != 'undefined' && $hash_id != null){
+			$filepath = \Config::get('filesystems.disks.local.root') . strtolower(substr($hash_id, 0, 1)) . '/' . strtolower (substr($hash_id, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+		}
+
+		if($file){
+			$file = $file->delete();
+			\Illuminate\Support\Facades\File::delete($filepath);
+		}
 
 		$response = "false";
 		if($file){
@@ -113,7 +135,13 @@ class FileController extends Controller {
 	public function download($id)
 	{
 		$file = File::where('hash', '=', $id)->first();
-		$filePath =  \Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
+		$drop = Drop::where('id', '=', $file->drop_id)->first();
+
+		if(!$drop || $drop->wasDownloaded || !$drop->wasSaved){
+			abort('404');
+		}
+
+		$filePath =  \Config::get('filesystems.disks.local.root') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1));
 		preg_match('/\.[^\.]+$/i',$file->name,$fileName);
 		$fileName = $file->hash . $fileName[0];
 
@@ -121,14 +149,28 @@ class FileController extends Controller {
               'Content-Type: ' . $file->content_type,
             );
 
-		//add file statistic
-		$fileStatistic = new FileStatistic;
-		$fileStatistic->file_id = $file->id;
-		$fileStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
-		$fileStatistic->ip = $_SERVER['REMOTE_ADDR'];
-		$fileStatistic->save();
+		$decryptedContent = Crypt::decrypt(\Illuminate\Support\Facades\File::get($filePath . "/" . $fileName));
+		\Illuminate\Support\Facades\File::put($filePath . "/" . 'd'.$fileName, $decryptedContent);
 
-		return Response::download($filePath . "/" . $fileName, $file->name, $headers);
+		$downloadRes = DropController::sendFile($filePath . "/" . 'd'.$fileName, $file->content_type);
+
+		if ($downloadRes['status']) {
+			if(!Auth::check() || $drop->user_id != Auth::user()->id){
+				$drop->wasDownloaded = true;
+				$drop->save();
+			}
+			//add file statistic
+			$fileStatistic = new FileStatistic;
+			$fileStatistic->file_id = $file->id;
+			$fileStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
+			$fileStatistic->ip = $_SERVER['REMOTE_ADDR'];
+			$fileStatistic->save();
+			\Illuminate\Support\Facades\File::delete($filePath . "/" . 'd'.$fileName);
+		} else {
+			\Illuminate\Support\Facades\File::delete($filePath . "/" . 'd'.$fileName);
+		}
+
+		//return Response::download($filePath . "/" . $fileName, $file->name, $headers);
 	}
 
 	public function getComments($id) {

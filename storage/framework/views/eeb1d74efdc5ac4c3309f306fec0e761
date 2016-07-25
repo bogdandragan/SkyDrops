@@ -1,5 +1,9 @@
 <?php $__env->startSection('title'); ?>
-    Admin Dashboard | SkyDrops Beta
+    Users Dashboard | SkyDrops Beta
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('createFEButton'); ?>
+    <a class="button" href="/upload">Create Drop</a>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
@@ -27,6 +31,12 @@
 
     <?php echo HTML::script('/js/skydrops.js'); ?>
 
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+    body{
+    background: url(<?php echo e(asset('/img/photo-montage-556807_1920.jpg')); ?>) repeat-y center center;
+    }
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -59,9 +69,9 @@
     <?php echo Form::token(); ?>
 
 
-    <script>
+    <?php if(Auth::check()): ?>
 
-    </script>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

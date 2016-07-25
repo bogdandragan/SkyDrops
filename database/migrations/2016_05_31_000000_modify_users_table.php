@@ -15,6 +15,8 @@ class ModifyUsersTable extends Migration {
         Schema::table('users', function(Blueprint $table)
         {
             $table->boolean('isAdmin')->nullable();
+            $table->string('restore_code', 50)->nullable();
+            $table->integer('coins')->nullable();
         });
     }
 
@@ -27,6 +29,8 @@ class ModifyUsersTable extends Migration {
     {
         Schema::table('users', function($table) {
             $table->dropColumn('isAdmin');
+            $table->dropColumn('restore_code');
+            $table->dropColumn('coins');
         });
     }
 

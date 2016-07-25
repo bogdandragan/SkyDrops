@@ -2,36 +2,78 @@ var myDropzone = "";
 var $select = "";
 var $selectCon = "";
 Dropzone.autoDiscover = false;
+var totalSize = 0;
+var totalCost = 1;
+var diffDays = 7;
+
+function showPaymentWindow() {
+
+    window.popup = window.open("http://www.google.com",
+        'importwindow',
+        "toolbar=no," +
+        "location=no," +
+        "statusbar=no," +
+        "menubar=no," +
+        "resizable=0," +
+        'width=600, ' +
+        'height=400, ' +
+        'top=100, ' +
+        'left=200');
+
+    window.popup.focus();
+
+    window.popup.onload = function() {
+        //console.log("12345678");
+        window.popup.onbeforeunload = function(){
+            console.log("4564654646");
+        }
+    }
+}
+function removeNotAllowedCharacters(filename){
+    var res = filename.replace(/,/g, '');
+    res = res.replace(/;/g, '');
+    res = res.replace(/\s/g, '');
+    return res;
+}
 
 $(function() {
-
 	if ( $( ".ownDropzone" ).length ) {
 		var myDropzone = new Dropzone(".ownDropzone",
 		{
 			url: "/u/upload",
 			dictDefaultMessage: "Drop files here or click to upload.",
 			parallelUploads: 10,
-			maxFilesize: 2047,
-			autoProcessQueue: false,
+			maxFilesize: 16384,
+			autoProcessQueue: true,
 			thumbnailWidth: 178,
 			thumbnailHeight: 200,
 			uploadMultiple: true,
+            headers: {
+                'x-csrf-token': $('input[name="_token"]').val()
+            },
 			previewTemplate: $('#preview-template').html()
 		});
 		
 			// Update the total progress bar
 	myDropzone.on("totaluploadprogress", function(progress) {
+        console.log(progress);
 		progress = parseInt(progress);
 		$('.blackBlock .progressValue').text(progress + " %");
 		$('.blackBlock .progressBar').css('width', progress + "%");
 	});
+
+     myDropzone.on("uploadprogress", function(file) {
+         console.log(file);
+         console.log(file.upload.progress + " " + file.name);
+         $(".dz-filename span:contains("+file.name+")").parent().parent().children().last().css('width', file.upload.progress + "%");
+     });
 	
 	myDropzone.on("successmultiple", function(files, response) {
 		//console.log(response);
-		window.onbeforeunload = null;
-		window.location = "/d/" + response;
+		//window.onbeforeunload = null;
+		//window.location = "/d/" + response;
 	});
-	
+
 	myDropzone.on("sending", function(file, xhr, formData) {
 		formData.append("title", $('input[name=inpTitle]').val());
 		//formData.append("tags", JSON.stringify($select[0].selectize.items));
@@ -41,21 +83,96 @@ $(function() {
 		formData.append("contacts", JSON.stringify([]));
 		formData.append("message", "");
 		formData.append("expires_at", ($('#delDate').is(':checked')) ? "" : $('.input-group.date').data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
-	});
+        formData.append("validity", diffDays);
+        formData.append("totalSize", totalSize);
+        formData.append("hash", $("#newHash").val());
+    });
 
      myDropzone.on("addedfile", function(file) {
-         $("#uploadButton").removeAttr('disabled');
+         //check if file was added
+         if (this.files.length) {
+             for (var i = 0; i < this.files.length - 1; i++){
+                 if(this.files[i].name === file.name && this.files[i].size === file.size && this.files[i].lastModifiedDate.toString() === file.lastModifiedDate.toString())
+                 {
+                     this.removeFile(file);
+                     return;
+                 }
+             }
+         }
+
+         totalSize += file.size;
+
+         if(totalSize>10*1024*1024*1024){
+             swal("Error!", "You cannot upload more than 10Gb", "error");
+             this.removeFile(file);
+             totalSize -= file.size;
+         }
+
+         getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+         getFECost(function(data){
+             console.log(data);
+             if(data[1] == 0)  // if user dont have coins
+             {
+                 myDropzone.removeFile(file);
+                 swal({
+                     title: "You don't have enough coins!",
+                     text: "Would you like to buy more?",
+                     type: "warning",
+                     showCancelButton: true,
+                     confirmButtonColor: "#DD6B55",
+                     confirmButtonText: "Yes, continue!",
+                     cancelButtonText: "No, cancel pls!",
+                     closeOnConfirm: true,
+                     closeOnCancel: true
+                 }, function(isConfirm){
+                     if (isConfirm) {
+                         window.location = "/shop";
+
+                         //showPaymentWindow();
+                     } else {
+                         //swal("Cancelled", "", "error");
+                     }
+                 });
+             }
+             else{
+                 $("#uploadButton").removeAttr('disabled');
+                 $("#uploadButton").removeClass("saveBtnDisabled")
+             }
+         });
      });
 
      myDropzone.on("removedfile", function(file) {
-         if(!myDropzone.files.length){
-             $("#uploadButton").attr("disabled", true);
-         }
+         var token = $('input[name=_token]').val();
+         var filename = removeNotAllowedCharacters(file.name);
+
+         $.ajax({
+             type:	'DELETE',
+             url:	'/f/' + Cookies.get(filename),
+             data:	{ _token : token },
+             success: function(data){
+                 totalSize -= file.size;
+                 getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+                 if(!myDropzone.files.length){
+                     $("#uploadButton").attr("disabled", true);
+                     $("#uploadButton").addClass("saveBtnDisabled");
+                 }
+                 Cookies.expire(filename);
+             },
+             error: function(data){
+                 swal("Error!", "An error occured while deleting the file.", "error");
+             }
+         });
+
      });
 
      myDropzone.on("error", function(error) {
          $('.blackBlock').hide();
-         swal("Error!", "An error occured while creating new drop", "error");
+         if(error.xhr.status == 403){
+             swal("Error!", error.xhr.statusText, "error");
+         }
+         else{
+             swal("Error!", error.xhr.status+" An error occured while creating new drop", "error");
+         }
      });
 
 	}
@@ -63,11 +180,44 @@ $(function() {
     $('#emptyDrop').change(function() {
         if($(this).is(":checked")) {
             $("#uploadButton").removeAttr('disabled');
+            $("#uploadButton").removeClass("saveBtnDisabled");
             myDropzone.removeEventListeners();
+            $(".ownDropzone").hide();
+            $("#emptyDropOptions").show();
+            $("#emptyDropOptions").val(1);
+            $("#feSizeLimit [value='1']").attr("selected", "selected");
+            totalSize = 1024*1024*1024;
+            myDropzone.removeAllFiles(true);
         }
         else if(!myDropzone.files.length && $(this).not(":checked")){
             $("#uploadButton").attr("disabled", true);
+            $("#uploadButton").addClass("saveBtnDisabled");
+            $(".ownDropzone").show();
+            $("#emptyDropOptions").hide();
             myDropzone.setupEventListeners();
+            totalSize = 0;
+            getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+        }
+    });
+
+    $('#feSizeLimit').change(function() {
+        if($(this).val() == "1") {
+            totalSize = 1024*1024*1024;
+            getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+        }
+        else if($(this).val() == "5") {
+            totalSize = 1024*1024*1024*5;
+            getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+        }
+        else if($(this).val() == "10") {
+            totalSize = 1024*1024*1024*10;
+            getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
+        }
+    });
+
+    $('.input-group.date').change(function() {
+        if(typeof ($('.input-group.date').data('datepicker')) != 'undefined'){
+            getTotalCost($('.input-group.date').data('datepicker').dates[0], totalSize);
         }
     });
 	
@@ -107,6 +257,7 @@ $(function() {
     date.setDate(date.getDate() + 7);
     date = new Date(date);
     $('.input-group.date .form-control').val(formatDate(date));
+    $("#totalCost").html(totalCost);
 
 	initDatepicker();
 	initContacts();
@@ -117,11 +268,35 @@ $(function() {
             createEmptyDrop();
         }
         else{
-            myDropzone.processQueue();
-            $('.blackBlock').show();
-            window.onbeforeunload = function() {
-                return "Your upload is not completed.";
-            };
+            var formData = new FormData();
+            formData.append("title", $('input[name=inpTitle]').val());
+            formData.append("tags", JSON.stringify([]));
+            formData.append("contacts", JSON.stringify([]));
+            formData.append("message", "");
+            formData.append("expires_at", ($('#delDate').is(':checked')) ? "" : $('.input-group.date').data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
+            formData.append("validity", diffDays);
+            formData.append("totalSize", totalSize);
+            formData.append("hash", $("#newHash").val());
+
+            $.ajax({
+                url: "u/upload/save",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data){
+                    window.onbeforeunload = null;
+                    window.location = "/d/" + data;
+                },
+                error: function(data){
+                    if(data.status == 403){
+                        swal("Error!", data.statusText, "error");
+                    }
+                    else{
+                        swal("Error!", data.status+" An error occured while creating new drop", "error");
+                    }
+                }
+            });
         }
 	});
 	
@@ -164,6 +339,64 @@ $(function() {
   });*/
 });
 
+function formatFileSize(size){
+    var units = [' B', ' KB', ' MB', ' GB', ' TB'];
+    for (i = 0; size > 1024; i++) { size /= 1024; }
+    return (Math.round(size * 100) / 100)+units[i];
+}
+
+function getFECost(callback){
+    var token = $('input[name=_token]').val();
+    $.ajax({
+        url: "u/getFECost",
+        data:	{ _token : token, size:totalSize, validity:diffDays},
+        type: 'POST',
+        success: function(data){
+            callback(data);
+        },
+        error: function(data){
+            if(data.status == 403){
+                swal("Error!", data.statusText, "error");
+            }
+            else{
+                swal("Error!", data.status+" An error occured while creating new drop", "error");
+            }
+        }
+    });
+}
+
+function getTotalCost(date, size){
+    totalCost = 1;
+    var now = new Date();
+    now.setHours(0,0,0,0)
+    diffDays = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+
+    if(diffDays <= 30){
+        $("#addValidityCoins").html(" +0");
+    }
+    if(diffDays > 30){
+        totalCost += 1;
+        $("#addValidityCoins").html(" +1");
+    }
+
+    if(size <= 1024*1024*1024){
+        totalCost += 0;
+        $("#addSizeCoins").html(" +0");
+    }
+    if(size > 1024*1024*1024 && size <= 1024*1024*1024*5){
+        totalCost += 1;
+        $("#addSizeCoins").html(" +1");
+
+    }
+    if(size > 1024*1024*1024*5 && size <= 1024*1024*1024*10){
+        totalCost += 2;
+        $("#addSizeCoins").html(" +2");
+    }
+
+    $("#totalCost").html(totalCost);
+    $("#totalSize").html(formatFileSize(size));
+    $("#dropValidity").html(diffDays+" days");
+}
 
 function initDatepicker(){
     $('.input-group.date').datepicker({
@@ -181,18 +414,36 @@ function createEmptyDrop(){
     formData.append("contacts", JSON.stringify([]));
     formData.append("message", "");
     formData.append("expires_at", ($('#delDate').is(':checked')) ? "" : $('.input-group.date').data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
+    formData.append("validity", diffDays);
+    formData.append("totalSize", totalSize);
 
     $.ajax({
-        url: "u/upload",
-        data: formData,
-        processData: false,
-        contentType: false,
-        type: 'POST',
+        type:	'DELETE',
+        url:	'/d/' + $("#newHash").val(),
+        data:	{ _token : $('input[name="_token"]').val() },
         success: function(data){
-            window.location = "/d/" + data;
+            $.ajax({
+                url: "u/upload/empty",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data){
+                    window.onbeforeunload = null;
+                    window.location = "/d/" + data;
+                },
+                error: function(data){
+                    if(data.status == 403){
+                        swal("Error!", data.statusText, "error");
+                    }
+                    else{
+                        swal("Error!", data.status+" An error occured while creating new drop", "error");
+                    }
+                }
+            });
         },
         error: function(data){
-            swal("Error!", "An error occured while creating new drop", "error");
+            swal("Error!", data.status+" An error occured while creating new drop", "error");
         }
     });
 }

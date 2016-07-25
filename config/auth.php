@@ -4,7 +4,11 @@ return [
 
 	/* Custom */
 
+
 /*	'ldap_tree' => 'ou=users,o=cham|ou=user,o=extranet', //splitted with Pipe*/
+//   'ldap_server' => '193.109.52.12',
+
+	//for local environment
 	'ldap_tree' => 'ou=users,o=system', //splitted with Pipe
 	'ldap_server' => '192.168.53.55',
 

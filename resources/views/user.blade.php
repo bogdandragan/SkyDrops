@@ -5,6 +5,10 @@
 	{{ $user->firstname }} {{ $user->lastname }}
 @endsection
 
+@section('createFEButton')
+	<a class="button" href="/upload">Create Drop</a>
+@endsection
+
 @section('content')
 
 <div class="container noSubHeader wrap usrBlock">
@@ -33,4 +37,21 @@
 {!! HTML::script('/js/jquery.overlay.min.js') !!}
 {!! HTML::script('/js/jquery.textcomplete.min.js') !!}
 {!! HTML::script('/js/skydrops.js') !!}
+
+@if(Auth::check())
+	<script>
+		var token = $('input[name=_token]').val();
+		$.ajax({
+			url: "/getAvailableCoins",
+			type: 'POST',
+			data:	{ _token : token },
+			success: function(data){
+				$("#coinsAmount").html(data[0]);
+			},
+			error: function(data){
+				console.log(data);
+			}
+		});
+	</script>
+@endif
 @endsection

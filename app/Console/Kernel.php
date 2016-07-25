@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel {
 		$schedule->command('inspire')
 				 ->hourly();
 
-		$schedule->call('App\Drop@clear')->daily();
+		$schedule->call('App\Drop@clear')->everyFiveMinutes();
 	}
 
 }

@@ -12,7 +12,7 @@
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/sweetalert.css') }}" rel="stylesheet">
 	<link href="{{ asset('/css/jquery.textcomplete.css') }}" rel="stylesheet">
-	
+
 	<!-- Fonts -->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -43,7 +43,8 @@
 				<a href="/" class="logo">
 					<span>SKyDrops</span><span class="betaMark">Beta</span>
 				</a>
-				
+				<a class="button" href="/home">Home</a>
+
 				<ul class="nav">
 				<!--
 					<li>
@@ -70,9 +71,10 @@
 					</div>
 					<br clear="left" />
 				</a>
-				<a class="button" href="/upload">Create Drop</a>
+				@yield('createFEButton')
 				@else
-				<a class="logInOut" href="/login"><i class="fa fa-sign-in"></i><span> Log In</span></a>
+					<a class="button" href="/auth/register">Free Registration and Account</a>
+					<a class="logInOut" href="/login"><i class="fa fa-sign-in"></i><span> Log In</span></a>
 				@endif
 				<br clear="both" />
 			</div>
@@ -83,62 +85,7 @@
 
 	<script>
 
-$(document).ready(function(){
-	
-	var data = [
-    {
-        value: 30,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "Active Drops"
-    },
-    {
-        value: 70,
-        color: "#222",
-        highlight: "#333",
-        label: "Free Drops"
-    }
-];
-
-var options = {
-    //Boolean - Whether we should show a stroke on each segment
-    segmentShowStroke : false,
-
-    //String - The colour of each segment stroke
-    segmentStrokeColor : "#aaa",
-
-    //Number - The width of each segment stroke
-    segmentStrokeWidth : 0,
-
-    //Number - The percentage of the chart that we cut out of the middle
-    percentageInnerCutout : 60, // This is 0 for Pie charts
-
-    //Number - Amount of animation steps
-    animationSteps : 100,
-
-    //String - Animation easing effect
-    animationEasing : "easeOutBounce",
-
-    //Boolean - Whether we animate the rotation of the Doughnut
-    animateRotate : true,
-
-    //Boolean - Whether we animate scaling the Doughnut from the centre
-    animateScale : false,
-
-    //String - A legend template
-    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-
-};
-	
-	
-	
-	// For a pie chart
-	var ctx = document.getElementById("myChart").getContext("2d");
-	var myPieChart = new Chart(ctx).Pie(data,options);
-	
-});
-
-</script>
+	</script>
 
 	
 	@yield('content')
@@ -163,14 +110,33 @@ var options = {
     		@if(Auth::user()->isAdmin)
     		<div class="text-center" style="margin-top: 10px;">
     			<a class="btn btn-primary" style="display: inline-block; width:49%;" href="/admin/dashboard">Manage users</a>
-    			<a class="btn btn-primary" style="display: inline-block; width:49%;" href="/admin/statistic">Drop statistics</a>
+    			<a class="btn btn-primary" style="display: inline-block; width:49%;" href="/admin/statistic">FE statistics</a>
     		</div>
     		@endif
     	</div>
+
+		<?php
+			$isSKyUser = false;
+
+			$domains = explode("@", Auth::user()->email);
+			$domain = end($domains);
+
+			$userGroup = \App\UserGroup::where('user_id', '=', Auth::user()->id)->first();
+
+			if($userGroup || $domain == "skypro.ch"){
+				$isSKyUser = true;
+			}
+		?>
+		@if(!$isSKyUser)
     	<div class="sidebar-section">
-    		<h2>Statistics</h2>
-    		<canvas id="myChart" width="200" height="200" style="display: block; margin: 1.5rem auto 0 auto;"></canvas>
+    		<h2 style="font-weight: bold; margin-top: 0px">Your coins amount</h2>
+			<span style="display: inline-block; color: #f7dc03"><i class="fa fa-3x fa-database"></i></span>
+			<span style="display: inline-block"><h2 style="font-weight: bold; font-size: 36px; margin-top: 0px; margin-left: 10px;" id="coinsAmount">{{Auth::user()->coins}}</h2></span>
+			<a class="btn btn-primary" style="width:100%;" href="/shop">Buy more coins</a>
+			<a class="btn btn-primary" style="width:100%; margin-top: 10px;" href="/coinStatistics">My coins balance statistics</a>
+    		<!--<canvas id="myChart" width="200" height="200" style="display: block; margin: 1.5rem auto 0 auto;"></canvas>-->
     	</div>
+		@endif
     </div>
 
   </div><!-- /.modal-dialog -->

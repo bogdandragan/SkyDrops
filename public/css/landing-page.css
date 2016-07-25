@@ -31,14 +31,14 @@ h6 {
 }
 
 .intro-header {
-    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
-    padding-bottom: 50px;
+    padding-top: 40rem;
+    padding-bottom: 40rem;
+    padding-left: 100px;
+    padding-right: 100px;
     text-align: center;
     color: #f8f8f8;
     background: url(../img/new-york-833208_1920.jpg) no-repeat center center;
     background-size: cover;
-    min-height: 100%;
-    position: relative;
 }
 
 .intro-message {
@@ -50,12 +50,13 @@ h6 {
 }
 
 .intro-left h1{
-    font-size: 3em !important;
+    font-size: 4.5rem !important;
     font-weight: normal !important;
+    text-shadow: 0 2px 3px rgba(0,0,0,1.2) !important;
 }
 
 .intro-left{
-    padding-left: 100px;
+    padding: 0px 100px;
 }
 
 .feature-message {
@@ -136,7 +137,7 @@ h6 {
 }
 
 .content-section-a {
-    padding: 20px 100px 100px 100px;
+    padding: 30px 100px 100px 100px;
     text-align: center;
     color: #f8f8f8;
     background: url(../img/computer-564136_1920.jpg) no-repeat center center;
@@ -144,7 +145,7 @@ h6 {
 }
 
 .content-section-b {
-    padding: 20px 100px 100px 100px;
+    padding: 30px 100px 100px 100px;
     background: url(../img/people-690810_1280.jpg) no-repeat center center;
     text-align: center;
     color: #f8f8f8;
@@ -156,7 +157,7 @@ h6 {
 }
 
 .content-section-c {
-    padding: 20px 100px 100px 100px;
+    padding: 30px 100px 100px 100px;
     text-align: center;
     color: #f8f8f8;
     background: url(../img/banknote-1396352_1920.jpg) no-repeat center center;
@@ -164,7 +165,7 @@ h6 {
 }
 
 .content-section-d {
-    padding: 20px 100px 100px 100px;
+    padding: 30px 100px 100px 100px;
     text-align: center;
     color: #f8f8f8;
     background-color: #171719;
@@ -172,7 +173,7 @@ h6 {
 }
 
 .content-section-e {
-    padding: 20px 100px 100px 100px;
+    padding: 30px 100px 100px 100px;
     text-align: center;
     color: #f8f8f8;
     background: url(../img/iphone-388387_1920.jpg) no-repeat center center;
@@ -216,6 +217,16 @@ h6 {
         float: left;
         margin-top: 15px;
     }
+
+    .modal-dialog {
+        width: 470px !important;
+    }
+}
+
+@media(max-width:1920px) {
+    .modal-dialog {
+        width: 470px !important;
+    }
 }
 
 @media(max-width:767px) {
@@ -233,6 +244,10 @@ h6 {
 
     ul.banner-social-buttons > li:last-child {
         margin-bottom: 0;
+    }
+
+    .modal-dialog {
+        width: 350px !important;
     }
 }
 
@@ -259,6 +274,10 @@ a.logo{
     margin-left: 10px;
     font-weight: 700;
     color: #414896;
+}
+
+a.logo:hover, a.logo:focus{
+    text-decoration: none;
 }
 
 .logo .betaMark{
@@ -314,6 +333,11 @@ a.logo{
     font-size: 18px;
 }
 
+.registerButton:hover, .registerButton:focus{
+    background-color: #414896 !important;
+    border-color: #414896 !important;
+}
+
 .registerButton{
     background-color: #414896;
     border-color: #414896;
@@ -322,35 +346,29 @@ a.logo{
 }
 
 .laptop{
-    content:url("../img/Laptop-PNG-HD.png");
     max-width: 100%;
     height: auto;
 }
 
 .pig{
-    content:url("../img/piggy_bank.png");
     max-width: 100%;
     height: auto;
 }
 
 .docs{
-    content:url("../img/docs(2).PNG");
     width: 60%;
     height: auto;
 }
 
 .coin10{
-    content:url("../img/coin_10.png");
     height: 340px;
 }
 
 .coin30{
-    content:url("../img/coin_30.png");
     height: 340px;
 }
 
 .coin100{
-    content:url("../img/coin_100.png");
     height: 340px;
 }
 
@@ -416,3 +434,86 @@ a.logo{
     font-weight: 200;
 }
 
+.forgot:hover, .forgot:focus{
+    color: #fff;
+    text-decoration: none;
+}
+
+.formContent{
+    width: 80%;
+    margin: 0 auto;
+}
+
+
+.divider{
+    width: 100%;
+}
+
+.fbImg{
+    padding: 0px 10px;
+}
+
+.twitterImg{
+    padding: 0px 10px;
+}
+
+.linkedinImg{
+    padding: 0px 10px;
+}
+
+.googleImg{
+    padding: 0px 10px;
+}
+
+.youtubeImg{
+    padding: 0px 10px;
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    color: #404998;
+}
+
+.modalBtn{
+    background-color: #0673b8 !important;
+    width: 130px;
+    margin: 0px 5px;
+}
+
+.restore-input{
+    height: 32px;
+    border-radius: 10px !important;
+    border: 1px solid #404998 !important;
+}
+
+.custom-label{
+    font-size: 15px;
+}
+
+.custom-form-group{
+    margin-bottom: 10px !important;
+}
+
+.thanks{
+    background: url('../img/thanks.png') no-repeat center center;
+    height: 405px;
+}
+
+
+.active-menu{
+    border-bottom: 4px solid #414896;
+}

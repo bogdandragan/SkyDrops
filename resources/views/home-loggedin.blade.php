@@ -4,6 +4,10 @@
 	Home | SkyDrops Beta
 @endsection
 
+@section('createFEButton')
+<a class="button" href="/upload">Create File Exchange</a>
+@endsection
+
 @section('scripts')
 	{!! HTML::script('/js/jquery.min.js') !!}
 	{!! HTML::script('/js/bootstrap.min.js') !!}
@@ -20,6 +24,10 @@
 @endsection
 
 @section('style')
+	body{
+		background: url({{ asset('/img/macbook-925596_1920.jpg') }}) repeat-y center center;
+	}
+
 	.drop-block {
 	margin-bottom: 10rem;
 	}
@@ -30,12 +38,9 @@
 	border: .1rem solid #e1e1e1;
 	background: #fff;
 	margin-bottom: 1.5rem;
+	margin-right: 1.5rem;
 	box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
 	color: #666;
-	}
-
-	.drop:not(:nth-child(3)) {
-	margin-right: 1.5rem;
 	}
 
 	.drop:active {
@@ -111,12 +116,20 @@
 	right: 1.1rem;
 	top: 1.1rem;
 	}
+
+	.button:hover, .button:focus {
+		background-color: #414896;
+		border-color: #414896;
+		color: #fff;
+		text-decoration: none;
+	}
 @endsection
 
 @section('content')
 
 <div class="container noSubHeader wrap">
 	<!-- Content start -->
+
 	<div class="drop-block clearfix">
 
 		@forelse ($drops as $drop)
@@ -133,7 +146,7 @@
 				<div class="drop-header">
 					<i class="fa fa-inbox"></i>
 						@if($drop->title)
-							{{ trim($drop->title) }}
+							{{ trim(substr($drop->title, 0, 28)) }}
 							@if(strlen($drop->title) > 28)
 								..
 							@endif
@@ -147,8 +160,14 @@
 				</div>
 				<div class="drop-content">
 					<?php
-						$imageContenttype = explode("/", explode(",", $drop->dropFilesContenttype)[0])[0];
-						$imageHash = explode(",", $drop->dropFilesHash)[0];
+						$imageContenttype = "";
+						$imageHash = "";
+						foreach (explode(",", $drop->dropFilesContenttype) as $index=>$contentType){
+							if(explode("/", $contentType)[0] == "image"){
+								$imageContenttype = explode("/", $contentType)[0];
+								$imageHash = explode(",", $drop->dropFilesHash)[$index];
+							}
+						}
 					?>
 					@if($imageContenttype == "image")
 						<div class="imagePreview" style="background-image: url('/f/{{ $imageHash }}')"></div>
@@ -157,18 +176,32 @@
 					@endif
 				</div>
 				<div class="drop-footer clearfix">
-					<span title="{{ $html }}" class="numFiles">{{ sizeof(explode(",", $drop->dropFiles)) }} @if(sizeof(explode(",", $drop->dropFiles)) > 1) files @else file @endif </span>
+					<span title="{{ $html }}" class="numFiles">
+						@if($drop->dropFiles == null)
+							0
+						@else
+							{{ sizeof(explode(",", $drop->dropFiles)) }}
+						@endif
+						@if($drop->dropFiles == null || sizeof(explode(",", $drop->dropFiles)) > 1)
+							files
+						@else
+							file
+						@endif
+					</span>
 					<input style="float: right; margin-left: 5px; margin-top: -5px;" type="button" class="button removeDrop" data-hash="{{ $drop->hash }}" value="Remove" />
 					<span class="date">
 						<?php $elapsed =  (isset($drop->expires_at)) ? date("d.m.Y", strtotime($drop->expires_at)) : "<span class='infinite'></span>"; ?>
 						<i class="fa fa-calendar-check-o" style="font-weight: 600"></i> {!! $elapsed !!}
 					</span>
-
-
 				</div>
 			</a>
 		@empty
-			No Drops
+			<div class="container" style="background-color: #f3f3f3; margin-top: 100px; width: 500px; border-radius: 10px;">
+				<div class="row" style="text-align: center;">
+					<p class="text-center" style="color: #414896; font-size: 16px;">File exchange list is empty</p>
+					<a class="button text-center" href="/upload" style="display:inline-block; width: 200px">Create File Exchange</a>
+				</div>
+			</div>
 		@endforelse
 	</div>
 	<!-- Content end -->
@@ -191,7 +224,7 @@
 		$This = $(this);
 		swal({
 			title: "Are you sure?",
-			text: "You will not be able to recover this drop!",
+			text: "You will not be able to recover this file exchange!",
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -208,15 +241,15 @@
 					data:	{ _token : token },
 					success: function(data){
 						$This.parent().parent().remove();
-						swal("Deleted!", "Your drop has been deleted.", "success");
+						swal("Deleted!", "Your file exchange has been deleted.", "success");
 					},
 					error: function(data){
-						swal("Error!", "An error occured while deleting the drop.", "error");
+						swal("Error!", "An error occured while deleting the file exchange.", "error");
 					}
 				});
 
 			} else {
-				swal("Cancelled", "Your drop is safe :)", "error");
+				swal("Cancelled", "Your file exchange is safe :)", "error");
 			}
 		});
 
@@ -228,4 +261,28 @@
 		}
 	});
 </script>
+
+@if(Auth::check())
+	<script>
+		$(document).ready(function () {
+		var token = $('input[name=_token]').val();
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('input[name="_token"]').val()
+				}
+			});
+
+			/*$.ajax({
+				url: "/getAvailableCoins",
+				type: 'GET',
+				success: function(data){
+					$("#coinsAmount").html(data[0]);
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});*/
+		});
+	</script>
+@endif
 @endsection

@@ -62,7 +62,7 @@
                     console.log(data);
                     $(".alert-danger, .alert-success").remove();
                     var successHtml = "<div class='alert alert-success' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
-                            "<li>Please check your email to confirm registration</li></ul></div>"
+                            "<li>Please check your email to restore your password</li></ul></div>"
                     $("#submitButton").after(successHtml);
                 },
                 error: function(jqXHR, textStatus, errorThrown){

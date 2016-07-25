@@ -4,6 +4,10 @@
     Statustics Dashboard | SkyDrops Beta
 @endsection
 
+@section('createFEButton')
+    <a class="button" href="/upload">Create Drop</a>
+@endsection
+
 @section('scripts')
     {!! HTML::script('/js/jquery.min.js') !!}
     {!! HTML::script('/js/bootstrap.min.js') !!}
@@ -14,6 +18,12 @@
     {!! HTML::script('/js/chart.min.js') !!}
     {!! HTML::script('/js/jquery.overlay.min.js') !!}
     {!! HTML::script('/js/jquery.textcomplete.min.js') !!}
+@endsection
+
+@section('style')
+    body{
+        background: url({{ asset('/img/computer-767776_1920.jpg') }}) repeat-y center center;
+    }
 @endsection
 
 @section('content')
@@ -79,6 +89,7 @@
         </div>
         </div>
     </div>
+    {!! Form::token() !!}
 
     {!! HTML::script('/js/angular.min.js') !!}
     <script src="/js/moment-with-locales.min.js"></script>
@@ -173,6 +184,7 @@
                 var request = $http.get(url, {params: { from: moment(fromTimestamp).format("YYYY-MM-DD"), to: moment(toTimestamp).format("YYYY-MM-DD HH:MM:SS") }});
 
                 request.success(function(data, status, headers, config) {
+                    console.log(data);
                     var result = data;
 
                     var drops = [];
@@ -269,12 +281,12 @@
                 var data = new google.visualization.DataTable();
 
                 data.addColumn('date', 'Day');
-                data.addColumn('number', 'Drops download');
+                data.addColumn('number', 'FE download');
 
                 data.addRows(drops);
 
                 var options = {
-                    title: 'Drops download by day',
+                    title: 'File exchange download by day',
                     hAxis: {
                         format: 'MMM dd, yyyy'
                     },
@@ -294,7 +306,7 @@
                 var data = google.visualization.arrayToDataTable(userAgents);
 
                 var options = {
-                    title: 'Drops download by user agent',
+                    title: 'File exchange download by user agent',
                     height: 350
                 };
 
@@ -382,4 +394,7 @@
         });
 
     </script>
+    @if(Auth::check())
+
+    @endif
 @endsection

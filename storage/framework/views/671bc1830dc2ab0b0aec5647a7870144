@@ -6,6 +6,10 @@
 	| SkyDrops Beta
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('createFEButton'); ?>
+	<a class="button" href="/upload">Create File Exchange</a>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('style'); ?>
 	#filePreview .modal-body {
 	padding: 0;
@@ -16,6 +20,39 @@
 	#filePreview .modal-body img {
 	max-width: 100%;
 	max-height: max-content;
+	}
+
+	input[type=text] {
+	background: none;
+	border: 0;
+	box-shadow: none;
+	height: auto;
+	outline: none;
+	}
+
+	input[name=inpTitle] {
+	font-size: 3rem;
+	}
+
+	.input-group-addon {
+	display: none;
+	}
+
+	.form-control:focus {
+	border: 0;
+	outline: 0;
+	box-shadow: none;
+	}
+
+	#dropTitle, #dropTitle2{
+	margin-top:20px;
+	display: block;
+	color: #fff;
+	font-size: 28px;
+	}
+
+	.validityDatepicker[readonly]{
+		background-color: #fff;
 	}
 <?php $__env->stopSection(); ?>
 
@@ -44,22 +81,36 @@
 
 	<?php echo HTML::script('/js/skydrops.js'); ?>
 
+	<?php echo HTML::script('/js/cookies.js'); ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="subHeader">
 	<div class="container wrap">
 		<div class="subHeaderLeftBlock">
-			<h2><i class="fa fa-inbox"></i> <?php if($drop->title): ?> <?php echo e($drop->title); ?> <?php else: ?> <?php echo e($drop->hash); ?> <?php endif; ?></h2>
-			<!-- <input type="button" class="button shareButton" value="Share" /> -->
-			<a class="button downloadArchive" href="/d/<?php echo e($drop->hash); ?>/downloadZip"><i class="fa fa-download"></i> Download Archive</a>
-			<a style="width: 150px;" id="copyArchiveLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Copy Archive Link</a>
-			<a style="width: 150px;" id="copyDropUploadLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Get link for upload</a>
-
+			<?php if(Auth::check()): ?>
+				<i class="fa fa-2x fa-inbox titleIcon"></i><span id="dropTitle" contenteditable="true" title="Click to rename drop"><?php if($drop->title): ?> <?php echo e($drop->title); ?> <?php else: ?> <?php echo e($drop->hash); ?> <?php endif; ?></span>
+			<?php else: ?>
+				<i class="fa fa-2x fa-inbox titleIcon"></i><span id="dropTitle2"><?php if($drop->title): ?> <?php echo e($drop->title); ?> <?php else: ?> <?php echo e($drop->hash); ?> <?php endif; ?></span>
+			<?php endif; ?>
+				<!-- <input type="button" class="button shareButton" value="Share" /> -->
+			<?php if(Auth::check()): ?>
+				<a style="width: 205px" id="copyDropLink" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Get Link for File Exchange</a>
+			<?php endif; ?>
+				<?php if($drop->wasSaved): ?>
+				<a class="button downloadArchive" href="/d/<?php echo e($drop->hash); ?>/downloadZip"><i class="fa fa-download"></i> Download Archive</a>
+				<?php endif; ?>
+			<?php if(Auth::check() && $drop->wasSaved): ?>
+				<a style="" id="copyArchiveLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Copy Archive Link</a>
+			<?php endif; ?>
+			<?php if($drop->forUpload): ?>
+				<a style="" id="copyDropUploadLink" data-clipboard-text="" class="button downloadArchive" href="#"><i class="fa fa-link"></i> Get link for upload</a>
+			<?php endif; ?>
 		</div>
 		<div class="box subHeaderRightBlock">
 			<div class="boxHeader">
-				Drop Information
+				File Exchange Information
 			</div>
 			<div class="boxContent">
 				<table class="dropTable">
@@ -100,9 +151,12 @@
 						<td>Validity</td>
 						<td>
 							<div>
-								<input type="text" class="form-control validityDatepicker" data-date-format="mm/dd/yyyy" value="<?php echo e(date("d.m.Y", strtotime($drop->expires_at))); ?>" disabled>
 								<?php if(Auth::check()): ?>
-								<span id="updateValidityBtn" title="Click to change validity" class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+									<input type="text" class="form-control validityDatepicker" data-date-format="mm/dd/yyyy" value="<?php echo e(date("d.m.Y", strtotime($drop->expires_at))); ?>" readonly>
+									<input type="hidden" id="createdAt" value="<?php echo e($drop->dropscreated_at); ?>">
+									<span id="updateValidityBtn" title="Click to change validity" class="input-group-addon"><i class="fa fa-pencil-square-o"></i></span>
+								<?php else: ?>
+									<input type="text" class="form-control validityDatepicker" data-date-format="mm/dd/yyyy" value="<?php echo e(date("d.m.Y", strtotime($drop->expires_at))); ?>" disabled>
 								<?php endif; ?>
 							</div>
 						</td>
@@ -125,6 +179,7 @@
 						<div class="boxContent">
 							<table class="files" cellpadding="0" cellspacing="0">
 								<?php foreach($files as $index => $file): ?>
+									<?php if(!$file->isTmp): ?>
 									<tr>
 										<td><span class="preview" data-index="<?php echo e($index); ?>" data-contenttype="<?php echo e($file->content_type); ?>" data-hash="<?php echo e($file->hash); ?>" href="#"><?php echo e($file->name); ?></span></td>
 										<td><?php echo e(App\File::formatFileSize($file->size)); ?></td>
@@ -133,26 +188,31 @@
 											<!-- <a class="button preview downloadDrop">Preview</a> -->
 											<!-- <span title="Preview" class="preview" style="margin-right: 5px; cursor: pointer;"><i class="fa fa-eye"></i></span> -->
 											<?php endif; ?>
-											<a class="button downloadDrop" href="/f/<?php echo e($file->hash); ?>/download">Download</a>
-											<a id="removeFile" class="button removeDrop" href="" data-hash="<?php echo e($file->hash); ?>">Remove</a>
+												<?php if($drop->wasSaved): ?>
+													<a class="button downloadDrop" href="/f/<?php echo e($file->hash); ?>/download"><i class="fa fa-download"></i> Download</a>
+												<?php endif; ?>
+												<?php if(Auth::check() && !$drop->wasDownloaded && $drop->wasSaved): ?>
+												<a id="removeFile" class="button removeDrop" href="" data-hash="<?php echo e($file->hash); ?>"><i class="fa fa-times"></i> Remove</a>
+												<?php endif; ?>
 											<!--<a title="Download" href="/f/<?php echo e($file->hash); ?>/download">
 												<i class="fa fa-download"></i>
 											</a> -->
 										</td>
 									</tr>
+									<?php endif; ?>
 								<?php endforeach; ?>
 
 							</table>
 						</div>
 					</div>
-
+					<?php if((Auth::check() && !$drop->wasDownloaded && $drop->wasSaved) || $drop->forUpload): ?>
 					<div class="mainBlock" style="float: none; width: auto;">
 						<div class="title-block">
 							<div class="fLeft">
-								<h4>Add files to drop</h4>
+								<h4>Add files to File Exchange</h4>
 							</div>
 							<div class="fRight">
-								<input name="addFileButton" type="button" id="addFileButton" data-hash="<?php echo e($drop->hash); ?>" class="button" value="Upload" disabled/>
+								<input name="addFileButton" type="button" id="addFileButton" data-hash="<?php echo e($drop->hash); ?>" class="button saveBtnDisabled" value="Save" disabled/>
 							</div>
 							<br clear="both" />
 							<br clear="both" />
@@ -163,10 +223,8 @@
 							<?php echo Form::token(); ?>
 
 						</form>
-
-
 					</div>
-
+					<?php endif; ?>
 				</div>
 				<div class="sideBlock">
 					<?php if(Auth::check()): ?>
@@ -178,14 +236,31 @@
 							<p>Pick some contacts from the list or type valid email addresses.</p>
 							<input type="text" id="input-contacts" />
 							<textarea placeholder="Write a message" class="selectize-input"></textarea>
-							<input type="button" id="shareButton" class="button" value="Share">
+							<button type="button" id="shareButton" class="button"><i class="fa fa-share-alt"></i> Share</button>
 						</div>
 					</div>
 					<?php endif; ?>
 				</div>
+				<?php if(Auth::check() && count($sharedWith) > 0): ?>
+				<div class="sideBlock">
+					<div class="box share">
+						<div class="boxHeader">
+							This drop was shared with:
+					</div>
+					<div class="boxContent">
+						<ul style="margin-left: 10px; list-style: none;">
+							<?php foreach($sharedWith as $shared): ?>
+								<li><?php echo e($shared->email); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+					<?php endif; ?>
+	</div>
+	<br clear="both" />
+	<input id="isOwner" type="hidden" value="<?php echo e($owner); ?>">
+	<!-- Content end -->
 
-				<br clear="both" />
-				<!-- Content end -->
 </div>
 
 <!-- Absolute stuff -->
@@ -205,6 +280,7 @@
 		<div class="dz-details">
 			<div class="dz-filename"><span data-dz-name></span></div>
 			<div class="dz-size" data-dz-size></div>
+			<div class="progressBar" style="width:0%;" data-dz-uploadprogress></div>
 		</div>
 		<!-- <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
 
@@ -278,6 +354,13 @@
 	var aMentions = [];
 	var currentIndex = "";
 	$(document).ready(function() {
+		$("#copyDropLink").attr('data-clipboard-text', location.protocol + '//' + location.host + location.pathname);
+		var dropLink = new ZeroClipboard( document.getElementById("copyDropLink") );
+		dropLink.on( "ready", function( readyEvent ) {
+			dropLink.on( "aftercopy", function( event ) {
+				swal("Link copied to clipboard.");
+			} );
+		});
 
 		$("#copyArchiveLink").attr('data-clipboard-text', location.protocol + '//' + location.host + location.pathname + "/downloadZip");
 		var archiveLink = new ZeroClipboard( document.getElementById("copyArchiveLink") );
@@ -446,7 +529,8 @@
 			}));
 		} else {
 			$('#filePreview .modal-body .content').html($('<img/>', {
-				src: "/img/fileicons/" + aContenttype[1] + ".png"
+				//src: "/img/fileicons/" + aContenttype[1] + ".png"
+				src: "/img/no-preview.png"
 			}));
 		}
 
@@ -563,85 +647,165 @@
 
 	});
 
+	function removeNotAllowedCharacters(filename){
+		var res = filename.replace(/,/g, '');
+		res = res.replace(/;/g, '');
+		res = res.replace(/\s/g, '');
+		return res;
+	}
+
 	Dropzone.autoDiscover = false;
-
-
-			var addDropzone = new Dropzone(".addFileDropzone",
-					{
-						url: "/u/addFile",
-						dictDefaultMessage: "Drop files here or click to upload.",
-						parallelUploads: 10,
-						maxFilesize: 2047,
-						autoProcessQueue: false,
-						thumbnailWidth: 178,
-						thumbnailHeight: 200,
-						uploadMultiple: true,
-						previewTemplate: $('#preview-template').html()
-					});
-
-			// Update the total progress bar
-			addDropzone.on("totaluploadprogress", function(progress) {
-				progress = parseInt(progress);
-				$('.blackBlock .progressValue').text(progress + " %");
-				$('.blackBlock .progressBar').css('width', progress + "%");
-			});
-
-			addDropzone.on("successmultiple", function(files, response) {
-				//console.log(response);
-				$('.blackBlock').hide();
-				window.onbeforeunload = null;
-				var filesHtml = "";
-				$.each(response.files, function(index, value) {
-					var row = "<tr><td><span class='preview' data-index='"+index+"' data-contenttype='"+value.content_type+"' data-hash='"+value.hash+"' href='#'>"+value.name+"</span></td>"+
-							"<td>"+formatFileSize(value.size)+"</td>"+
-							"<td>"+
-							"<a class='button downloadDrop' href='/f/"+value.hash+"/download'>Download</a>"+
-							"<a id='removeFile' class='button removeDrop' href='' data-hash='"+value.hash+"'>Remove</a>"+
-							"</td>"+
-							"</tr>";
-					filesHtml+=row;
+	var addDropzone;
+	var totalSize;
+	if ( $( ".addFileDropzone" ).length ) {
+		addDropzone = new Dropzone(".addFileDropzone",
+				{
+					url: "/u/addFile",
+					dictDefaultMessage: "Drop files here or click to upload.",
+					parallelUploads: 10,
+					maxFilesize: 16384,
+					autoProcessQueue: true,
+					thumbnailWidth: 178,
+					thumbnailHeight: 200,
+					uploadMultiple: true,
+					previewTemplate: $('#preview-template').html(),
+					renameFilename: function (filename) {
+						return removeNotAllowedCharacters(filename)
+					}
 				});
-				$('.files').data('key',$.parseJSON(JSON.stringify(response.files)));
-				$(".files").html(filesHtml);
-				$("#totalSize").text(formatFileSize(response.drop.totalSize));
-				addDropzone.removeAllFiles(true);
-			});
 
-			addDropzone.on("sending", function(file, xhr, formData) {
-				formData.append("dropHash", $("#addFileButton").attr("data-hash"));
-			});
+		// Update the total progress bar
+		addDropzone.on("totaluploadprogress", function (progress) {
+			progress = parseInt(progress);
+			$('.blackBlock .progressValue').text(progress + " %");
+			$('.blackBlock .progressBar').css('width', progress + "%");
+		});
 
-			addDropzone.on("addedfile", function(file) {
-				$("#addFileButton").removeAttr('disabled');
-			});
+		addDropzone.on("successmultiple", function (files, response) {
+			//console.log(response);
+			$('.blackBlock').hide();
 
-			addDropzone.on("removedfile", function(file) {
-				if(!addDropzone.files.length){
-					$("#addFileButton").attr("disabled", true);
+			$("#totalSize").text(formatFileSize(response.drop.totalSize));
+		});
+
+		addDropzone.on("sending", function (file, xhr, formData) {
+			formData.append("dropHash", $("#addFileButton").attr("data-hash"));
+		});
+
+		addDropzone.on("uploadprogress", function(file) {
+			console.log(file);
+			console.log(file.upload.progress + " " + file.name);
+			$(".dz-filename span:contains("+file.name+")").parent().parent().children().last().css('width', file.upload.progress + "%");
+		});
+
+		addDropzone.on("addedfile", function (file) {
+			//check if file was added
+			if (this.files.length) {
+				for (var i = 0; i < this.files.length - 1; i++){
+					if(this.files[i].name === file.name && this.files[i].size === file.size && this.files[i].lastModifiedDate.toString() === file.lastModifiedDate.toString())
+					{
+						this.removeFile(file);
+					}
+				}
+			}
+			totalSize += file.size;
+
+			if(totalSize>10*1024*1024*1024){
+				swal("Error!", "You cannot upload more than 10Gb", "error");
+				this.removeFile(file);
+				totalSize -= file.size;
+			}
+
+			$("#addFileButton").removeClass("saveBtnDisabled")
+			$("#addFileButton").removeAttr('disabled');
+		});
+
+		addDropzone.on("removedfile", function (file) {
+			var token = $('input[name=_token]').val();
+
+			var filename = removeNotAllowedCharacters(file.name);
+
+			if(typeof (Cookies.get(filename)) == 'undefined')
+				return;
+
+			var hash = Cookies.get(filename);
+			console.log(hash);
+			$.ajax({
+				type:	'DELETE',
+				url:	'/f/' + hash,
+				data:	{ _token : token },
+				success: function(data){
+					totalSize -= file.size;
+					if (!addDropzone.files.length) {
+						$("#addFileButton").attr("disabled", true);
+						$("#addFileButton").addClass("saveBtnDisabled");
+						window.onbeforeunload = null;
+					}
+					Cookies.expire(filename);
+				},
+				error: function(data){
+					swal("Error!", "An error occured while deleting the file.", "error");
 				}
 			});
+		});
 
-			addDropzone.on("error", function(error) {
-				$('.blackBlock').hide();
-				swal("Error!", "An error occured while creating new drop", "error");
+		addDropzone.on("error", function (error) {
+			$('.blackBlock').hide();
+			swal("Error!", "An error occured while creating new drop", "error");
+		});
+
+		$("#addFileButton").click(function(){
+			var data = [];
+			$.each(addDropzone.files, function (index, value) {
+				var filename = removeNotAllowedCharacters(value.name);
+				var hash = Cookies.get(filename);
+				data.push(hash);
+				Cookies.expire(filename);
 			});
 
+			var token = $('input[name=_token]').val();
+			console.log("Data: "+data);
+			$.ajax({
+				type:	'POST',
+				url:	'/u/addFile/save',
+				data:	{ _token : token, files : data },
+				success: function(data){
+					var filesHtml = "";
+					$.each(addDropzone.files, function (index, value) {
+						var filename = removeNotAllowedCharacters(value.name);
 
+						var row = "<tr><td><span class='preview' data-index='" + index + "' data-contenttype='" + value.content_type + "' data-hash='" + value.hash + "' href='#'>" + filename + "</span></td>" +
+								"<td>" + formatFileSize(value.size) + "</td>" +
+								"<td>" +
+								"<a class='button downloadDrop' href='/f/" + value.hash + "/download'><i class='fa fa-download'></i> Download</a>";
 
+						if($("#isOwner").val() == 1){
+							row += "<a id='removeFile' class='button removeDrop' href='' data-hash='" + value.hash + "'><i class='fa fa-times'></i> Remove</a>";
+						}
+						row += "</td></tr>";
+						filesHtml += row;
+						window.onbeforeunload = null;
+					});
+					$('.files').data('key', $.parseJSON(JSON.stringify(addDropzone.files)));
+					$(".files").append(filesHtml);
+					console.log(addDropzone.files);
+					addDropzone.files = [];
+					console.log(addDropzone.files);
+					$( ".dz-preview" ).remove();
+					$("#addFileButton").attr("disabled", true);
+					$("#addFileButton").addClass("saveBtnDisabled");
+				},
+				error: function(data){
+					swal("Error!", "An error occured while saving file exchange.", "error");
+				}
+			});
+		});
+
+	}
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('input[name="_token"]').val()
 			}
-		});
-
-		$('#addFileButton').click(function(){
-			addDropzone.processQueue();
-			$('.blackBlock').show();
-
-			window.onbeforeunload = function() {
-				return "Your upload is not completed.";
-			};
-
 		});
 
 	function formatFileSize(size){
@@ -650,17 +814,26 @@
 		return (Math.round(size * 100) / 100)+units[i];
 	}
 
-	function updateDropvalidity(newDate){
+	function formatDate(oDate) {
+		return ("0" + oDate.getDate()).slice(-2) + "." + ("0" + (oDate.getMonth() + 1)).slice(-2) + "." + oDate.getFullYear();
+	}
+
+	function updateDropvalidity(newDate, diffDays){
 		var token = $('input[name=_token]').val();
 		$.ajax({
 			type:	'POST',
 			url:	'/d/'+$("#addFileButton").attr("data-hash")+'/updateValidity',
-			data:	{_token : token, newDate : newDate},
+			data:	{_token : token, newDate : newDate, diffDays : diffDays},
 			success: function(data){
 				swal("Updated!", "Drop validity date has been updated.", "success");
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				swal("Error!", "An error occured while updating drop validity!", "error");
+				if(jqXHR.status == 403){
+					swal("Error!", jqXHR.statusText, "error");
+				}
+				else{
+					swal("Error!", "An error occured while updating drop validity!", "error");
+				}
 			}
 		});
 	}
@@ -670,22 +843,247 @@
 	date = new Date(date);
 	$('.validityDatepicker').datepicker({
 		format: 'dd.mm.yyyy',
-		startDate: date
+		startDate: date,
+		endDate: '+90d'
 	}).on('changeDate', function(e){
 		$(this).datepicker('hide');
-		updateDropvalidity($(".validityDatepicker").data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00");
+		var createdDate = $("#createdAt").val().split("-");
+		var createdDate = new Date(createdDate[0], createdDate[1]-1, createdDate[2].substring(0,2))
+		console.log(createdDate);
+		var diffDays = Math.floor(($(".validityDatepicker").data('datepicker').dates[0] - createdDate) / (1000 * 60 * 60 * 24));
+		console.log(diffDays);
+		if(diffDays > 90){
+			swal("Error!", "File exchange validity cannot be more than 90 days!", "error");
+			return false;
+		}
+
+		var coins = 0;
+		if(diffDays > 30 && diffDays <= 90){
+			coins = 1
+		}
+
+		swal({
+			title: "Are you sure?",
+			text: "New date: "+ formatDate($(".validityDatepicker").data('datepicker').dates[0])+".\r\nThis operation will cost you "+coins+" coin(s)",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Yes, continue!",
+			cancelButtonText: "No, cancel pls!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function(isConfirm){
+			if (isConfirm) {
+				updateDropvalidity($(".validityDatepicker").data('datepicker').getFormattedDate('yyyy-mm-dd') + " 00:00:00", diffDays);
+				var date = $(".validityDatepicker").data('datepicker').dates[0];
+				date.setDate(date.getDate() + 1);
+				$('.validityDatepicker').datepicker('setStartDate', date);
+			} else {
+				swal("Cancelled", "", "error");
+			}
+		});
 	});
+	var date = $(".validityDatepicker").data('datepicker').dates[0];
+	date.setDate(date.getDate() + 1);
+	console.log(date);
+
+	$('.validityDatepicker').datepicker('setStartDate', date);
 
 	$('#updateValidityBtn').on('click', function(){
 		$('.validityDatepicker').datepicker('show');
 	});
 
 	$('.validityDatepicker').on('click', function(){
-		$('.validityDatepicker').datepicker('hide');
+		//$('.validityDatepicker').datepicker('hide');
 	});
 
+	var oldDropTitle;
+	$('#dropTitle').spellcheck = false;
+	$('body').attr("spellcheck",false);
+	$('#dropTitle').focus(function() {
+		oldDropTitle = $(this).html();
+	});
+
+	$('#dropTitle').focusout(function() {
+		var str = $(this).html().trim();
+		str = str.replace(/&nbsp;/g, '');
+		str = str.replace(/\s/g, '');
+		console.log(str);
+
+		$(this).html(str);
+		if($(this).html() == ""){
+			$(this).html(oldDropTitle);
+		}
+
+		if(oldDropTitle != $(this).html()){
+			var token = $('input[name=_token]').val();
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('input[name="_token"]').val()
+				}
+			});
+
+			$.ajax({
+				type:	'POST',
+				url:	'/d/'+$("#addFileButton").attr("data-hash")+'/updateTitle',
+				data:	{_token : token, newTitle : $(this).html()},
+				success: function(data){
+					swal("Updated!", "Drop has been renamed.", "success");
+				},
+				error: function(jqXHR, textStatus, errorThrown){
+					swal("Error!", "An error occured while renaming the drop!", "error");
+				}
+			});
+		}
+	});
+
+	window.onbeforeunload = function (evt) {
+		if (addDropzone.files.length) {
+			return "Are you sure you want to leave, cause there are some unsaved changes?";
+		}
+	};
+
+	window.addEventListener("pagehide", function () {
+		if (addDropzone.files.length) {
+			var data = [];
+			$.each(addDropzone.files, function (index, value) {
+				var filename = removeNotAllowedCharacters(value.name);
+				var hash = Cookies.get(filename);
+				data.push(hash);
+				Cookies.expire(filename);
+			});
+
+			var token = $('input[name=_token]').val();
+			$.ajax({
+				type:	'POST',
+				url:	'/u/addFile/deleteTmp',
+				data:	{ _token : token, files:data},
+				async: false,
+				success: function(data){
+
+				},
+				error: function(data){
+
+				}
+			});
+		}
+	});
 </script>
 
+<?php if(Auth::check()): ?>
+
+<script>
+	// For a pie chart
+
+	/*var chartData = [
+		{
+			value: 0,
+			color:"#F7464A",
+			highlight: "#FF5A5E",
+			label: "Used Drops"
+		},
+		{
+			value: 0,
+			color: "#222",
+			highlight: "#333",
+			label: "Free Drops"
+		}
+	];
+
+	var options = {
+		//Boolean - Whether we should show a stroke on each segment
+		segmentShowStroke : false,
+
+		//String - The colour of each segment stroke
+		segmentStrokeColor : "#aaa",
+
+		//Number - The width of each segment stroke
+		segmentStrokeWidth : 0,
+
+		//Number - The percentage of the chart that we cut out of the middle
+		percentageInnerCutout : 60, // This is 0 for Pie charts
+
+		//Number - Amount of animation steps
+		animationSteps : 100,
+
+		//String - Animation easing effect
+		animationEasing : "easeOutBounce",
+
+		//Boolean - Whether we animate the rotation of the Doughnut
+		animateRotate : true,
+
+		//Boolean - Whether we animate scaling the Doughnut from the centre
+		animateScale : false,
+
+	};*/
+
+	$(document).ready(function () {
+		var token = $('input[name=_token]').val();
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('input[name="_token"]').val()
+			}
+		});
+
+		/*$.ajax({
+			url: "/getAvailableCoins",
+			type: 'GET',
+			success: function(data){
+				$("#coinsAmount").html(data[0]);
+				/*chartData[0].value = parseInt(data[1]);
+				 chartData[1].value = parseInt(data[0]);
+				 var ctx = document.getElementById("myChart").getContext("2d");
+				 var myPieChart = new Chart(ctx).Pie(chartData,options);*/
+	/*		},
+			error: function(data){
+				console.log(data);
+			}
+		});*/
+	});
+
+
+	/*
+	 1) @skypro.ch не будут покупать coins. Дава сделаем как проще:
+
+	 - или всем дадим 1000000 coins
+
+	 - или вообще не будем их учитывать
+
+	 - или пусть счетчик не уменьшает количество coins для них
+
+	 //2) Календарь для выбора даты срока жизни FE.
+
+	// - по меньшей дате у нас ограниечение есть - это хорошо
+
+	// но по большей нет, а у нас в задании не более 90 дней (если я не лшибаюсь).
+
+	// Запретить пользователю выбирать дату более чем 90 дней от текущей.
+
+	 3) Forgot password & Registration формы - остался старый дизайн (надо бы что-то покрасивее)
+
+	 Может их модальными сделать или еще как но оставить на Landing Page (чтоб юзер от туда не уходил).
+
+	 4) Contact Us form- по сле отправки давай покажем окошко с картинкой "Thank you". (можно взять с страницы комникатора "картинка стикера")
+
+	 5) Если юзер не залогиненый то он не может попасть на Landing Page. Давай может сделаем логику чтоб мог.
+
+	 Так же проблема с покупкой coins. Кнопки есть на Landing Page но юзер может увидеть эту страницу только когда он не залогиненый...
+
+	 Опять же, если юзер не залогиненый и нажмет купить coins то ему нужно будет залогиниться.
+
+	 Думаю надо как-то так:
+
+	 - Залогиненый юзер может попасть на landing page
+
+	 - если юзер залогиненый и на landing page то не показываем ему log in & registration. вместо этого лучше какуюто кнопку или картинку чтоб он мог попасть на свою страничку
+
+	 6) Давайте добавим прокрутку (эффект) при нажатии на элементы главного меню. Так же выделим пункт меню на котором мы в текущий момент находимся.
+
+	 7) Не надо дублировать меню на каждой странице landing page. В заголовке у нас уже есть меню.
+	 */
+</script>
+<?php endif; ?>
 
 <?php $__env->stopSection(); ?>
 

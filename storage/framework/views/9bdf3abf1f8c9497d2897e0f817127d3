@@ -2,6 +2,10 @@
     Statustics Dashboard | SkyDrops Beta
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('createFEButton'); ?>
+    <a class="button" href="/upload">Create Drop</a>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('scripts'); ?>
     <?php echo HTML::script('/js/jquery.min.js'); ?>
 
@@ -21,6 +25,12 @@
 
     <?php echo HTML::script('/js/jquery.textcomplete.min.js'); ?>
 
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+    body{
+        background: url(<?php echo e(asset('/img/computer-767776_1920.jpg')); ?>) repeat-y center center;
+    }
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -86,6 +96,8 @@
         </div>
         </div>
     </div>
+    <?php echo Form::token(); ?>
+
 
     <?php echo HTML::script('/js/angular.min.js'); ?>
 
@@ -181,6 +193,7 @@
                 var request = $http.get(url, {params: { from: moment(fromTimestamp).format("YYYY-MM-DD"), to: moment(toTimestamp).format("YYYY-MM-DD HH:MM:SS") }});
 
                 request.success(function(data, status, headers, config) {
+                    console.log(data);
                     var result = data;
 
                     var drops = [];
@@ -277,12 +290,12 @@
                 var data = new google.visualization.DataTable();
 
                 data.addColumn('date', 'Day');
-                data.addColumn('number', 'Drops download');
+                data.addColumn('number', 'FE download');
 
                 data.addRows(drops);
 
                 var options = {
-                    title: 'Drops download by day',
+                    title: 'File exchange download by day',
                     hAxis: {
                         format: 'MMM dd, yyyy'
                     },
@@ -302,7 +315,7 @@
                 var data = google.visualization.arrayToDataTable(userAgents);
 
                 var options = {
-                    title: 'Drops download by user agent',
+                    title: 'File exchange download by user agent',
                     height: 350
                 };
 
@@ -390,6 +403,9 @@
         });
 
     </script>
+    <?php if(Auth::check()): ?>
+
+    <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

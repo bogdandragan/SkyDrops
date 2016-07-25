@@ -1,0 +1,87 @@
+<?php $__env->startSection('title'); ?>
+    My coins balance statistics | SkyDrops Beta
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('createFEButton'); ?>
+    <a class="button" href="/upload">Create File Exchange</a>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('scripts'); ?>
+    <?php echo HTML::script('/js/jquery.min.js'); ?>
+
+    <?php echo HTML::script('/js/bootstrap.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery-ui.min.js'); ?>
+
+    <?php echo HTML::script('/js/bootstrap-datepicker.js'); ?>
+
+    <?php echo HTML::script('/js/autosize.js'); ?>
+
+    <?php echo HTML::script('/js/dropzone.js'); ?>
+
+    <?php echo HTML::script('/js/selectize.js'); ?>
+
+    <?php echo HTML::script('/js/sweetalert.min.js'); ?>
+
+    <?php echo HTML::script('/js/chart.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery.overlay.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery.textcomplete.min.js'); ?>
+
+    <?php echo HTML::script('/js/skydrops.js'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+    body{
+        background: url(<?php echo e(asset('/img/banknote-1396352_1920.jpg')); ?>) repeat-y center center;
+    }
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="container noSubHeader wrap">
+        <!-- Content start -->
+        <div class="drop-block clearfix">
+            <div class="box" style="padding: 20px;">
+                <h2>My coins balance statistics</h2>
+                <h4>Current amount: <?php echo e(Auth::user()->coins); ?></h4>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Operation</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                    <?php $__empty_1 = true; foreach($coins as $coin): $__empty_1 = false; ?>
+                        <tr>
+                            <?php if($coin->isAdded): ?>
+                            <td>Recharging coins balance</td>
+                            <?php else: ?>
+                            <td>File exchange <a href="/d/<?php echo e($coin->hash); ?>">#<?php echo e($coin->drop_id); ?></a></td>
+                            <?php endif; ?>
+                             <td><?php echo e($coin->created_at->timezone(Auth::user()->timezone)); ?></td>
+                             <?php if($coin->isAdded): ?>
+                             <td style="color: green;">+<?php echo e($coin->amount); ?></td>
+                             <?php else: ?>
+                             <td style="color: red;">-<?php echo e($coin->amount); ?></td>
+                             <?php endif; ?>
+                        </tr>
+                    <?php endforeach; if ($__empty_1): ?>
+                        No Users
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+        <!-- Content end -->
+        <?php echo Form::token(); ?>
+
+    </div>
+
+    <script>
+
+    </script>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

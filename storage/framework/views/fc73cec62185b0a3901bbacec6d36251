@@ -9,9 +9,9 @@
 
 <body>
 	<h1>SKyDrops</h1>
-	<p><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?> wants to share a Drop with you.</p>
+	<p><?php echo e(Auth::user()->firstname); ?> <?php echo e(Auth::user()->lastname); ?> wants to share a File Exchange with you.</p>
 	<?php if(!empty($mailMessage)): ?>
 	<p><strong>Message</strong><br><?php echo nl2br($mailMessage); ?></p>
 	<?php endif; ?>
-	<a href="http://skydrops.skypro.ch/d/<?php echo e($drop_hash); ?>">http://skydrops.skypro.ch/d/<?php echo e($drop_hash); ?></a>
+	<a href="<?php echo e(\Illuminate\Support\Facades\Config::get('app.domain')); ?>/d/<?php echo e($drop_hash); ?>"><?php echo e(\Illuminate\Support\Facades\Config::get('app.domain')); ?>/d/<?php echo e($drop_hash); ?></a>
 </body>

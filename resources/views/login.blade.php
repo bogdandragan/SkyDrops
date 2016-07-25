@@ -38,10 +38,9 @@
 						</form>
 					</div>
 				</div>
-				
 					  
-				<!-- Content end --> 
-					  
+				<!-- Content end -->
+	{!! Form::token() !!}
 </div>
 	<script>
 		$("#loginForm").submit(function(e) {
@@ -52,7 +51,7 @@
 				url: "/u/ldap",
 				data: $("#loginForm").serialize(),
 				success: function(data) {
-					window.location = "/";
+					window.location = "/home";
 				},
 				error: function(jqXHR, textStatus, errorThrown){
 					if(jqXHR.status == 401) {

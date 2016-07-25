@@ -78,7 +78,7 @@ return [
 	|
 	*/
 
-	'key' => env('APP_KEY', 'SomeRandomString'),
+	'key' => env('APP_KEY', 'DGrvAhKJW4o2e5kIOgHvYkZdS6lnzWtO'),
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -201,6 +201,15 @@ return [
 
 	'file_storage' => '/var/www/skydrops.dev/storage/app/',
 
-	'sky_group_name' => 'SKYD'
+	'sky_group_name' => 'SKYD',
+
+	'startCoins' => 10,
+
+	//Prices
+	'5$' => 10,
+	'12$' => 30,
+	'30$' => 100,
+
+	'domain' => 'http://3fb9bcd8.ngrok.io'
 
 ];

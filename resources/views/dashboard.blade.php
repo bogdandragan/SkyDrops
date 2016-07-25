@@ -4,6 +4,10 @@
     Users Dashboard | SkyDrops Beta
 @endsection
 
+@section('createFEButton')
+    <a class="button" href="/upload">Create Drop</a>
+@endsection
+
 @section('scripts')
     {!! HTML::script('/js/jquery.min.js') !!}
     {!! HTML::script('/js/bootstrap.min.js') !!}
@@ -17,6 +21,12 @@
     {!! HTML::script('/js/jquery.overlay.min.js') !!}
     {!! HTML::script('/js/jquery.textcomplete.min.js') !!}
     {!! HTML::script('/js/skydrops.js') !!}
+@endsection
+
+@section('style')
+    body{
+    background: url({{ asset('/img/photo-montage-556807_1920.jpg') }}) repeat-y center center;
+    }
 @endsection
 
 @section('content')
@@ -48,7 +58,7 @@
     </div>
     {!! Form::token() !!}
 
-    <script>
+    @if(Auth::check())
 
-    </script>
+    @endif
 @endsection

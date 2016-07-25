@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\UsersCoins;
 use Illuminate\Http\Request;
 use Input;
 use App\Drop as Drop;
@@ -19,6 +20,7 @@ use Hash;
 use Redirect;
 use Log;
 use Config;
+use Crypt;
 
 class UserController extends Controller {
 
@@ -107,13 +109,25 @@ class UserController extends Controller {
 	
 	public function upload(Request $request)
 	{
-		$hash = md5(uniqid(mt_rand(), true));
-		
-		//Create Drop
-		$drop = new Drop;
-		$drop->hash = $hash;
-		if($_POST['title'])
-			$drop->title = $_POST['title'];
+		$user = User::where('id', '=', Auth::user()->id)->first();
+		$drop = Drop::where('hash', '=', $_POST['hash'])->first();
+
+		if(!empty($_POST['totalSize']) && !empty($_POST['validity'])){
+			$totalCost = $this->getCost($_POST['totalSize'], $_POST['validity']);
+			if(!$this->checkSKyUser($user) && $user->coins - $totalCost[0] < 0){
+				//return $drop->hash;
+				return (new \Illuminate\Http\Response)->setStatusCode(403, 'You dont have coins. Please buy more coins');
+			}
+		}
+
+		//Create Drop or add to existed
+		if(!$drop){
+			$drop = new Drop;
+			$drop->hash = $_POST['hash'];
+		}
+
+		if(!empty($_POST['title']))
+			$drop->title = str_replace(' ','',$_POST['title']);
 		else
 			$drop->title = "New drop";
 		$drop->user_id = Auth::user()->id;
@@ -129,37 +143,194 @@ class UserController extends Controller {
 		//Create File
 		if($request->hasFile('file')){
 			foreach($request->file('file') as $file){
+				$originalFilename = $file->getClientOriginalName();
+				$originalFilename = str_replace(";","",$originalFilename);
+				$originalFilename = str_replace(",","",$originalFilename);
+				$originalFilename = str_replace(" ","",$originalFilename);
+
 				$hash = md5(uniqid(mt_rand(), true));
-			
+				//setcookie($file->getClientOriginalName(), $hash, time()+60*60*2);
+				\Cookie::queue(\Cookie::make('unsigned::'.$originalFilename, $hash, 120, null, null, false, false));
+
 				//Copy in storage
 				$extension = $file->getClientOriginalExtension();
 				$filename = $hash . "." .  $extension;
 				
-				$filepath = Config::get('app.file_storage') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
+				$filepath = Config::get('filesystems.disks.local.root') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
 				
 				//Create file in DB
 				$dbFile = new File;
 				$dbFile->drop_id = $drop->id;
 				$dbFile->hash = $hash;
-				$dbFile->name = $file->getClientOriginalName();
+				$dbFile->name = $originalFilename;
 				$dbFile->size = $file->getSize();
 				$dbFile->content_type = $file->getMimeType();
 				$dbFile->save();
-				
+
 				$file->move($filepath, $filename);
-				
+
+				$encryptedContent = Crypt::encrypt(\Illuminate\Support\Facades\File::get($filepath.'/'.$filename));
+				\Illuminate\Support\Facades\File::put($filepath.'/'.$filename, $encryptedContent);
 			}
 		}
-		
-		//Mail
+
+		return $drop->hash;
+	}
+
+	public function saveUpload(Request $request)
+	{
+		$user = User::where('id', '=', Auth::user()->id)->first();
+		$drop = Drop::where('hash', '=', $_POST['hash'])->first();
+
+		if(!empty($_POST['validity'])){
+			$totalCost = $this->getCost($_POST['totalSize'], $_POST['validity']);
+			if(!$this->checkSKyUser($user) && $user->coins - $totalCost[0] < 0){
+				return (new \Illuminate\Http\Response)->setStatusCode(403, 'You dont have coins. Please buy more coins');
+			}
+		}
+
+		if(!empty($_POST['title']))
+			$drop->title = str_replace(' ','',$_POST['title']);
+		else
+			$drop->title = "New drop";
+		$drop->user_id = Auth::user()->id;
+		if(!empty($_POST['expires_at'])) $drop->expires_at = $_POST['expires_at'];
+		$drop->wasSaved = true;
+		$drop->save();
+
 		Mail::send('emails.drop', ['drop_hash' => $drop->hash, 'mailMessage' => (string)$_POST['message']], function($message)
 		{
 			$message->from('skydrops@skypro.ch', 'SKyDrops');
 			$message->subject(Auth::user()->firstname . " " . Auth::user()->lastname . ' shared a Drop with you');
 			$message->to(json_decode($_POST['contacts']));
 		});
-		
+
+		if(!$this->checkSKyUser($user)){
+			$userCoins = new UsersCoins;
+			$userCoins->user_id = $user->id;
+			$userCoins->drop_id = $drop->id;
+			$userCoins->amount = $totalCost[0];
+			$userCoins->save();
+
+			$user->coins-=$totalCost[0];
+			$user->save();
+		}
+
 		return $drop->hash;
+	}
+
+	public function uploadEmpty(Request $request)
+	{
+		$hash = md5(uniqid(mt_rand(), true));
+		$user = User::where('id', '=', Auth::user()->id)->first();
+
+		$totalCost = $this->getCost($_POST['totalSize'], $_POST['validity']);
+
+		if(!$this->checkSKyUser($user) && $user->coins - $totalCost[0] < 0){
+			return (new \Illuminate\Http\Response)->setStatusCode(403, 'You dont have coins. Please buy more coins');
+		}
+
+		//Create Drop
+		$drop = new Drop;
+		$drop->hash = $hash;
+		$drop->forUpload = true;
+		$drop->wasSaved = true;
+		$drop->sizeLimit = $_POST['totalSize'];
+		if(!empty($_POST['title']))
+			$drop->title = str_replace(' ','',$_POST['title']);
+		else
+			$drop->title = "NewFE";
+		$drop->user_id = Auth::user()->id;
+		if(!empty($_POST['expires_at'])) $drop->expires_at = $_POST['expires_at'];
+		$drop->save();
+
+		//Create DropTag
+		foreach(json_decode($_POST['tags']) as $tagName){
+			$tag = Tag::firstOrCreate(array('name' => $tagName));
+			$dt = DropTag::firstOrCreate(array('drop_id' => $drop->id, 'tag_id' => $tag->id));
+		}
+
+		if(!$this->checkSKyUser($user)){
+			$user->coins -= $totalCost[0];
+			$user->save();
+
+			$userCoins = new UsersCoins;
+			$userCoins->user_id = $user->id;
+			$userCoins->drop_id = $drop->id;
+			$userCoins->amount = $totalCost[0];
+			$userCoins->save();
+		}
+
+		return $drop->hash;
+	}
+
+	public function checkSKyUser($user){
+		$domains = explode("@", $user->email);
+
+		$domain = end($domains);
+
+		$userGroup = UserGroup::where('user_id', '=', $user->id)->first();
+
+		if($userGroup || $domain == "skypro.ch"){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public function getCost($size, $validity){
+
+		$user = User::where('id', '=', Auth::user()->id)->first();
+
+		$totalCost = 1;
+
+		if($validity > 30){
+			$totalCost += 1;
+		}
+		if($size <= 1024*1024*1024){
+			$totalCost += 0;
+		}
+		if($size > 1024*1024*1024 && $size <= 1024*1024*1024*5){
+			$totalCost += 1;
+		}
+		if($size > 1024*1024*1024*5 && $size <= 1024*1024*1024*10){
+			$totalCost += 2;
+		}
+
+		if($user->coins - $totalCost >= 0){
+			return array($totalCost, 1);
+		}else{
+			return array($totalCost, 0);
+		}
+	}
+
+	public function getFECost(Request $request){
+
+		$user = User::where('id', '=', Auth::user()->id)->first();
+
+		$totalCost = 1;
+		$validity = $_POST['validity'];
+		$size = $_POST['size'];
+
+		if($validity > 30){
+			$totalCost += 1;
+		}
+		if($size <= 1024*1024*1024){
+			$totalCost += 0;
+		}
+		if($size > 1024*1024*1024 && $size <= 1024*1024*1024*5){
+			$totalCost += 1;
+		}
+		if($size > 1024*1024*1024*5 && $size <= 1024*1024*1024*10){
+			$totalCost += 2;
+		}
+
+		if($user->coins - $totalCost >= 0){
+			return array($totalCost, 1);
+		}else{
+			return array($totalCost, 0);
+		}
 	}
 
 	public function addFile(Request $request)
@@ -169,27 +340,57 @@ class UserController extends Controller {
 			$drop = Drop::where('hash', '=', $dropHash)->first();
 			$drop_id = $drop->id;
 
+			if($drop->wasDownloaded && !$drop->forUpload){
+				abort('404');
+			}
+
+
 			//Create File
 			if($request->hasFile('file')){
+
+
+				//check if drop for upload and then check size limit
+				if($drop->forUpload){
+					$existedFiles = File::where('drop_id', '=', $drop_id)->sum('size');
+
+					foreach($request->file('file') as $file){
+						$existedFiles += $file->getSize();
+						if($existedFiles > $drop->sizeLimit){
+							return (new \Illuminate\Http\Response)->setStatusCode(403, 'File exchange size limit error');
+						}
+					}
+				}
+
 				foreach($request->file('file') as $file){
 					$hash = md5(uniqid(mt_rand(), true));
+
+					$originalFilename = $file->getClientOriginalName();
+					$originalFilename = str_replace(";","",$originalFilename);
+					$originalFilename = str_replace(",","",$originalFilename);
+					$originalFilename = str_replace(" ","",$originalFilename);
+
+					\Cookie::queue(\Cookie::make('unsigned::'.$originalFilename, $hash, 120, null, null, false, false));
 
 					//Copy in storage
 					$extension = $file->getClientOriginalExtension();
 					$filename = $hash . "." .  $extension;
 
-					$filepath = Config::get('app.file_storage') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
+					$filepath = Config::get('filesystems.disks.local.root') . strtolower(substr($hash, 0, 1)) . '/' . strtolower (substr($hash, 1, 1));
 
 					//Create file in DB
 					$dbFile = new File;
 					$dbFile->drop_id = $drop_id;
 					$dbFile->hash = $hash;
-					$dbFile->name = $file->getClientOriginalName();
+					$dbFile->name = $originalFilename;
 					$dbFile->size = $file->getSize();
 					$dbFile->content_type = $file->getMimeType();
+					$dbFile->isTmp = true;
 					$dbFile->save();
 
 					$file->move($filepath, $filename);
+
+					$encryptedContent = Crypt::encrypt(\Illuminate\Support\Facades\File::get($filepath.'/'.$filename));
+					\Illuminate\Support\Facades\File::put($filepath.'/'.$filename, $encryptedContent);
 				}
 			}
 			$files = File::where('drop_id', '=', $drop_id)->get();
@@ -205,6 +406,42 @@ class UserController extends Controller {
 			'drop'		=> $drop,
 			'files'		=> $files
 		);
+	}
+
+	public function saveAddFile(Request $request)
+	{
+		$response = "false";
+		foreach ($_POST['files'] as $file){
+			$fileDb = File::where('hash', '=', $file)->first();
+
+			if($fileDb){
+				$fileDb->isTmp = false;
+				$fileDb->save();
+				$response = "true";
+			}
+		}
+
+		return $response;
+	}
+
+	public function deleteTmpAddFile(Request $request)
+	{
+		$response = "false";
+		foreach ($_POST['files'] as $file){
+			$fileDb = File::where('hash', '=', $file)->first();
+
+			if($file != 'undefined' && $file != null){
+				$filepath = \Config::get('filesystems.disks.local.root') . strtolower(substr($file, 0, 1)) . '/' . strtolower (substr($file, 1, 1)) .'/'. $fileDb->hash . '.' . pathinfo($fileDb->name, PATHINFO_EXTENSION);
+			}
+
+			if($fileDb){
+				$fileDb->delete();
+				\Illuminate\Support\Facades\File::delete($filepath);
+				$response = "true";
+			}
+		}
+
+		return $response;
 	}
 	
 	
@@ -251,18 +488,29 @@ class UserController extends Controller {
 				return (new \Illuminate\Http\Response)->setStatusCode(401, "Your user need to be in a <strong>"+\Config::get('app.sky_group_name')+"-*+</strong> group.");
 			}
 		} else{
+
+			if (!Auth::attempt(array(
+				'username'     => $username,
+				'password'  => $password
+			))) {
+				return (new \Illuminate\Http\Response)->setStatusCode(401, 'Username or password do not match');
+			}
+
 			$user = User::where('username', '=', $username)->first();
+
+			/*if(!$user){
+				return (new \Illuminate\Http\Response)->setStatusCode(401, 'Username or password do not match');
+			}*/
+
 			$userGroup = UserGroup::where('user_id', '=', $user->id)->first();
 
-			if(!$user || $userGroup || $user->verification_code != ""){
+			if($userGroup || $user->verification_code != ""){
 				return (new \Illuminate\Http\Response)->setStatusCode(401, 'Username or password do not match');
 			}
 
 			Auth::login($user);
 
 			return $user;
-
-
 		}
 	}
 	
@@ -281,6 +529,7 @@ class UserController extends Controller {
 		
 		if ($ldapconn)
 		{
+			//for local environment
 			$ldapbind = ldap_bind($ldapconn, "cn=admin,ou=users,o=system", "WEto655NiXbi7w") or die ("Error trying to bind: ".ldap_error($ldapconn));
 						
 			$aContext = explode("|", Config::get('auth.ldap_tree'));
@@ -338,9 +587,6 @@ class UserController extends Controller {
 					array_push($nGroups, $treffer[1]);
 				}
 			}
-			
-			
-			
 		}	
 		return $nGroups;
 	}
@@ -348,43 +594,44 @@ class UserController extends Controller {
 	public function getContacts() {
 		if(Auth::check()){
 			$new_array = array();
-			
-			$ldapconn = ldap_connect( Config::get('auth.ldap_server') ) or die("Could not connect to LDAP server.");
+			$userGroup = UserGroup::where('user_id', '=', Auth::user()->id)->first();
+			if($userGroup){
+				$ldapconn = ldap_connect( Config::get('auth.ldap_server') ) or die("Could not connect to LDAP server.");
 
-			$result = false;
-			
-			if ($ldapconn)
-			{
-							
-				$aContext = explode("|", Config::get('auth.ldap_tree'));
-				foreach ($aContext as &$sContext) {
-					if(!$result){
-						//Get result
-						$sr = ldap_search($ldapconn, $sContext, "(objectClass=Person)", array("givenname", "sn", "mail"));
-						ldap_sort ( $ldapconn, $sr, 'givenname' ) ;
+				$result = false;
 
-						//Get Email if defined(else empty)
-						$entries = ldap_get_entries($ldapconn, $sr);
-						if($entries["count"] > 0){
-							for($i=0;$i<$entries["count"];$i++){
-								if(isset($entries[$i]["givenname"]) && isset($entries[$i]["sn"]) && isset($entries[$i]["mail"])) {
-									$o = new \stdClass();
-									$o->name = $entries[$i]['givenname'][0] . " " . $entries[$i]['sn'][0];
-									$o->email = $entries[$i]['mail'][0];
-									array_push($new_array, $o);
+				if ($ldapconn)
+				{
+					$aContext = explode("|", Config::get('auth.ldap_tree'));
+					foreach ($aContext as &$sContext) {
+						if(!$result){
+							//Get result
+							$sr = ldap_search($ldapconn, $sContext, "(objectClass=Person)", array("givenname", "sn", "mail"));
+							ldap_sort ( $ldapconn, $sr, 'givenname' ) ;
+
+							//Get Email if defined(else empty)
+							$entries = ldap_get_entries($ldapconn, $sr);
+							if($entries["count"] > 0){
+								for($i=0;$i<$entries["count"];$i++){
+									if(isset($entries[$i]["givenname"]) && isset($entries[$i]["sn"]) && isset($entries[$i]["mail"])) {
+										$o = new \stdClass();
+										$o->name = $entries[$i]['givenname'][0] . " " . $entries[$i]['sn'][0];
+										$o->email = $entries[$i]['mail'][0];
+										array_push($new_array, $o);
+									}
 								}
 							}
 						}
 					}
-				}
 
-			} else {
-				Log::error('Error connecting to LDAP.');
+				} else {
+					Log::error('Error connecting to LDAP.');
+				}
+				return json_encode($new_array);
 			}
-			return json_encode($new_array);
-			echo "<pre>";
-			print_r($new_array);
-			echo "</pre>";
+			else{
+				return json_encode($new_array);
+			}
 		}
 	}
 	
@@ -400,7 +647,7 @@ class UserController extends Controller {
 				'drops'		=> $drops
 			));
 		} else{
-			return redirect('login');
+			return redirect('/');
 		}
 		
 	}
@@ -417,7 +664,7 @@ class UserController extends Controller {
 				'groups'		=> $groups
 			));
 		} else{
-			return redirect('login');
+			return redirect('/');
 		}
 		
 	}
@@ -453,6 +700,8 @@ class UserController extends Controller {
 		}
 
 		$restoreCode = str_random(30);
+		$user->restore_code = $restoreCode;
+		$user->save();
 
 		\Mail::send('emails.password', ['code' => $restoreCode], function($message) use($email)
 		{
@@ -470,8 +719,63 @@ class UserController extends Controller {
 		if(!$user)
 			abort('404');
 
-		return view('newPassword');
+		return view('newPassword', array('code' => $code));
 
+	}
+
+	public function setNewPassword(Request $request){
+		$validator = \Validator::make($request->all(), [
+			'password' => 'required|confirmed|min:6',
+		]);
+
+		if ($validator->fails())
+		{
+			//return $validator->errors()->toArray();
+			$this->throwValidationException(
+				$request, $validator
+			);
+		}
+
+		$user = User::where('restore_code', '=', $request['code'])->first();
+
+		if(!$user){
+			return (new \Illuminate\Http\Response)->setStatusCode(403, 'Restore code is not valid');
+		}
+
+		$user->restore_code = "";
+		$user->password = bcrypt($request['password']);
+		$user->save();
+
+		Auth::login($user);
+
+		return $user;
+	}
+
+	public function getAvailableCoins(){
+		if(Auth::check()){
+			$user = User::where('id', '=', Auth::user()->id)->first();
+		}
+		else{
+			abort('403');
+		}
+
+		$availableCoins = $user->coins;
+
+		return array($availableCoins);
+	}
+
+	public function coinStatistics(){
+		if(Auth::check()){
+			$coins = UsersCoins::where('usersCoins.user_id', '=', Auth::user()->id)
+				->leftJoin('drops', 'usersCoins.drop_id', '=', 'drops.id')
+				->select('usersCoins.*', 'drops.hash')
+				->orderBy('created_at', 'desc')->get();
+
+			return view('coinStatistics', array('coins' => $coins));
+		}
+		else{
+			return view('home');
+		}
 	}
 
 }

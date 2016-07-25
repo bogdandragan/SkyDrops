@@ -4,7 +4,10 @@ use App\DropStatistic;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\SharedDrops;
 use App\SharedUploads;
+use App\User;
+use App\UsersCoins;
 use Illuminate\Http\Request;
 use App\Drop as Drop;
 use App\File as File;
@@ -15,6 +18,7 @@ use DB;
 use Mail;
 use Auth;
 use ZipArchive;
+use Crypt;
 
 
 class DropController extends Controller {
@@ -57,28 +61,41 @@ class DropController extends Controller {
 	 */
 	public function show($id)
 	{
+		$drop = Drop::select('*', 'drops.id as dropsid', 'drops.created_at as dropscreated_at')
+			->where('hash', '=', $id)
+			->leftJoin('users', 'users.id', '=', 'drops.user_id')
+			->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
+			->first();
+
+		if(!$drop) abort(404);
+
+		$isOwner = 0;
 		if(Auth::check()){
-			$drop = Drop::select('*', 'drops.id as dropsid', 'drops.created_at as dropscreated_at')
-				->where('hash', '=', $id)
-				->leftJoin('users', 'users.id', '=', 'drops.user_id')
-				->leftJoin(DB::raw('(SELECT drop_id, group_concat(tags.name) as tags FROM dropTags LEFT JOIN tags ON tags.id = dropTags.tag_id GROUP BY drop_id)postTags'), 'drops.id', '=', 'postTags.drop_id')
-				->first();
-
-			if(!$drop) abort(404);
-				$files = File::where('drop_id', '=', $drop->dropsid)->get();
-
-				$drop->totalSize = 0;
-				foreach ($files as $file){
-				$drop->totalSize += $file->size;
+			$user = User::where('id', '=', Auth::user()->id)->first();
+			if($drop->user_id == $user->id){
+				$isOwner = 1;
 			}
-			return view('drop', array(
-				'drop'		=> $drop,
-				'files'		=> $files
-			));
 		}
-		else{
-			return view('home');
+
+		$files = File::where('drop_id', '=', $drop->dropsid)->get();
+
+		$drop->totalSize = 0;
+
+		$sharedWith = SharedDrops::select('email')
+			->where('drop_id', '=', $drop->dropsid)
+			->groupby('email')
+			->get();
+
+		foreach ($files as $file){
+			$drop->totalSize += $file->size;
 		}
+
+		return view('drop', array(
+			'drop'		=> $drop,
+			'files'		=> $files,
+			'sharedWith' => $sharedWith,
+			'owner' => $isOwner
+		));
 	}
 
 	/**
@@ -105,8 +122,44 @@ class DropController extends Controller {
 
 	public function updateValidity($hash_id)
 	{
+		$user = User::where('id', '=', Auth::user()->id)->first();
+
+		if(!empty($_POST['diffDays'])){
+
+			$diffDays = $_POST['diffDays'];
+
+			if($diffDays <= 30){
+				$totalCost = 0;
+			}
+			else{
+				$totalCost = 1;
+			}
+
+			if($user->coins - $totalCost < 0){
+				return (new \Illuminate\Http\Response)->setStatusCode(403, 'You dont have coins. Please buy more coins');
+			}
+		}
+
 		$drop = Drop::where('hash', '=', $hash_id)->first();
 		$drop->expires_at = $_POST['newDate'];
+		$drop->save();
+
+		$userCoins = new UsersCoins;
+		$userCoins->user_id = $user->id;
+		$userCoins->drop_id = $drop->id;
+		$userCoins->amount = $totalCost;
+		$userCoins->save();
+
+		$user->coins -= $totalCost;
+		$user->save();
+
+		return $drop->hash;
+	}
+
+	public function updateTitle($hash_id)
+	{
+		$drop = Drop::where('hash', '=', $hash_id)->first();
+		$drop->title = str_replace(' ','',$_POST['newTitle']);
 		$drop->save();
 
 		return $drop->hash;
@@ -132,17 +185,21 @@ class DropController extends Controller {
 	public function destroy($hash_id)
 	{
 		$drop = Drop::where('hash', '=', $hash_id)->first();
+		$response = "false";
+		if(!$drop){
+			return $response;
+		}
+
 		$files = File::where('drop_id', '=', $drop->id);
 		$drop = $drop->delete();
 
 		foreach ($files->get() as $file){
-			$filepath = Config::get('app.file_storage') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+			$filepath = Config::get('filesystems.disks.local.root') . strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
 			\Illuminate\Support\Facades\File::delete($filepath);
 		}
 
 		$files->delete();
 
-		$response = "false";
 		if($drop && $files){
 			$response = "true";
 		}
@@ -150,14 +207,41 @@ class DropController extends Controller {
 		return $response;
 	}
 
-	public function downloadZip($hash_id){
-		if(!Auth::check()){
-			abort('403');
+	public static function sendFile($path, $contentType = 'application/octet-stream')
+	{
+		ignore_user_abort(true);
+
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: attachment; filename="' .
+			basename($path) . "\";");
+		header("Content-Type: $contentType");
+
+		$res = array(
+			'status' => true,
+			'errors' =>array(),
+			'readfileStatus' =>null,
+			'aborted' =>false
+		);
+
+		$res['readfileStatus'] = readfile($path);
+		if ($res['readfileStatus'] === false) {
+			$res['errors'][] = 'readfile failed.';
+			$res['status'] = false;
 		}
 
+		if (connection_aborted()) {
+			$res['errors'][] = 'Connection aborted.';
+			$res['aborted'] = true;
+			$res['status'] = false;
+		}
+
+		return $res;
+	}
+
+	public function downloadZip($hash_id){
 		$drop = Drop::where('hash', '=', $hash_id)->first();
 
-		if(!$drop){
+		if(!$drop || $drop->wasDownloaded || !$drop->wasSaved){
 			abort('404');
 		}
 
@@ -166,24 +250,34 @@ class DropController extends Controller {
 		$zip = new ZipArchive();
 		$zipname = "";
 		if($drop->title){
-			$zipname = $drop->title . ".zip";
+			$zipname = $drop->title.$drop->hash. ".zip";
 		}else{
 			$zipname = $drop->hash . ".zip";
 		}
 
-		$res = $zip->open(storage_path() . '/app/'.$zipname, ZipArchive::CREATE);
+		$res = $zip->open(\Config::get('filesystems.disks.local.root').$zipname, ZipArchive::CREATE);
 
 		if($res === TRUE){
 			foreach ($files as $file) {
-				$filename = storage_path() .'/app/'. strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+				$filename = \Config::get('filesystems.disks.local.root'). strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'. $file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
 				if(file_exists($filename))
 				{
-					$zip->addFile($filename,$file->name);
+					$decryptedFileName = \Config::get('filesystems.disks.local.root'). strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'.'d'.$file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+
+					$decryptedContent = Crypt::decrypt(\Illuminate\Support\Facades\File::get($filename));
+					\Illuminate\Support\Facades\File::put($decryptedFileName, $decryptedContent);
+
+					$zip->addFile($decryptedFileName,$file->name);
 
 				}
 			}
 
 			$zip->close();
+
+			foreach ($files as $file){
+				$decryptedFileName = \Config::get('filesystems.disks.local.root'). strtolower(substr($file->hash, 0, 1)) . '/' . strtolower (substr($file->hash, 1, 1)) .'/'.'d'.$file->hash . '.' . pathinfo($file->name, PATHINFO_EXTENSION);
+				\Illuminate\Support\Facades\File::delete($decryptedFileName);
+			}
 		}
 
 
@@ -191,20 +285,30 @@ class DropController extends Controller {
 			'Content-Type' => 'application/octet-stream',
 		);
 
-		//add drop statistic
-		$dropStatistic = new DropStatistic;
-		$dropStatistic->drop_id = $drop->id;
-		$dropStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
-		$dropStatistic->ip = $_SERVER['REMOTE_ADDR'];
-		$dropStatistic->save();
+		$res = $this->sendFile(\Config::get('filesystems.disks.local.root').$zipname, 'application/octet-stream');
 
-		return Response::download(storage_path() . '/app/'.$zipname, $zipname, $headers)->deleteFileAfterSend(true);
+		if ($res['status']) {
+			if(!Auth::check() || $drop->user_id != Auth::user()->id){
+				$drop->wasDownloaded = true;
+				$drop->save();
+			}
+			//add drop statistic
+			$dropStatistic = new DropStatistic;
+			$dropStatistic->drop_id = $drop->id;
+			$dropStatistic->userAgent = $_SERVER['HTTP_USER_AGENT'];
+			$dropStatistic->ip = $_SERVER['REMOTE_ADDR'];
+			$dropStatistic->save();
+			\Illuminate\Support\Facades\File::delete(\Config::get('filesystems.disks.local.root').$zipname);
+		} else {
+			\Illuminate\Support\Facades\File::delete(\Config::get('filesystems.disks.local.root').$zipname);
+		}
+		//return Response::download(storage_path() . '/app/'.$zipname, $zipname, $headers)->deleteFileAfterSend(true)->withCookie(cookie('name', 'value'));
 
 	}
 	
 	public function download($id)
 	{
-		$file= Config::get('app.file_storage')+"3/8/logo_black.png";
+		$file= Config::get('filesystems.disks.local.root')+"3/8/logo_black.png";
         $headers = array(
               'Content-Type: image/png',
             );
@@ -213,11 +317,24 @@ class DropController extends Controller {
 	
 	public function share($hash)
 	{
+		$drop = Drop::where('hash', '=', $hash)->first();
+
+		foreach (explode(",",$_POST['contacts']) as $contact){
+			$shared = new SharedDrops;
+			$shared->drop_id = $drop->id;
+			$email = trim($contact, "[");
+			$email = trim($email, "]");
+			$email = trim($email, '"');
+			$shared->email = $email;
+			$shared->message = $_POST['message'];
+			$shared->save();
+		}
+
 		//Mail
 		Mail::send('emails.drop', ['drop_hash' => $hash, 'mailMessage' => (string)$_POST['message']], function($message)
 		{
 			$message->from('skydrops@skypro.ch', 'SKyDrops');
-			$message->subject(Auth::user()->firstname . ' ' . Auth::user()->lastname . ' shared a Drop with you');
+			$message->subject(Auth::user()->firstname . ' ' . Auth::user()->lastname . ' shared a File Exchange with you');
 			$message->to(json_decode($_POST['contacts']));
 		});
 	}
@@ -238,9 +355,25 @@ class DropController extends Controller {
 		foreach ($files as $file){
 			$drop->totalSize += $file->size;
 		}
+
+		$isOwner = 0;
+		if(Auth::check()){
+			$user = User::where('id', '=', Auth::user()->id)->first();
+			if($drop->user_id == $user->id){
+				$isOwner = 1;
+			}
+		}
+
+		$sharedWith = SharedDrops::select('email')
+			->where('drop_id', '=', $drop->dropsid)
+			->groupby('email')
+			->get();
+
 		return view('drop', array(
 			'drop'		=> $drop,
-			'files'		=> $files
+			'files'		=> $files,
+			'sharedWith' => $sharedWith,
+			'owner' => $isOwner
 		));
 	}
 

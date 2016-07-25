@@ -15,6 +15,6 @@
 <div>
     <p>Thanks for creating an account</p>
     <p>Please follow the link below to verify your email address:</p>
-    <a href="http://skydrops.skypro.ch/auth/confirm/{{$code}}">http://skydrops.skypro.ch/auth/confirm/{{$code}}</a>
+    <a href="{{\Illuminate\Support\Facades\Config::get('app.domain')}}/auth/confirm/{{$code}}">{{\Illuminate\Support\Facades\Config::get('app.domain')}}/auth/confirm/{{$code}}</a>
 </div>
 </body>
