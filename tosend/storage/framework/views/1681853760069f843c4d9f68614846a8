@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>Welcome</title>
+
+    <link href="<?php echo e(asset('/css/bootstrap.min.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('/css/landing-page.css')); ?>" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700italic,300,400,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        body{
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1{
+            font-family: 'Raleway';
+            font-size: 5rem;
+            font-weight: 200;
+            text-shadow: 0 2px 3px rgba(0,0,0,.2);
+            line-height: 1.4;
+        }
+
+        h2{
+            font-family: 'Raleway';
+            font-size: 3.6rem;
+            font-weight: 200;
+            text-shadow: 0 2px 3px rgba(0,0,0,.2);
+            line-height: 1.4;
+        }
+
+    </style>
+    <script type="text/javascript">
+    </script>
+</head>
+<body class="home">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+    <div class="container-fluid topnav">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="topnav logo" href="#"><span>SKyDrops</span><span class="betaMark">Beta</span></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right menu-top">
+                <li>
+                    <a href="#home"><span>Home</span></a>
+                </li>
+                <li>
+                    <a href="#features"><span>Features</span></a>
+                </li>
+                <li>
+                    <a href="#advantages"><span>Advantages</span></a>
+                </li>
+                <li>
+                    <a href="#shop"><span>Shop</span></a>
+                </li>
+                <li>
+                    <a href="#contact"><span>Contact us</span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+<!-- Header -->
+<a name="home"></a>
+<div class="intro-header">
+        <div class="row" style="margin: 0px;">
+                        <div class="col-lg-8 intro-left">
+                            <h1 style="text-align: left;">A file exchange app for teams that like it <b>simple</b> - made for you to simplify your <b>daily work</b></h1>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="formContent">
+                                <form id="loginForm" action="/u/ldap" method="POST">
+                                    <div class="form-group">
+                                        <input class="form-control custom-input" type="text" name="username"  placeholder="Username" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control custom-input" type="password" name="password" placeholder="Password" />
+                                    </div>
+                                    <a class="forgot" href="auth/restore">Forgot password?</a>
+                                    <button type="submit" class="btn btn-primary" id="submitButton"><i class="fa fa-sign-in"></i><span> Log In</span></button>
+                                    <div class="divider">
+                                        <hr style="width: 42%; float: left; display: inline">
+                                        <span style="display: inline; width: 10%; float: left; margin: 10px; font-weight: normal;">or</span>
+                                        <hr style="display: inline; width: 42%; float: right">
+                                    </div>
+                                    <?php echo Form::token(); ?>
+
+                                    <a href="/auth/register" class="btn btn-primary registerButton" id="registerButton" style="width: 100%">Register</a>
+                                </form>
+                            </div>
+                    </div>
+                </div>
+        </div>
+    <!-- /.container -->
+</div>
+<!-- /.intro-header -->
+
+<!-- Page Content -->
+
+<a  name="features"></a>
+<div class="content-section-a">
+    <div class="row">
+        <ul class="nav navbar-nav navbar-right menu-section">
+            <li>
+                <a href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#features"><span>Features</span></a>
+            </li>
+            <li>
+                <a href="#advantages"><span>Advantages</span></a>
+            </li>
+            <li>
+                <a href="#shop"><span>Shop</span></a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact us</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 section-a-left section-abcde">
+            <div>
+                <h1>Take your files <b>anywhere</b></h1>
+                <h2>Save files on your computer, then access them on your phone from the road. Everything you keep in SKyDrops is synced automatically to all your devices.</h2>
+            </div>
+            <a class="btn btn-primary registerButton" href="/auth/register" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+        <div class="col-lg-6 section-abcde">
+            <img class="laptop"/>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.content-section-a -->
+
+<a  name="feature2"></a>
+<div class="content-section-b">
+    <div class="row">
+        <ul class="nav navbar-nav navbar-right menu-section">
+            <li>
+                <a href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#features"><span>Features</span></a>
+            </li>
+            <li>
+                <a href="#advantages"><span>Advantages</span></a>
+            </li>
+            <li>
+                <a href="#shop"><span>Shop</span></a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact us</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <img class="docs"/>
+        </div>
+        <div class="col-lg-6 section-b-right section-abcde">
+            <div>
+                <h1>Work on documents <b>together</b></h1>
+                <h2>Edit a presentation with teammates without emailing files back forth. When you edit a file in a shared folder, everyone gets the update automatically</h2>
+            </div>
+            <a class="btn btn-primary registerButton" href="/auth/register" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<a  name="advantages"></a>
+<div class="content-section-c">
+    <div class="row">
+        <ul class="nav navbar-nav navbar-right menu-section">
+            <li>
+                <a href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#features"><span>Features</span></a>
+            </li>
+            <li>
+                <a href="#advantages"><span>Advantages</span></a>
+            </li>
+            <li>
+                <a href="#shop"><span>Shop</span></a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact us</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 section-c-left section-abcde">
+            <div>
+                <h1><b>No</b> monthly payments only "pay what you <b>use</b>"</h1>
+                <h2>Save files on your computer, then access them on your phone from the road. Everything you keep in SKyDrops is synced automatically to all your devices.</h2>
+            </div>
+            <a class="btn btn-primary registerButton" href="/auth/register" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+        <div class="col-lg-6 section-abcde">
+            <img class="pig"/>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<a  name="shop"></a>
+<div class="content-section-d">
+    <div class="row">
+        <ul class="nav navbar-nav navbar-right menu-section">
+            <li>
+                <a href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#features"><span>Features</span></a>
+            </li>
+            <li>
+                <a href="#advantages"><span>Advantages</span></a>
+            </li>
+            <li>
+                <a href="#shop"><span>Shop</span></a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact us</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <h1 style="font-weight: normal;">Get started now</h1>
+        <div class="col-lg-4 section-abcde">
+            <div class="coinPackage">
+                <img class="coin10">
+                <br>
+                <h1 class="price">5$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+        <div class="col-lg-4 section-abcde">
+            <div class="coinPackage">
+                <img class="coin30">
+                <br>
+                <h1 class="price">12$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+        <div class="col-lg-4 section-abcde">
+            <div class="coinPackage">
+                <img class="coin100">
+                <br>
+                <h1 class="price">30$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<a  name="contact"></a>
+<div class="content-section-e">
+    <div class="row">
+        <ul class="nav navbar-nav navbar-right menu-section">
+            <li>
+                <a href="#home"><span>Home</span></a>
+            </li>
+            <li>
+                <a href="#features"><span>Features</span></a>
+            </li>
+            <li>
+                <a href="#advantages"><span>Advantages</span></a>
+            </li>
+            <li>
+                <a href="#shop"><span>Shop</span></a>
+            </li>
+            <li>
+                <a href="#contact"><span>Contact us</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="row section-abcde">
+        <h1 style="font-weight: normal;">Contact us or ask us a question</h1>
+        <div class="col-lg-12 section-abcde">
+            <div class="contactForm container">
+                <form id="contactForm">
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 25px;">
+                            <input type="text"  placeholder="Your name" class="form-control input-lg custom-input" required="">
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 25px;">
+                            <input type="email"  placeholder="Your email" class="form-control input-lg custom-input" required="">
+                        </div>
+                        <div class="col-md-12" style="margin-top: 5px;">
+                            <input type="text"  placeholder="Subject" class="form-control input-lg custom-input" required="">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xs-12">
+                            <textarea style="height: auto;" rows="12" placeholder="Message" class="form-control custom-input" required=""></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="margin-top: 20px;">
+                        <button class="btn btn-primary registerButton" type="submit" style="width: 200px; font-size: 22px;">Send message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<!--<div class="content-section-b">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">3D Device Mockups<br>by PSDCovers</h2>
+                <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to download some of their awesome, free photoshop actions!</p>
+            </div>
+            <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                <img class="img-responsive" src="img/dog.png" alt="">
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.content-section-b -->
+
+<!--<div class="content-section-a">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-5 col-sm-6">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">Google Web Fonts and<br>Font Awesome Icons</h2>
+                <p class="lead">This template features the 'Lato' font, part of the <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+            </div>
+            <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                <img class="img-responsive" src="img/phones.png" alt="">
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.content-section-a -->
+
+<!--<a  name="contact"></a>
+<div class="banner">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Connect to Start Bootstrap:</h2>
+            </div>
+            <div class="col-lg-6">
+                <ul class="list-inline banner-social-buttons">
+                    <li>
+                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.banner -->
+
+<!-- Footer -->
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12" style="padding: 10px 50px; font-size: 16px; font-weight: normal; color: #3f4897;">
+                <p style="display: block;" class="copyright large pull-left">&copy; 2016 SKyPRO, All Rights Reserved</p>
+                <div class="pull-right">
+                    <a href="http://www.facebook.com/SKyPRO.software" target="_blank"><img class="fbImg"></a>
+                    <a href="https://twitter.com/SKyPROUSA" target="_blank"><img class="twitterImg"></a>
+                    <a href="https://www.linkedin.com/company/skypro" target="_blank"><img class="linkedinImg"></a>
+                    <a href="#"><img class="googleImg" target="_blank"></a>
+                    <a href="https://www.youtube.com/profile?user=skyprosoftware" target="_blank"><img class="youtubeImg"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<?php echo Form::token(); ?>
+
+
+<?php echo HTML::script('/js/jquery.min.js'); ?>
+
+<?php echo HTML::script('/js/bootstrap.min.js'); ?>
+
+
+<script>
+    $("#loginForm").submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/u/ldap",
+            data: $("#loginForm").serialize(),
+            success: function(data) {
+                window.location = "/";
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if(jqXHR.status == 401) {
+                    $(".alert-danger").remove();
+                    var errorHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+                            "<li>"+jqXHR.statusText+"</li></ul></div>"
+                    $("#registerButton").after(errorHtml);
+                }
+            }
+        });
+
+    });
+</script>
+
+
+</body>
+</html>

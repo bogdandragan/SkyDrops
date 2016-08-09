@@ -75,7 +75,46 @@
 
     <div class="container noSubHeader wrap">
         <h2 class="text-center">SKyDrops Shop</h2>
-        <table style="margin: 0 auto;">
+          <table style="margin: 0 auto;">
+            <tr>
+                <td class="product">Add  <strong>10 </strong> coins to your account  <strong>(5$) </strong></td>
+                <td class="price5">
+		    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+		      <input type="hidden" name="cmd" value="_s-xclick">
+		      <input type="hidden" name="hosted_button_id" value="M9JJQQ96JKHNW">
+		      <input type="hidden" name="custom" value="{{$payment_id}}0">
+		      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		    </form>
+                </td>
+            </tr>
+            <tr>
+                <td class="product">Add  <strong>30 </strong> coins to your account  <strong>(12$) </strong></td>
+                <td class="price12">
+		    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+		      <input type="hidden" name="cmd" value="_s-xclick">
+		      <input type="hidden" name="hosted_button_id" value="W8GGVHSZBVUWW">
+		      <input type="hidden" name="custom" value="{{$payment_id}}1">
+		      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		    </form>
+                </td>
+            </tr>
+            <tr>
+                <td class="product">Add  <strong>100 </strong> coins to your account <strong>(30$)</strong></td>
+                <td class="price30">
+		    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+		      <input type="hidden" name="cmd" value="_s-xclick">
+		      <input type="hidden" name="hosted_button_id" value="2KUE99HTPZK9U">
+		      <input type="hidden" name="custom" value="{{$payment_id}}2">
+		      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+		      <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		    </form>
+                </td>
+            </tr>
+        </table>
+
+        <!--<table style="margin: 0 auto;">
             <tr>
                 <td class="product">Add  <strong>10 </strong> coins to your account  <strong>(5$) </strong></td>
                 <td class="price5">
@@ -112,7 +151,7 @@
                     </form>
                 </td>
             </tr>
-        </table>
+        </table>-->
 
 
         {!! Form::token() !!}

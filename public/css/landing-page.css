@@ -517,3 +517,10 @@ a.logo:hover, a.logo:focus{
 .active-menu{
     border-bottom: 4px solid #414896;
 }
+
+#registerModal .modal-header, #registerLoginModal .modal-header{
+    border: none;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    margin-bottom: -10px;
+}

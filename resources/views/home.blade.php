@@ -99,7 +99,7 @@
 <div class="intro-header">
         <div class="row" style="margin: 0px;">
                         <div class="col-lg-8 intro-left">
-                            <h1 style="text-align: left;">A file exchange app for teams that like it <b>simple</b> - made for you to simplify your <b>daily work</b></h1>
+                            <h1 style="text-align: left;">File exchange for people that like it <b>simple</b> - made for you to simplify your <b>daily work</b></h1>
                         </div>
                         <div class="col-lg-4">
                             <div class="formContent">
@@ -164,8 +164,11 @@
         <div class="modal-dialog vertical-align-center">
             <!-- Modal content-->
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="regFormHeader"><b>Register now and get 10 coins for free!</b></h4>
+                </div>
                 <div class="modal-body">
-                    <h4><b>Register now and get 10 coins for free!</b></h4>
                     <form action="/auth/register" method="POST" id="registrationForm">
                         <div class="form-group custom-form-group">
                             <label class="custom-label"><b>Username</b></label>
@@ -210,8 +213,8 @@
     <div class="row">
         <div class="col-lg-6 section-a-left section-abcde wow zoomIn">
             <div>
-                <h1>Simple file exchange only with people <b>you trust</b></h1>
-                <h2>Share files without storing them “for years” on some cloud. After people downloaded the file you shared, it will be automatically deleted from our storage.</h2>
+                <h1>Straight forward <b>file exchange</b></h1>
+                <h2>Using SKyDrop you manage the files. They will be automatically deleted from our storage, after they are downloaded.</h2>
             </div>
             <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
         </div>
@@ -232,7 +235,7 @@
         <div class="col-lg-6 section-b-right section-abcde wow zoomIn">
             <div>
                 <h1><b>Secure</b> file sharing</h1>
-                <h2>We encrypt all files you store and share. No matter, you are a private person or a big company, your important information will not get to the wrong hands.</h2>
+                <h2>Your files are personal and we want to keep them this way, therefore we encrypt everything you share and store.</h2>
             </div>
             <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
         </div>
@@ -245,8 +248,8 @@
     <div class="row">
         <div class="col-lg-6 section-c-left section-abcde wow zoomIn">
             <div>
-                <h1><b>No</b> monthly payments only "pay what you <b>use</b>"</h1>
-                <h2>Subscription model is not for us, we like everything simple. And what is simpler that paying only for files you share? Just buy our “storing coins” and use them only when you need to exchange files.</h2>
+                <h1>Pay what you <b>use</b></h1>
+                <h2>We like things simple and fair. You pay for what you use, not more not less. There is no subscription simply exchange for coins.</h2>
             </div>
             <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
         </div>
@@ -266,7 +269,11 @@
                 <img class="coin10" src="{{asset("/img/coin_10.png")}}">
                 <br>
                 <h1 class="price">5$</h1>
-                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @if(Auth::check())
+                    <a class="btn btn-primary registerButton buyBtn" href="/shop" style="margin-top: 20px;">Buy Coin Package</a>
+                @else
+                    <a class="btn btn-primary registerButton buyBtn" data-toggle="modal" data-target="#registerLoginModal" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @endif
             </div>
         </div>
         <div class="col-lg-4 section-abcde wow zoomIn">
@@ -274,7 +281,11 @@
                 <img class="coin30" src="{{asset("/img/coin_30.png")}}">
                 <br>
                 <h1 class="price">12$</h1>
-                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @if(Auth::check())
+                    <a class="btn btn-primary registerButton buyBtn" href="/shop" style="margin-top: 20px;">Buy Coin Package</a>
+                @else
+                    <a class="btn btn-primary registerButton buyBtn" data-toggle="modal" data-target="#registerLoginModal" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @endif
             </div>
         </div>
         <div class="col-lg-4 section-abcde wow zoomIn">
@@ -282,7 +293,11 @@
                 <img class="coin100" src="{{asset("/img/coin_100.png")}}">
                 <br>
                 <h1 class="price">30$</h1>
-                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @if(Auth::check())
+                    <a class="btn btn-primary registerButton buyBtn" href="/shop" style="margin-top: 20px;">Buy Coin Package</a>
+                @else
+                    <a class="btn btn-primary registerButton buyBtn" data-toggle="modal" data-target="#registerLoginModal" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+                @endif
             </div>
         </div>
 
@@ -290,6 +305,26 @@
     <p style="margin-top: 40px;">*The SKyDrops Account can be cancelled at any time at no charge. There are no refunds.
     </p>
     <!-- /.container -->
+</div>
+
+<div id="registerLoginModal" class="modal fade" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <a href="/login" class="btn btn-primary" id="submitButton"><i class="fa fa-sign-in"></i><span> Log In</span></a>
+                    <div class="divider">
+                        <hr>
+                    </div>
+                    <a href="#" data-toggle="modal" data-dismiss="modal" data-target="#registerModal" class="btn btn-primary registerButton" id="registerButton" style="width: 100%; white-space:normal; word-wrap:break-word;">Register and get 10 coins for free!</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <a  name="contact"></a>
@@ -438,6 +473,8 @@
 {!! HTML::script('/js/jquery.min.js') !!}
 {!! HTML::script('/js/bootstrap.min.js') !!}
 {!! HTML::script('/js/wow.min.js') !!}
+{!! HTML::script('/js/sweetalert.min.js') !!}
+
 
 
 <script>
@@ -531,6 +568,13 @@
 
     });
 
+    $("#registerModal").on('show.bs.modal', function () {
+        $("#registrationForm").show();
+        $("#regFormHeader").show();
+        $(".alert-danger, .alert-success").remove();
+        $("#registrationForm input").val("");
+    });
+
     $("#registrationForm").submit(function(e) {
         e.preventDefault();
 
@@ -541,9 +585,11 @@
             success: function(data) {
                 console.log(data);
                 $(".alert-danger, .alert-success").remove();
-                var successHtml = "<div class='alert alert-success' style='margin-top: 10px; padding: 5px;'><ul style='list-style-type: none;'>"+
+                $("#registrationForm").hide();
+                $("#regFormHeader").hide();
+                var successHtml = "<div class='alert alert-success' style='margin: 10px 10px 0px 10px; padding: 5px;'><ul style='list-style-type: none;'>"+
                         "<li style='margin-left: -25px'>Please check your email to confirm registration</li></ul></div>";
-                $(".last-register-input").after(successHtml);
+                $(".modal-header").after(successHtml);
             },
             error: function(jqXHR, textStatus, errorThrown){
                 if(jqXHR.status == 422) {

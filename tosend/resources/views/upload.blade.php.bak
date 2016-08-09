@@ -1,0 +1,95 @@
+<title>Upload</title>
+
+@extends('master')
+
+@section('content')
+<div class="container noSubHeader wrap">
+
+				
+				<!-- Content start -->
+				
+				<div class="mainBlock">
+					<form action="{{ url('u/upload')}}" class="ownDropzone" id="my-awesome-dropzone" enctype="multipart/form-data" method="post">
+						<div class="dz-message">
+    Drop files here or click to upload.</div>
+						{!! Form::token() !!}
+					</form>
+					
+					  
+				</div>
+				<div class="sideBlock">
+					<input type="button" id="uploadButton" class="button" value="Upload" />
+					<div class="box">
+						<div class="boxHeader">
+							Title
+						</div>
+						<div class="boxContent">
+							<input style="font-size: 1.3rem" name="inpTitle" class="form-control" type="text" placeholder="Describe your drop" />
+						</div>
+					</div>
+					<div class="box">
+						<div class="boxHeader">
+							Expiry Date
+						</div>
+						<div class="boxContent">
+							<label for="delDate">
+								<input type="checkbox" name="delDate" value="Yes" id="delDate"> Never expire
+							</label><br>
+							<div class="input-group date">
+							  <input type="text" class="form-control"><span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="box">
+						<div class="boxHeader">
+							Tag
+						</div>
+						<div class="boxContent">
+							<p>Add some tags so as not to lose the overview about your drops.</p>
+							<input type="text" id="input-tags" />
+						</div>
+					</div>
+					
+					<div class="box">
+						<div class="boxHeader">
+							Share
+						</div>
+						<div class="boxContent">
+							<p>Pick some contacts from the list or type valid email addresses.</p>
+							<input type="text" id="input-contacts" />
+							<textarea placeholder="Write a message" class="selectize-input"></textarea>
+						</div>
+					</div>
+				</div>
+					  
+				<!-- Content end --> 
+					  
+</div>
+
+<!-- Absolute stuff -->
+<div class="blackBlock">
+	<div class="progressBar"></div>
+	<div class="progressValue">0</div>
+	
+</div> 
+
+<!-- Hidden stuff -->
+<div id="preview-template" style="display: none;">
+<div class="dz-preview dz-file-preview">
+  <i class="fa fa-trash" data-dz-remove></i>
+  <div class="doc-preview">
+    <img data-dz-thumbnail />
+  </div>
+  <div class="dz-details">
+    <div class="dz-filename"><span data-dz-name></span></div>
+    <div class="dz-size" data-dz-size></div>
+  </div>
+  <!-- <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+ 
+ <br clear="right" />
+ <div class="dz-error-message"><span data-dz-errormessage></span></div> -->
+</div>
+</div>
+
+@endsection

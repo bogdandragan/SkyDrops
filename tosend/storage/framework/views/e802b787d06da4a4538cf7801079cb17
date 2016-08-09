@@ -1,0 +1,305 @@
+<?php $__env->startSection('title'); ?>
+	Home | SkyDrops Beta
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('createFEButton'); ?>
+<a class="button" href="/upload">Create File Exchange</a>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('scripts'); ?>
+	<?php echo HTML::script('/js/jquery.min.js'); ?>
+
+	<?php echo HTML::script('/js/bootstrap.min.js'); ?>
+
+	<?php echo HTML::script('/js/jquery-ui.min.js'); ?>
+
+	<?php echo HTML::script('/js/bootstrap-datepicker.js'); ?>
+
+	<?php echo HTML::script('/js/autosize.js'); ?>
+
+	<?php echo HTML::script('/js/dropzone.js'); ?>
+
+	<?php echo HTML::script('/js/selectize.js'); ?>
+
+	<?php echo HTML::script('/js/sweetalert.min.js'); ?>
+
+	<?php echo HTML::script('/js/chart.min.js'); ?>
+
+	<?php echo HTML::script('/js/jquery.overlay.min.js'); ?>
+
+	<?php echo HTML::script('/js/jquery.textcomplete.min.js'); ?>
+
+	<?php echo HTML::script('/js/skydrops.js'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+	body{
+		background: url(<?php echo e(asset('/img/macbook-925596_1920.jpg')); ?>) repeat-y center center;
+	}
+
+	.drop-block {
+	margin-bottom: 10rem;
+	}
+
+	.drop {
+	float: left;
+	width: 38.5rem;
+	border: .1rem solid #e1e1e1;
+	background: #fff;
+	margin-bottom: 1.5rem;
+	margin-right: 1.5rem;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+	color: #666;
+	}
+
+	.drop:active {
+	text-decoration: none;
+	}
+
+	.drop:hover {
+	color: #666;
+	-moz-box-shadow: 1px 1px 5px #999; -webkit-box-shadow: 1px 1px 5px #999; box-shadow: 1px 1px 5px #999;
+	}
+
+	.drop .drop-header {
+	padding: 1.5rem;
+	border-bottom: 1px dotted #e1e1e1;
+	font-weight: 700;
+	}
+
+	.drop .drop-content {
+	text-align: center;
+	background: #f3f3f3;
+	height: 20rem;
+	}
+
+	.drop .drop-content img {
+	height: 100%;
+	max-width: 100%;
+	max-height: 20rem;
+	}
+
+	.drop .drop-content .imagePreview {
+	width: 100%;
+	height: 100%;
+	background-position: center;
+	background-size: cover;
+	}
+
+	.drop .drop-content .noPreview {
+	display: inline-block;
+	margin-top: 9rem;
+	color: #999;
+	font-weight: 600;
+	}
+
+	.drop .drop-content img.fileIcon {
+	width: 10rem;
+	height: auto;
+	margin-top: 5rem;
+	}
+
+	.drop .drop-footer {
+	padding: 1.5rem;
+	position: relative;
+	}
+
+	.drop .drop-footer .numFiles {
+	float: left;
+	}
+
+	.drop .drop-footer .date {
+	float: right;
+	}
+
+	.button.removeDrop {
+	display: inline-block;
+	width: auto;
+	margin: 0;
+	background: #eb4d5c;
+	color: #fff;
+	padding: 5px 15px;
+	font-weight: 500;
+	font-size: 1.3rem;
+	border-radius: 3px;
+	right: 1.1rem;
+	top: 1.1rem;
+	}
+
+	.button:hover, .button:focus {
+		background-color: #414896;
+		border-color: #414896;
+		color: #fff;
+		text-decoration: none;
+	}
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+<div class="container noSubHeader wrap">
+	<!-- Content start -->
+
+	<div class="drop-block clearfix">
+
+		<?php $__empty_1 = true; foreach($drops as $drop): $__empty_1 = false; ?>
+			<?php $html = ""; ?>
+			<?php foreach(explode(",", $drop->dropFiles) as $file): ?>
+
+			<?php
+				$html .= "<span class='tt'>". $file ."</span>";
+			?>
+
+			<?php endforeach; ?>
+
+			<a href="/d/<?php echo e($drop->hash); ?>" class="drop">
+				<div class="drop-header">
+					<i class="fa fa-inbox"></i>
+						<?php if($drop->title): ?>
+							<?php echo e(trim(substr($drop->title, 0, 28))); ?>
+
+							<?php if(strlen($drop->title) > 28): ?>
+								..
+							<?php endif; ?>
+						<?php else: ?>
+							<?php echo e(substr(str_replace(",", ", ", $drop->dropFiles), 0, 28)); ?>
+
+						<?php endif; ?>
+						<?php if(!$drop->title && strlen($drop->dropFiles) > 28): ?>
+							..
+						<?php endif; ?>
+					<span style="float: right;"><?php echo e(App\File::formatFileSize($drop->dropSize)); ?></span>
+				</div>
+				<div class="drop-content">
+					<?php
+						$imageContenttype = "";
+						$imageHash = "";
+						foreach (explode(",", $drop->dropFilesContenttype) as $index=>$contentType){
+							if(explode("/", $contentType)[0] == "image"){
+								$imageContenttype = explode("/", $contentType)[0];
+								$imageHash = explode(",", $drop->dropFilesHash)[$index];
+							}
+						}
+					?>
+					<?php if($imageContenttype == "image"): ?>
+						<div class="imagePreview" style="background-image: url('/f/<?php echo e($imageHash); ?>')"></div>
+					<?php else: ?>
+						<span class="noPreview">No Preview</span>
+					<?php endif; ?>
+				</div>
+				<div class="drop-footer clearfix">
+					<span title="<?php echo e($html); ?>" class="numFiles">
+						<?php if($drop->dropFiles == null): ?>
+							0
+						<?php else: ?>
+							<?php echo e(sizeof(explode(",", $drop->dropFiles))); ?>
+
+						<?php endif; ?>
+						<?php if($drop->dropFiles == null || sizeof(explode(",", $drop->dropFiles)) > 1): ?>
+							files
+						<?php else: ?>
+							file
+						<?php endif; ?>
+					</span>
+					<input style="float: right; margin-left: 5px; margin-top: -5px;" type="button" class="button removeDrop" data-hash="<?php echo e($drop->hash); ?>" value="Remove" />
+					<span class="date">
+						<?php $elapsed =  (isset($drop->expires_at)) ? date("d.m.Y", strtotime($drop->expires_at)) : "<span class='infinite'></span>"; ?>
+						<i class="fa fa-calendar-check-o" style="font-weight: 600"></i> <?php echo $elapsed; ?>
+
+					</span>
+				</div>
+			</a>
+		<?php endforeach; if ($__empty_1): ?>
+			<div class="container" style="background-color: #f3f3f3; margin-top: 100px; width: 500px; border-radius: 10px;">
+				<div class="row" style="text-align: center;">
+					<p class="text-center" style="color: #414896; font-size: 16px;">File exchange list is empty</p>
+					<a class="button text-center" href="/upload" style="display:inline-block; width: 200px">Create File Exchange</a>
+				</div>
+			</div>
+		<?php endif; ?>
+	</div>
+	<!-- Content end -->
+	<?php echo Form::token(); ?>
+
+</div>
+
+<script>
+	$( document ).tooltip({
+		position: {
+			my: "left bottom-0",
+			at: "left top"
+		},
+		content: function(){
+			var element = $( this );
+			return element.attr('title')
+		}
+	});
+
+	$(document).on('click', '.removeDrop', function(e){
+		$This = $(this);
+		swal({
+			title: "Are you sure?",
+			text: "You will not be able to recover this file exchange!",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Yes, delete it!",
+			cancelButtonText: "No, cancel pls!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function(isConfirm){
+			if (isConfirm) {
+				var token = $('input[name=_token]').val();
+				$.ajax({
+					type:	'DELETE',
+					url:	'/d/' + $This.attr('data-hash'),
+					data:	{ _token : token },
+					success: function(data){
+						$This.parent().parent().remove();
+						swal("Deleted!", "Your file exchange has been deleted.", "success");
+					},
+					error: function(data){
+						swal("Error!", "An error occured while deleting the file exchange.", "error");
+					}
+				});
+
+			} else {
+				swal("Cancelled", "Your file exchange is safe :)", "error");
+			}
+		});
+
+	});
+
+	$(document).on('click', 'a.drop', function(event) {
+		if ($(event.target).closest('.removeDrop').length) {
+			event.preventDefault();
+		}
+	});
+</script>
+
+<?php if(Auth::check()): ?>
+	<script>
+		$(document).ready(function () {
+		var token = $('input[name=_token]').val();
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('input[name="_token"]').val()
+				}
+			});
+
+			/*$.ajax({
+				url: "/getAvailableCoins",
+				type: 'GET',
+				success: function(data){
+					$("#coinsAmount").html(data[0]);
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});*/
+		});
+	</script>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <title>Welcome | SKyDrops Beta</title>
+
+    <link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/landing-page.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/animate.min.css') }}" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700italic,300,400,600' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        body{
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1{
+            font-family: 'Raleway';
+            font-size: 5rem;
+            font-weight: 200;
+            text-shadow: 0 2px 3px rgba(0,0,0,.2);
+            line-height: 1.4;
+        }
+
+        h2{
+            font-family: 'Raleway';
+            font-size: 3.6rem;
+            font-weight: 200;
+            text-shadow: 0 2px 3px rgba(0,0,0,.2);
+            line-height: 1.4;
+        }
+
+    </style>
+    <script type="text/javascript">
+    </script>
+</head>
+<body class="home">
+
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+    <div class="container-fluid topnav">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="topnav logo" href="/"><span>SKyDrops</span><span class="betaMark">Beta</span></a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right menu-top">
+                <li>
+                    <a href="#home"><span>Home</span></a>
+                </li>
+                <li>
+                    <a href="#features"><span class="features-menu">Features</span></a>
+                </li>
+                <li>
+                    <a href="#advantages"><span class="advantages-menu">Advantages</span></a>
+                </li>
+                <li>
+                    <a href="#shop"><span class="shop-menu">Shop</span></a>
+                </li>
+                <li>
+                    <a href="#contact"><span class="contact-menu">Contact us</span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+<!-- Header -->
+<a name="home"></a>
+<div class="intro-header">
+        <div class="row" style="margin: 0px;">
+                        <div class="col-lg-8 intro-left">
+                            <h1 style="text-align: left;">A file exchange app for teams that like it <b>simple</b> - made for you to simplify your <b>daily work</b></h1>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="formContent">
+                                @if(Auth::check())
+                                    <a href="/home" class="btn btn-primary" id="submitButton" style="margin-top: 20px;">Back to home page</a>
+                                @else
+                                    <form id="loginForm" action="/u/ldap" method="POST">
+                                        <div class="form-group">
+                                            <input class="form-control custom-input" type="text" name="username"  placeholder="Username" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control custom-input" type="password" name="password" placeholder="Password" />
+                                        </div>
+                                        <a class="forgot" href="#" data-toggle="modal" data-target="#restoreModal">Forgot password?</a>
+                                        <button type="submit" class="btn btn-primary" id="submitButton"><i class="fa fa-sign-in"></i><span> Log In</span></button>
+                                        <div class="divider">
+                                            <hr style="width: 41%; float: left; display: inline">
+                                            <span style="display: inline; width: 10%; float: left; margin: 10px; font-weight: normal;">or</span>
+                                            <hr style="display: inline; width: 41%; float: right">
+                                        </div>
+                                        {!! Form::token() !!}
+                                        <a href="#" data-toggle="modal" data-target="#registerModal" class="btn btn-primary registerButton" id="registerButton" style="width: 100%; white-space:normal; word-wrap:break-word;">Register and get 10 coins for free!</a>
+                                    </form>
+                                @endif
+                            </div>
+                    </div>
+                </div>
+        </div>
+    <!-- /.container -->
+</div>
+<!-- /.intro-header -->
+
+<!-- Modal -->
+<div id="restoreModal" class="modal fade" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4><b>Can't sign in? Forgot your password?</b></h4>
+                    <p style="font-weight: normal;">Enter your email address and we will send you password reset instructions.</p>
+                    <form action="/user/restore" method="POST" id="restoreForm">
+                        <div class="form-group">
+                            <label class="custom-label"><b>Enter your email address</b></label>
+                            <input class="form-control restore-input" type="email" name="email" required />
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn btn-primary modalBtn" id="restoreButton"> Send</button>
+                            <button type="button" class="btn btn-primary modalBtn" id="cancelButton" data-dismiss="modal"> Cancel</button>
+                        </div>
+
+                        {!! Form::token() !!}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="registerModal" class="modal fade" role="dialog">
+    <div class="vertical-alignment-helper">
+        <div class="modal-dialog vertical-align-center">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="regFormHeader"><b>Register now and get 10 coins for free!</b></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="/auth/register" method="POST" id="registrationForm">
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>Username</b></label>
+                            <input class="form-control restore-input" type="text" name="username" />
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>Email</b></label>
+                            <input class="form-control restore-input" type="email" name="email" />
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>First name</b></label>
+                            <input class="form-control restore-input" type="text" name="first_name" />
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>Last name</b></label>
+                            <input class="form-control restore-input" type="text" name="last_name" />
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>Password</b></label>
+                            <input class="form-control restore-input" type="password" name="password" />
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label class="custom-label"><b>Confirm password</b></label>
+                            <input class="form-control restore-input last-register-input" type="password" name="password_confirmation" />
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn btn-primary modalBtn" id="registerButton"> Register</button>
+                            <button type="button" class="btn btn-primary modalBtn" id="cancelButton" data-dismiss="modal"> Cancel</button>
+                        </div>
+                        {!! Form::token() !!}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page Content -->
+
+<a  name="features"></a>
+<div class="content-section-a">
+    <div class="row">
+        <div class="col-lg-6 section-a-left section-abcde wow zoomIn">
+            <div>
+                <h1>Simple file exchange only with people <b>you trust</b></h1>
+                <h2>Share files without storing them “for years” on some cloud. After people downloaded the file you shared, it will be automatically deleted from our storage.</h2>
+            </div>
+            <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+        <div class="col-lg-6 section-abcde wow zoomIn">
+            <img class="laptop" src="{{asset('/img/Laptop-PNG-HD1.png')}}"/>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /.content-section-a -->
+
+<a  name="feature2"></a>
+<div class="content-section-b">
+    <div class="row">
+        <div class="col-lg-6 wow zoomIn">
+            <img class="docs" src="{{asset("/img/docs(2).PNG")}}"/>
+        </div>
+        <div class="col-lg-6 section-b-right section-abcde wow zoomIn">
+            <div>
+                <h1><b>Secure</b> file sharing</h1>
+                <h2>We encrypt all files you store and share. No matter, you are a private person or a big company, your important information will not get to the wrong hands.</h2>
+            </div>
+            <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<a  name="advantages"></a>
+<div class="content-section-c">
+    <div class="row">
+        <div class="col-lg-6 section-c-left section-abcde wow zoomIn">
+            <div>
+                <h1><b>No</b> monthly payments only "pay what you <b>use</b>"</h1>
+                <h2>Subscription model is not for us, we like everything simple. And what is simpler that paying only for files you share? Just buy our “storing coins” and use them only when you need to exchange files.</h2>
+            </div>
+            <a class="btn btn-primary registerButton" data-toggle="modal" data-target="#registerModal" href="#" style="margin-top: 20px;">Get Started For Free</a>
+        </div>
+        <div class="col-lg-6 section-abcde wow zoomIn">
+            <img class="pig" src="{{asset("/img/piggy_bank.png")}}"/>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<a  name="shop"></a>
+<div class="content-section-d">
+    <div class="row">
+        <h1 style="font-weight: normal;">Get started now</h1>
+        <div class="col-lg-4 section-abcde wow zoomIn">
+            <div class="coinPackage">
+                <img class="coin10" src="{{asset("/img/coin_10.png")}}">
+                <br>
+                <h1 class="price">5$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+        <div class="col-lg-4 section-abcde wow zoomIn">
+            <div class="coinPackage">
+                <img class="coin30" src="{{asset("/img/coin_30.png")}}">
+                <br>
+                <h1 class="price">12$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+        <div class="col-lg-4 section-abcde wow zoomIn">
+            <div class="coinPackage">
+                <img class="coin100" src="{{asset("/img/coin_100.png")}}">
+                <br>
+                <h1 class="price">30$</h1>
+                <a class="btn btn-primary registerButton buyBtn" href="#" style="margin-top: 20px;">Buy Coin Package</a>
+            </div>
+        </div>
+
+    </div>
+    <p style="margin-top: 40px;">*The SKyDrops Account can be cancelled at any time at no charge. There are no refunds.
+    </p>
+    <!-- /.container -->
+</div>
+
+<a  name="contact"></a>
+<div class="content-section-e">
+    <div class="row section-abcde">
+        <h1 style="font-weight: normal;">Contact us or ask us a question</h1>
+        <div class="col-lg-12 section-abcde">
+            <div class="contactForm wow zoomIn">
+                <div class="thanks" style="display: none;">
+                </div>
+                <form id="contactForm">
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 25px;">
+                            <input type="text" name="Name" placeholder="Your name" class="form-control input-lg custom-input" required="">
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 25px;">
+                            <input type="email" name="Email"  placeholder="Your email" class="form-control input-lg custom-input" required="">
+                        </div>
+                        <div class="col-md-12" style="margin-top: 5px;">
+                            <input type="text" name="Subject"  placeholder="Subject" class="form-control input-lg custom-input" required="">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xs-12">
+                            <textarea style="height: auto;" rows="12" placeholder="Message" name="Message" class="form-control custom-input" required=""></textarea>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row" style="margin-top: 20px;">
+                        <button class="btn btn-primary registerButton" id="contactSubmit" type="submit" style="width: 200px; font-size: 22px; margin-bottom: 15px;">Send message</button>
+                        <div class="alert alert-success contactSuccess" style="display: none;">Your message was sent successfully</div>
+                        <div class="alert alert-danger contactDanger" style="display: none;">An error occured while sending the message</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row text-right">
+            <div class="col-sm-6 col-sm-offset-6">
+                <ul style="margin-right: 10px; margin-top: 20px; list-style: none; font-size: 16px;">
+                    <li>4700 Millenia Blvd.</li>
+                    <li>Suite 175.</li>
+                    <li>Orlando, FL 32839.</li>
+                    <li>Phone: +1 (407) 442 0285</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</div>
+
+<!--<div class="content-section-b">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">3D Device Mockups<br>by PSDCovers</h2>
+                <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to download some of their awesome, free photoshop actions!</p>
+            </div>
+            <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                <img class="img-responsive" src="img/dog.png" alt="">
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.content-section-b -->
+
+<!--<div class="content-section-a">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-5 col-sm-6">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">Google Web Fonts and<br>Font Awesome Icons</h2>
+                <p class="lead">This template features the 'Lato' font, part of the <a target="_blank" href="http://www.google.com/fonts">Google Web Font library</a>, as well as <a target="_blank" href="http://fontawesome.io">icons from Font Awesome</a>.</p>
+            </div>
+            <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                <img class="img-responsive" src="img/phones.png" alt="">
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.content-section-a -->
+
+<!--<a  name="contact"></a>
+<div class="banner">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Connect to Start Bootstrap:</h2>
+            </div>
+            <div class="col-lg-6">
+                <ul class="list-inline banner-social-buttons">
+                    <li>
+                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+<!--</div>
+<!-- /.banner -->
+
+<!-- Footer -->
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12" style="padding: 10px 50px; font-size: 16px; font-weight: normal; color: #3f4897;">
+                <p style="display: block;" class="copyright large pull-left">&copy; 2016 SKyPRO, All Rights Reserved</p>
+                <div class="pull-right">
+                    <a href="http://www.facebook.com/SKyPRO.software" target="_blank"><img class="fbImg" src="{{asset("/img/fb.jpg")}}"></a>
+                    <a href="https://twitter.com/SKyPROUSA" target="_blank"><img class="twitterImg" src="{{asset("/img/twitter.jpg")}}"></a>
+                    <a href="https://www.linkedin.com/company/skypro" target="_blank"><img class="linkedinImg" src="{{asset("/img/linkedin.jpg")}}"></a>
+                    <a href="#" target="_blank"><img class="googleImg" src="{{asset("/img/google.jpg")}}"></a>
+                    <a href="https://www.youtube.com/profile?user=skyprosoftware" target="_blank"><img class="youtubeImg" src="{{asset("/img/youtube.jpg")}}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{!! Form::token() !!}
+
+{!! HTML::script('/js/jquery.min.js') !!}
+{!! HTML::script('/js/bootstrap.min.js') !!}
+{!! HTML::script('/js/wow.min.js') !!}
+{!! HTML::script('/js/sweetalert.min.js') !!}
+
+
+
+<script>
+    new WOW().init();
+
+
+    var featuresOffset = $("[name='features']").offset().top;
+    var advantagesOffset = $("[name='advantages']").offset().top;
+    var shopOffset = $("[name='shop']").offset().top;
+    var contactOffset = $("[name='contact']").offset().top;
+
+    var $w = $(window).scroll(function(){
+        console.log($w.scrollTop());
+        if ( $w.scrollTop() < featuresOffset) {
+            $(".features-menu").removeClass("active-menu");
+            $(".advantages-menu").removeClass("active-menu");
+            $(".shop-menu").removeClass("active-menu");
+            $(".contact-menu").removeClass("active-menu");
+        } else if ( $w.scrollTop() >= featuresOffset && $w.scrollTop() < advantagesOffset) {
+            $(".features-menu").addClass("active-menu");
+            $(".advantages-menu").removeClass("active-menu");
+            $(".shop-menu").removeClass("active-menu");
+            $(".contact-menu").removeClass("active-menu");
+        } else if ($w.scrollTop() >= advantagesOffset && $w.scrollTop() < shopOffset){
+            $(".features-menu").removeClass("active-menu");
+            $(".advantages-menu").addClass("active-menu");
+            $(".shop-menu").removeClass("active-menu");
+            $(".contact-menu").removeClass("active-menu");
+        } else if ($w.scrollTop() >= shopOffset && $w.scrollTop() < contactOffset){
+            $(".features-menu").removeClass("active-menu");
+            $(".advantages-menu").removeClass("active-menu");
+            $(".shop-menu").addClass("active-menu");
+            $(".contact-menu").removeClass("active-menu");
+        } else if ($w.scrollTop() >= contactOffset){
+            $(".features-menu").removeClass("active-menu");
+            $(".advantages-menu").removeClass("active-menu");
+            $(".shop-menu").removeClass("active-menu");
+            $(".contact-menu").addClass("active-menu");
+        }
+    });
+
+
+    $("#loginForm").submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/u/ldap",
+            data: $("#loginForm").serialize(),
+            success: function(data) {
+                window.location = "/home";
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if(jqXHR.status == 401) {
+                    $(".alert-danger").remove();
+                    var errorHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+                            "<li>"+jqXHR.statusText+"</li></ul></div>"
+                    $("#registerButton").after(errorHtml);
+                }
+            }
+        });
+
+    });
+
+    $("#restoreForm").submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/u/restore",
+            data: $("#restoreForm").serialize(),
+            success: function(data) {
+                console.log(data);
+                $(".alert-danger, .alert-success").remove();
+                var successHtml = "<div class='alert alert-success' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+                        "<li style='margin-left: -35px'>Please check your email to restore your password</li></ul></div>"
+                $(".restore-input").after(successHtml);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if(jqXHR.status == 401) {
+                    $(".alert-danger, .alert-success").remove();
+                    var errorHtml = "<div class='alert alert-danger' style='margin-top: 10px;'><ul style='list-style-type: none;'>"+
+                            "<li style='margin-left: -35px'>"+jqXHR.statusText+"</li></ul></div>"
+                    $(".restore-input").after(errorHtml);
+                }
+                if(jqXHR.status == 422){
+                    window.location = "http://reset.skypro.ch/";
+                }
+            }
+        });
+
+    });
+
+    $("#registerModal").on('show.bs.modal', function () {
+        $("#registrationForm").show();
+        $("#regFormHeader").show();
+        $(".alert-danger, .alert-success").remove();
+        $("#registrationForm input").val("");
+    });
+
+    $("#registrationForm").submit(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/auth/register",
+            data: $("#registrationForm").serialize(),
+            success: function(data) {
+                console.log(data);
+                $(".alert-danger, .alert-success").remove();
+                $("#registrationForm").hide();
+                $("#regFormHeader").hide();
+                var successHtml = "<div class='alert alert-success' style='margin: 10px 10px 0px 10px; padding: 5px;'><ul style='list-style-type: none;'>"+
+                        "<li style='margin-left: -25px'>Please check your email to confirm registration</li></ul></div>";
+                $(".modal-header").after(successHtml);
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if(jqXHR.status == 422) {
+                    $(".alert-danger, .alert-success").remove();
+                    var errors = jqXHR.responseJSON;
+                    var errorsHtml = "<div class='alert alert-danger' style='margin-top: 10px; padding: 5px;'><ul>";
+                    $.each(jqXHR.responseJSON, function (index, value) {
+                        errorsHtml += "<li style='margin-left: -25px'>"+value[0]+"</li>"
+                    });
+                    errorsHtml += "</ul></div>";
+                    $(".last-register-input").after(errorsHtml);
+                }
+            }
+        });
+
+    });
+
+
+    function sendForm(form, url) {
+        var jqxhr = $.ajax({
+            url: url,
+            type: "POST",
+            data: form,
+        })
+                .success(function() {
+                    $("#contactForm").hide();
+                    $(".thanks").show();
+                })
+                .error(function (xhr, ajaxOptions, thrownError) {
+                    $(".contactSuccess").hide();
+                    $(".contactDanger").show();
+                });
+    }
+
+    $("#contactForm").submit(function(e) {
+        e.preventDefault();
+
+        var audio = new Audio('IncMsg.wav');
+        audio.play();
+        if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+            console.log("1");
+        }
+
+
+
+        // Проверка разрешения на отправку уведомлений
+        else if (Notification.permission === "granted") {
+            // Если разрешено то создаем уведомлений
+            var notification = new Notification("Hi there!");
+            console.log("2");
+        }
+
+        // В противном случает мы запрашиваем разрешение
+        else if (Notification.permission !== 'denied') {
+            console.log("3");
+            Notification.requestPermission(function (permission) {
+                // Если пользователь разрешил, то создаем уведомление
+                if (permission === "granted") {
+                    console.log("4");
+                    var notification = new Notification("Hi there!");
+                }
+            });
+        }
+
+        /*var form = $("#contactForm").serializeArray();
+        var url = 'http://pingonline.komnicator.com/forms/skydrop';
+        sendForm (form, url);*/
+
+    });
+</script>
+
+
+</body>
+</html>

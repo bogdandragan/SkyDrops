@@ -1,0 +1,77 @@
+<?php $__env->startSection('title'); ?>
+    Users Dashboard | SkyDrops Beta
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('createFEButton'); ?>
+    <a class="button" href="/upload">Create Drop</a>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('scripts'); ?>
+    <?php echo HTML::script('/js/jquery.min.js'); ?>
+
+    <?php echo HTML::script('/js/bootstrap.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery-ui.min.js'); ?>
+
+    <?php echo HTML::script('/js/bootstrap-datepicker.js'); ?>
+
+    <?php echo HTML::script('/js/autosize.js'); ?>
+
+    <?php echo HTML::script('/js/dropzone.js'); ?>
+
+    <?php echo HTML::script('/js/selectize.js'); ?>
+
+    <?php echo HTML::script('/js/sweetalert.min.js'); ?>
+
+    <?php echo HTML::script('/js/chart.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery.overlay.min.js'); ?>
+
+    <?php echo HTML::script('/js/jquery.textcomplete.min.js'); ?>
+
+    <?php echo HTML::script('/js/skydrops.js'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('style'); ?>
+    body{
+    background: url(<?php echo e(asset('/img/photo-montage-556807_1920.jpg')); ?>) repeat-y center center;
+    }
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+    <div class="container noSubHeader wrap">
+        <!-- Content start -->
+        <div class="box" style="padding: 20px;">
+            <h2>Users</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                </tr>
+            <?php $__empty_1 = true; foreach($users as $user): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo e($user->email); ?></td>
+                    <td><?php echo e($user->username); ?></td>
+                    <td><?php echo e($user->firstname); ?></td>
+                    <td><?php echo e($user->lastname); ?></td>
+                </tr>
+            <?php endforeach; if ($__empty_1): ?>
+                No Users
+            <?php endif; ?>
+            </table>
+        </div>
+        <!-- Content end -->
+    </div>
+    <?php echo Form::token(); ?>
+
+
+    <?php if(Auth::check()): ?>
+
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
